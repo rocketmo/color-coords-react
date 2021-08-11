@@ -1,0 +1,53 @@
+.tile {
+    background-color: #fff;
+    height: 48px;
+    width: 48px;
+}
+
+.tile.tile-blue {
+    background-color: #277da1;
+}
+
+.tile.tile-blue.tile-alt {
+    background-color: #4da4ca;
+}
+
+.tile.tile-green {
+    background-color: #90be6d;
+}
+
+.tile.tile-green.tile-alt {
+    background-color: #aecc98;
+}
+
+.tile.tile-orange {
+    background-color: #f9844a;
+}
+
+.tile.tile-orange.tile-alt {
+    background-color: #ed9869;
+}
+
+.tile.tile-purple {
+    background-color: #6d4c8f;
+}
+
+.tile.tile-purple.tile-alt {
+    background-color: #9273b0;
+}
+
+.tile.tile-red {
+    background-color: #f94144;
+}
+
+.tile.tile-red.tile-alt {
+    background-color: #f3797b;
+}
+
+.tile.tile-yellow {
+    background-color: #f9c74f;
+}
+
+.tile.tile-yellow.tile-alt {
+    background-color: #f4d181;
+}
