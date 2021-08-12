@@ -1,7 +1,18 @@
+import Grid from "./components/grid";
+import GridCell from "./classes/grid-cell";
+import { Color } from "./constants";
 import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
+    const gridProps = {
+        grid: [
+            [ new GridCell(Color.BLUE), new GridCell(Color.ORANGE) ],
+            [ new GridCell(), new GridCell(Color.GREEN) ],
+            [ null, new GridCell(Color.RED) ]
+        ]
+    };
+
     return (
         <div className="App">
             <header className="App-header">
@@ -18,6 +29,8 @@ function App() {
                     Learn React
                 </a>
             </header>
+
+            <Grid {...gridProps} />
         </div>
     );
 }
