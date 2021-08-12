@@ -1,9 +1,9 @@
 import "./tile.css";
-
-const TILE_SIZE = 48;
+import { TILE_SIZE, Color } from "../../constants";
 
 export default function Tile(props) {
-    const colorClass = `tile-front ${props.color ?? ""} ${props.alt ? "tile-alt" : ""}`;
+    const color = props.color ?? Color.DEFAULT;
+    const colorClass = `tile-front bg-${color} ${props.alt ? "alt" : ""}`;
     const tilePositionStyle = {
         left: `${props.col * TILE_SIZE}px`,
         top: `${props.row * TILE_SIZE}px`,

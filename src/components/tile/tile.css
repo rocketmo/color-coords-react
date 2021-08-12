@@ -5,15 +5,10 @@
 }
 
 .tile .tile-front {
-    background-color: #ddd;
     height: 100%;
     position: absolute;
     width: 100%;
     z-index: 2;
-}
-
-.tile .tile-front.tile-alt {
-    background-color: #eee;
 }
 
 .tile .tile-back {
@@ -24,52 +19,4 @@
     top: -10%;
     width: 120%;
     z-index: 1;
-}
-
-.tile .tile-front.tile-blue {
-    background-color: #62afd0;
-}
-
-.tile .tile-front.tile-blue.tile-alt {
-    background-color: #85bed6;
-}
-
-.tile .tile-front.tile-green {
-    background-color: #90be6d;
-}
-
-.tile .tile-front.tile-green.tile-alt {
-    background-color: #a7c98e;
-}
-
-.tile .tile-front.tile-orange {
-    background-color: #f9844a;
-}
-
-.tile .tile-front.tile-orange.tile-alt {
-    background-color: #f49e73;
-}
-
-.tile .tile-front.tile-purple {
-    background-color: #916fb3;
-}
-
-.tile .tile-front.tile-purple.tile-alt {
-    background-color: #a78ec1;
-}
-
-.tile .tile-front.tile-red {
-    background-color: #f94144;
-}
-
-.tile .tile-front.tile-red.tile-alt {
-    background-color: #f56e70;
-}
-
-.tile .tile-front.tile-yellow {
-    background-color: #f9c74f;
-}
-
-.tile .tile-front.tile-yellow.tile-alt {
-    background-color: #f5cf76;
 }
