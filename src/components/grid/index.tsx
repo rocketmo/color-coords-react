@@ -23,7 +23,7 @@ export default class Grid extends React.Component {
                 const gridCell = this.state.grid[i][j];
                 const key = `${i},${j}`;
                 tiles.push(
-                    <Tile color={gridCell?.color} alt={i + j % 2 === 0}
+                    <Tile color={gridCell?.color} alt={(i + j) % 2 === 0}
                         row={i} col={j} key={key} />
                 );
             }
