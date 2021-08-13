@@ -1,15 +1,16 @@
 .player {
     background-color: #333;
-    border-radius: 36px;
-    height: 36px;
+    border-radius: 40px;
+    height: 40px;
     position: absolute;
-    width: 36px;
+    transition: top 0.5s, left 0.5s;
+    width: 40px;
     z-index: 5;
 }
 
 .player .player-color {
     border: 4px solid #fff;
-    border-radius: 36px;
+    border-radius: 40px;
     box-sizing: border-box;
     height: 100%;
     opacity: 0.9;

@@ -15,7 +15,8 @@ interface GridState {
     grid: (GridCell | null)[][],
     playerRow: number,
     playerCol: number,
-    playerColor: Color
+    playerColor: Color,
+    isPlayerMoving: boolean // TODO: Consider using a queue to track player movements
 }
 
 export default class Grid extends React.Component {
@@ -28,10 +29,13 @@ export default class Grid extends React.Component {
             grid: props.grid ?? [[]],
             playerRow: props.playerRow,
             playerCol: props.playerCol,
-            playerColor: Color.DEFAULT
+            playerColor: Color.DEFAULT,
+            isPlayerMoving: false
         };
 
         this.onKeyDown = this.onKeyDown.bind(this);
+        this.onMovementEnd = this.onMovementEnd.bind(this);
+
         this.keyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, -1, 0),
             ArrowDown: this.movePlayerByKeyDown.bind(this, 1, 0),
@@ -40,14 +44,19 @@ export default class Grid extends React.Component {
         };
     }
 
-    onKeyDown(event: KeyboardEvent) {
+    onKeyDown(event: KeyboardEvent): void {
         if (event.key && this.keyFnMap[event.key]) {
             this.keyFnMap[event.key](event);
         }
     }
 
-    movePlayerByKeyDown(rowOffset: number, colOffset: number, event: KeyboardEvent) {
+    movePlayerByKeyDown(rowOffset: number, colOffset: number, event: KeyboardEvent): void {
         event.preventDefault();
+
+        // Do not move the player if it is already in motion or if the offset is zero
+        if (this.state.isPlayerMoving || (rowOffset === 0 && colOffset === 0)) {
+            return;
+        }
 
         const { grid, playerRow, playerCol, playerColor } = this.state;
         if (grid[playerRow + rowOffset] && grid[playerRow + rowOffset][playerCol + colOffset]) {
@@ -55,7 +64,8 @@ export default class Grid extends React.Component {
             // Move the player
             this.setState({
                 playerRow: playerRow + rowOffset,
-                playerCol: playerCol + colOffset
+                playerCol: playerCol + colOffset,
+                isPlayerMoving: true
             });
 
             // Update the color of the tile the player lands on
@@ -67,6 +77,13 @@ export default class Grid extends React.Component {
                 });
             }
         }
+    }
+
+    // This method is called after the player stops moving
+    onMovementEnd() {
+        this.setState({
+            isPlayerMoving: false
+        });
     }
 
     render() {
@@ -91,7 +108,7 @@ export default class Grid extends React.Component {
             <div className="tile-grid" tabIndex={1} onKeyDown={this.onKeyDown}>
                 { tiles }
                 <Player color={this.state.playerColor} row={this.state.playerRow}
-                    col={this.state.playerCol} />
+                    col={this.state.playerCol} onMovementEnd={this.onMovementEnd} />
             </div>
         );
     }

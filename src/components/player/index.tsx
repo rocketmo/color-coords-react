@@ -1,10 +1,17 @@
 import "./player.css";
 import { TILE_SIZE, Color } from "../../constants";
 
-const PLAYER_SIZE = 36;
+const PLAYER_SIZE = 40;
 const QUARTER_DIFF = (TILE_SIZE - PLAYER_SIZE) / 2;
 
-export default function Player(props: { color?: Color; row: number; col: number }) {
+interface PlayerProps {
+    color?: Color,
+    row: number,
+    col: number,
+    onMovementEnd: Function
+}
+
+export default function Player(props: PlayerProps) {
     const color = props.color ?? Color.DEFAULT;
     const colorClass = `player-color bg-${color}`;
     const playerPositionStyle = {
@@ -13,7 +20,8 @@ export default function Player(props: { color?: Color; row: number; col: number 
     };
 
     return (
-        <div className="player" style={playerPositionStyle}>
+        <div className="player" style={playerPositionStyle}
+            onTransitionEnd={() => props.onMovementEnd()}>
             <div className={colorClass}></div>
         </div>
     );
