@@ -7,10 +7,13 @@ import "./App.css";
 function App() {
     const gridProps = {
         grid: [
-            [ new GridCell(Color.BLUE), new GridCell(Color.ORANGE) ],
-            [ new GridCell(), new GridCell(Color.GREEN) ],
+            [ new GridCell(Color.RED), new GridCell(Color.RED) ],
+            [ new GridCell(Color.GREEN), new GridCell(Color.GREEN), new GridCell(Color.GREEN),
+                new GridCell(Color.GREEN), new GridCell(Color.GREEN), new GridCell(Color.GREEN) ],
             [ null, new GridCell(Color.RED) ]
-        ]
+        ],
+        playerRow: 1,
+        playerCol: 0
     };
 
     return (
