@@ -8,7 +8,7 @@ interface PlayerProps {
     color?: Color,
     row: number,
     col: number,
-    onMovementEnd: Function
+    onAnimationEnd: Function
 }
 
 export default function Player(props: PlayerProps) {
@@ -21,8 +21,9 @@ export default function Player(props: PlayerProps) {
 
     return (
         <div className="player" style={playerPositionStyle}
-            onTransitionEnd={() => props.onMovementEnd()}>
+            onTransitionEnd={() => props.onAnimationEnd()}>
             <div className={colorClass}></div>
+            <div className="player-border"></div>
         </div>
     );
 }

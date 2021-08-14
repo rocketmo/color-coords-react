@@ -9,10 +9,21 @@
 }
 
 .player .player-color {
+    border-radius: 40px;
+    box-sizing: border-box;
+    height: 100%;
+    opacity: 0.85;
+    position: absolute;
+    width: 100%;
+    z-index: 6;
+}
+
+.player .player-border {
     border: 4px solid #fff;
     border-radius: 40px;
     box-sizing: border-box;
     height: 100%;
-    opacity: 0.9;
+    position: absolute;
     width: 100%;
+    z-index: 7;
 }
