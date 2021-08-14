@@ -1,8 +1,8 @@
-import Grid from "./components/grid";
-import GridCell from "./classes/grid-cell";
-import { Color } from "./constants";
+import Grid from "../grid";
+import GridCell from "../../classes/grid-cell";
+import { Color } from "../../constants";
 import logo from "./logo.svg";
-import "./App.css";
+import "./app.css";
 
 function App() {
     const gridProps = {
