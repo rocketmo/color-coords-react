@@ -1,0 +1,25 @@
+.swatch {
+    animation: swatch-spin infinite 15s linear;
+    height: 20px;
+    position: absolute;
+    width: 20px;
+    z-index: 3;
+}
+
+.swatch .swatch-border {
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 4;
+}
+
+@keyframes swatch-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

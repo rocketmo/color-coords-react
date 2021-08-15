@@ -1,5 +1,6 @@
 import Grid from "../grid";
 import GridCell from "../../classes/grid-cell";
+import Swatch from "../../classes/swatch";
 import { Color } from "../../constants";
 import logo from "./logo.svg";
 import "./app.css";
@@ -7,10 +8,11 @@ import "./app.css";
 function App() {
     const gridProps = {
         grid: [
-            [ new GridCell(Color.RED), new GridCell(Color.RED) ],
+            [ new GridCell(Color.RED), new GridCell(Color.DEFAULT, new Swatch(Color.BLUE)) ],
             [ new GridCell(Color.GREEN), new GridCell(Color.GREEN), new GridCell(Color.GREEN),
-                new GridCell(Color.GREEN), new GridCell(Color.GREEN), new GridCell(Color.GREEN) ],
-            [ null, new GridCell(Color.RED) ]
+                new GridCell(Color.GREEN), new GridCell(Color.GREEN),
+                new GridCell(Color.DEFAULT, new Swatch(Color.GREEN)) ],
+            [ null, new GridCell(Color.RED), null, new GridCell() ]
         ],
         playerRow: 1,
         playerCol: 0

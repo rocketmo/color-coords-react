@@ -1,5 +1,6 @@
 import "./player.css";
 import { TILE_SIZE, Color } from "../../constants";
+import { TransitionEvent } from "react";
 
 const PLAYER_SIZE = 40;
 const QUARTER_DIFF = (TILE_SIZE - PLAYER_SIZE) / 2;
@@ -11,7 +12,7 @@ interface PlayerProps {
     onAnimationEnd: Function
 }
 
-export default function Player(props: PlayerProps) {
+export default function PlayerComponent(props: PlayerProps) {
     const color = props.color ?? Color.DEFAULT;
     const colorClass = `player-color bg-${color}`;
     const playerPositionStyle = {
@@ -21,7 +22,7 @@ export default function Player(props: PlayerProps) {
 
     return (
         <div className="player" style={playerPositionStyle}
-            onTransitionEnd={() => props.onAnimationEnd()}>
+            onTransitionEnd={(event: TransitionEvent) => props.onAnimationEnd(event)}>
             <div className={colorClass}></div>
             <div className="player-border"></div>
         </div>

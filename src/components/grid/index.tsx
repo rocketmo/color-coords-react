@@ -1,11 +1,14 @@
-import React, { KeyboardEvent } from "react";
+import React, { KeyboardEvent, TransitionEvent } from "react";
 import { Queue } from '@datastructures-js/queue';
-import Tile from "../tile";
-import Player from "../player";
+import { cloneDeep } from "lodash";
+import PlayerComponent from "../player";
+import Player, { PlayerMovement } from "../../classes/player";
 import GridCell from "../../classes/grid-cell";
 import GridAnimationFrame from "../../classes/grid-animation-frame";
+import PlayerAnimationFrame from "../../classes/player-animation-frame";
+import TileAnimationFrame from "../../classes/tile-animation-frame";
 import "./grid.css";
-import { Color } from "../../constants";
+import { Color, Direction } from "../../constants";
 import { sleep } from "../../services/util";
 
 interface GridProps {
@@ -46,10 +49,10 @@ export default class Grid extends React.Component {
         this.onAnimationEnd = this.onAnimationEnd.bind(this);
 
         this.keyFnMap = {
-            ArrowUp: this.movePlayerByKeyDown.bind(this, -1, 0),
-            ArrowDown: this.movePlayerByKeyDown.bind(this, 1, 0),
-            ArrowLeft: this.movePlayerByKeyDown.bind(this, 0, -1),
-            ArrowRight: this.movePlayerByKeyDown.bind(this, 0, 1)
+            ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
+            ArrowDown: this.movePlayerByKeyDown.bind(this, Direction.DOWN),
+            ArrowLeft: this.movePlayerByKeyDown.bind(this, Direction.LEFT),
+            ArrowRight: this.movePlayerByKeyDown.bind(this, Direction.RIGHT)
         };
 
         this.keyPressFlagMap = {
@@ -84,13 +87,7 @@ export default class Grid extends React.Component {
         }
     }
 
-    async movePlayerByKeyDown(rowOffset: number, colOffset: number, event: KeyboardEvent)
-        : Promise<void> {
-
-        // If there is no offset, player will not move
-        if (rowOffset === 0 && colOffset === 0) {
-            return;
-        }
+    async movePlayerByKeyDown(dir: Direction, event: KeyboardEvent): Promise<void> {
 
         // Continuously move the player while key is pressed down
         while (this.keyPressFlagMap[event.key]) {
@@ -102,67 +99,92 @@ export default class Grid extends React.Component {
             }
 
             const { grid, playerRow, playerCol, playerColor } = this.state;
-            const nextRow = playerRow + rowOffset;
-            const nextCol = playerCol + colOffset;
+            const gridClone = cloneDeep(grid);
+            const player = new Player(playerRow, playerCol, gridClone, playerColor);
 
-            // Check if the move is valid
-            if (grid[nextRow] && grid[nextRow][nextCol]) {
+            let playerMovement: PlayerMovement = { currentDirection: dir, prevDirection: null };
+            let moveResult = player.move(playerMovement);
 
-                // Check if the grid tile needs to be updated
-                const gridCell = grid[nextRow][nextCol];
-                let nextColor = undefined;
-                if (playerColor !== Color.DEFAULT && gridCell && gridCell.color !== playerColor) {
-                    nextColor = playerColor;
-                }
-
-                // Add animation frame
-                this.gridAnimationQueue.enqueue(new GridAnimationFrame(nextRow, nextCol, nextColor))
-
-                // Process next animation
-                this.startNextAnimation();
-            }
-
-            // If not valid, wait until next cycle
-            else {
+            // If move is invalid, wait until next cycle
+            if (!moveResult.moved) {
                 await sleep(0);
                 continue;
             }
+
+            // Otherwise, add animation frames until the player stops moving
+            while (moveResult.moved) {
+
+                const { newRow, newCol, newColor, gridCellMovedTo } = moveResult;
+
+                // Check if the grid tile needs to be updated
+                if (gridCellMovedTo && newColor !== Color.DEFAULT &&
+                    gridCellMovedTo.color !== newColor) {
+
+                    gridCellMovedTo.color = newColor;
+                    this.gridAnimationQueue.enqueue(
+                        new TileAnimationFrame(newRow, newCol, newColor)
+                    );
+                }
+
+                // Add player animation frame
+                this.gridAnimationQueue.enqueue(
+                    new PlayerAnimationFrame(newRow, newCol, newColor)
+                );
+
+                // Try to move again
+                playerMovement = {
+                    currentDirection: null,
+                    prevDirection: playerMovement.currentDirection
+                };
+
+                moveResult = player.move(playerMovement);
+            }
+
+            // Process next animation
+            this.startNextAnimation();
         }
     }
 
     startNextAnimation() {
 
-        // No animations queued
-        if (this.gridAnimationQueue.size() <= 0) {
-            return;
-        }
+        // Process animations until we process a player animation
+        while (this.gridAnimationQueue.size() > 0) {
+            const animationFrame = this.gridAnimationQueue.dequeue();
 
-        // Process the next animation
-        const animationFrame = this.gridAnimationQueue.dequeue();
+            // Process player animation
+            if (animationFrame.isPlayerAnimation()) {
+                // Move the player
+                this.isPlayerMoving = true;
+                this.setState({
+                    playerRow: animationFrame.row,
+                    playerCol: animationFrame.col,
+                    playerColor: animationFrame.color
+                });
 
-        // Move the player
-        this.isPlayerMoving = true;
-        this.setState({
-            playerRow: animationFrame.row,
-            playerCol: animationFrame.col
-        });
+                break;
+            }
 
-        // Update the color of the grid tile if necessary
-        const gridCell = this.state.grid[animationFrame.row] &&
-            this.state.grid[animationFrame.row][animationFrame.col];
+            // Proces tile animation
+            else {
+                const gridCell = this.state.grid[animationFrame.row] &&
+                    this.state.grid[animationFrame.row][animationFrame.col];
 
-        if (animationFrame.gridColor && gridCell && gridCell.color !== animationFrame.gridColor) {
-            gridCell.color = animationFrame.gridColor;
-            this.setState({
-                grid: [ ...this.state.grid ]
-            });
+                if (gridCell && gridCell.color !== animationFrame.color) {
+                    gridCell.color = animationFrame.color;
+                    this.setState({
+                        grid: [ ...this.state.grid ]
+                    });
+                }
+            }
         }
     }
 
     // This method is called after single animation frame is completed
-    onAnimationEnd() {
-        this.isPlayerMoving = false;
-        this.startNextAnimation();
+    onAnimationEnd(event: TransitionEvent) {
+        if (event.propertyName === "left" || event.propertyName === "top") {
+            this.isPlayerMoving = false;
+            this.startNextAnimation();
+        }
     }
 
     render() {
@@ -170,16 +192,11 @@ export default class Grid extends React.Component {
 
         for (let i = 0; i < this.state.grid.length; i += 1) {
             for (let j = 0; j < this.state.grid[i].length; j += 1) {
-                if (!this.state.grid[i][j]) {
-                    continue;
-                }
-
                 const gridCell = this.state.grid[i][j];
-                const key = `${i},${j}`;
-                tiles.push(
-                    <Tile color={gridCell?.color} alt={(i + j) % 2 === 0}
-                        row={i} col={j} key={key} />
-                );
+
+                if (gridCell) {
+                    tiles.push(...gridCell.render(i, j));
+                }
             }
         }
 
@@ -187,7 +204,7 @@ export default class Grid extends React.Component {
             <div className="tile-grid" tabIndex={1} onKeyDown={this.onKeyDown}
                 onKeyUp={this.onKeyUp} onFocus={this.resetFlags} onBlur={this.resetFlags}>
                 { tiles }
-                <Player color={this.state.playerColor} row={this.state.playerRow}
+                <PlayerComponent color={this.state.playerColor} row={this.state.playerRow}
                     col={this.state.playerCol} onAnimationEnd={this.onAnimationEnd} />
             </div>
         );
