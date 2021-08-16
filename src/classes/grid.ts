@@ -13,19 +13,13 @@ export interface GridCellConfig {
 export default class Grid {
     [ immerable ] = true;
     cells: (GridCell | null)[][];
-    solution: (Color | null)[][];
 
     constructor(config: GridCellConfig[][]) {
         this.cells = config.map((row, rowIdx) => {
             return row.map((cell, colIdx) => {
                 return (cell.hasTile) ?
-                    new GridCell(rowIdx, colIdx, cell.tileColor, cell.item) : null;
-            });
-        });
-
-        this.solution = config.map(row => {
-            return row.map(cell => {
-                return (cell.hasTile) ? (cell.solutionColor ?? Color.DEFAULT) : null;
+                    new GridCell(rowIdx, colIdx, cell.tileColor, cell.solutionColor, cell.item) :
+                    null;
             });
         });
     }
@@ -43,7 +37,7 @@ export default class Grid {
         for (let i = 0; i < this.cells.length; i += 1) {
             for (let j = 0; j < this.cells[i].length; j += 1) {
                 const cellColor = this.cells[i][j]?.color ?? null;
-                const solutionColor = this.solution[i][j] ?? null;
+                const solutionColor = this.cells[i][j]?.solutionColor ?? null;
 
                 if (cellColor !== solutionColor) {
                     return false;
@@ -54,7 +48,7 @@ export default class Grid {
         return true;
     }
 
-    renderElements(): JSX.Element[] {
+    renderElements(showSolution: boolean): JSX.Element[] {
         const elements = [];
 
         for (let i = 0; i < this.cells.length; i += 1) {
@@ -62,7 +56,7 @@ export default class Grid {
                 const gridCell = this.cells[i][j];
 
                 if (gridCell) {
-                    elements.push(...gridCell.renderElements());
+                    elements.push(...gridCell.renderElements(showSolution));
                 }
             }
         }

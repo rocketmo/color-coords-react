@@ -12,6 +12,14 @@
     z-index: 2;
 }
 
+.tile .tile-solution {
+    height: 100%;
+    position: absolute;
+    transition: opacity .4s ease-out;
+    width: 100%;
+    z-index: 3;
+}
+
 .tile .tile-back {
     background-color: #171717;
     height: 120%;

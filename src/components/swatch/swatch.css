@@ -3,7 +3,7 @@
     height: 20px;
     position: absolute;
     width: 20px;
-    z-index: 3;
+    z-index: 10;
 }
 
 .swatch .swatch-border {
@@ -12,7 +12,7 @@
     height: 100%;
     position: absolute;
     width: 100%;
-    z-index: 4;
+    z-index: 11;
 }
 
 @keyframes swatch-spin {

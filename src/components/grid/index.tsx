@@ -22,7 +22,8 @@ interface GridState {
     grid: Grid,
     playerRow: number,
     playerCol: number,
-    playerColor: Color
+    playerColor: Color,
+    showSolution: boolean
 }
 
 export default class GridComponent extends React.Component {
@@ -38,7 +39,8 @@ export default class GridComponent extends React.Component {
             grid: new Grid(props.gridConfig),
             playerRow: props.playerRow,
             playerCol: props.playerCol,
-            playerColor: Color.DEFAULT
+            playerColor: Color.DEFAULT,
+            showSolution: false
         };
 
         this.gridAnimationQueue = new Queue();
@@ -65,20 +67,26 @@ export default class GridComponent extends React.Component {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (event.key && this.keyFnMap[event.key]) {
+        if (this.keyFnMap[event.key]) {
             event.preventDefault();
 
             if (!this.keyPressFlagMap[event.key]) {
                 this.keyPressFlagMap[event.key] = true;
                 this.keyFnMap[event.key](event);
             }
+        } else if (event.key.toLowerCase() === "z") {
+            event.preventDefault();
+            this.setState({ showSolution: true });
         }
     }
 
     onKeyUp(event: KeyboardEvent): void {
-        if (event.key && this.keyPressFlagMap[event.key]) {
+        if (this.keyPressFlagMap[event.key]) {
             event.preventDefault();
             this.keyPressFlagMap[event.key] = false;
+        } else if (event.key.toLowerCase() === "z") {
+            event.preventDefault();
+            this.setState({ showSolution: false });
         }
     }
 
@@ -86,6 +94,8 @@ export default class GridComponent extends React.Component {
         for (const key in this.keyPressFlagMap) {
             this.keyPressFlagMap[key] = false;
         }
+
+        this.setState({ showSolution: false });
     }
 
     async movePlayerByKeyDown(dir: Direction, event: KeyboardEvent): Promise<void> {
@@ -197,7 +207,7 @@ export default class GridComponent extends React.Component {
     }
 
     render() {
-        const gridElements = this.state.grid.renderElements();
+        const gridElements = this.state.grid.renderElements(this.state.showSolution);
 
         return (
             <div className="tile-grid" tabIndex={1} onKeyDown={this.onKeyDown}

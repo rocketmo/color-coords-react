@@ -5,7 +5,7 @@
     position: absolute;
     transition: top 0.5s, left 0.5s;
     width: 40px;
-    z-index: 5;
+    z-index: 20;
 }
 
 .player .player-color {
@@ -16,7 +16,7 @@
     position: absolute;
     transition: background-color .3s ease-out 0.15s;
     width: 100%;
-    z-index: 6;
+    z-index: 21;
 }
 
 .player .player-border {
@@ -26,5 +26,5 @@
     height: 100%;
     position: absolute;
     width: 100%;
-    z-index: 7;
+    z-index: 22;
 }
