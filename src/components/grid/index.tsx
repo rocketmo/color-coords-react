@@ -1,9 +1,10 @@
 import React, { KeyboardEvent, TransitionEvent } from "react";
 import { Queue } from '@datastructures-js/queue';
 import { cloneDeep } from "lodash";
+import produce from "immer";
 import PlayerComponent from "../player";
 import Player, { PlayerMovement } from "../../classes/player";
-import GridCell from "../../classes/grid-cell";
+import Grid, { GridCellConfig } from "../../classes/grid";
 import GridAnimationFrame from "../../classes/grid-animation-frame";
 import PlayerAnimationFrame from "../../classes/player-animation-frame";
 import TileAnimationFrame from "../../classes/tile-animation-frame";
@@ -12,19 +13,19 @@ import { Color, Direction } from "../../constants";
 import { sleep } from "../../services/util";
 
 interface GridProps {
-    grid: (GridCell | null)[][],
+    gridConfig: GridCellConfig[][],
     playerRow: number,
     playerCol: number
 }
 
 interface GridState {
-    grid: (GridCell | null)[][],
+    grid: Grid,
     playerRow: number,
     playerCol: number,
     playerColor: Color
 }
 
-export default class Grid extends React.Component {
+export default class GridComponent extends React.Component {
     state: GridState;
     keyFnMap: Record<string, Function>;
     keyPressFlagMap: Record<string, boolean>;
@@ -34,7 +35,7 @@ export default class Grid extends React.Component {
     constructor(props: GridProps) {
         super(props);
         this.state = {
-            grid: props.grid ?? [[]],
+            grid: new Grid(props.gridConfig),
             playerRow: props.playerRow,
             playerCol: props.playerCol,
             playerColor: Color.DEFAULT
@@ -166,44 +167,42 @@ export default class Grid extends React.Component {
 
             // Proces tile animation
             else {
-                const gridCell = this.state.grid[animationFrame.row] &&
-                    this.state.grid[animationFrame.row][animationFrame.col];
+                const gridCell = this.state.grid.getCellAt(animationFrame.row, animationFrame.col);
 
                 if (gridCell && gridCell.color !== animationFrame.color) {
-                    gridCell.color = animationFrame.color;
                     this.setState({
-                        grid: [ ...this.state.grid ]
+                        grid: produce(this.state.grid, draft => {
+                            const cg = draft.getCellAt(animationFrame.row, animationFrame.col);
+                            cg && (cg.color = animationFrame.color);
+                        })
                     });
                 }
             }
         }
     }
 
-    // This method is called after single animation frame is completed
+    // This method is called after player animation is completed
     onAnimationEnd(event: TransitionEvent) {
+
+        // Only continue animation if the player stopped moving
         if (event.propertyName === "left" || event.propertyName === "top") {
             this.isPlayerMoving = false;
-            this.startNextAnimation();
+
+            if (this.gridAnimationQueue.size() > 0) {
+                this.startNextAnimation();
+            } else if (this.state.grid.isGridSolved()) { // TODO: Update solve logic
+                console.log("Solved.");
+            }
         }
     }
 
     render() {
-        const tiles = [];
-
-        for (let i = 0; i < this.state.grid.length; i += 1) {
-            for (let j = 0; j < this.state.grid[i].length; j += 1) {
-                const gridCell = this.state.grid[i][j];
-
-                if (gridCell) {
-                    tiles.push(...gridCell.render(i, j));
-                }
-            }
-        }
+        const gridElements = this.state.grid.renderElements();
 
         return (
             <div className="tile-grid" tabIndex={1} onKeyDown={this.onKeyDown}
                 onKeyUp={this.onKeyUp} onFocus={this.resetFlags} onBlur={this.resetFlags}>
-                { tiles }
+                { gridElements }
                 <PlayerComponent color={this.state.playerColor} row={this.state.playerRow}
                     col={this.state.playerCol} onAnimationEnd={this.onAnimationEnd} />
             </div>

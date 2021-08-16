@@ -1,4 +1,5 @@
 import { Color, Direction, DIR_OFFSET } from "../constants";
+import Grid from "./grid";
 import GridCell from "./grid-cell";
 
 export interface PlayerMovement {
@@ -18,10 +19,10 @@ interface PlayerMovementResult {
 export default class Player {
     row: number;
     col: number;
-    grid: (GridCell | null)[][];
+    grid: Grid;
     color: Color;
 
-    constructor(row: number, col: number, grid: (GridCell | null)[][], color?: Color) {
+    constructor(row: number, col: number, grid: Grid, color?: Color) {
         this.row = row;
         this.col = col;
         this.grid = grid;
@@ -33,7 +34,7 @@ export default class Player {
             const { rowOffset, colOffset } = DIR_OFFSET[movement.currentDirection];
             const nextRow = this.row + rowOffset;
             const nextCol = this.col + colOffset;
-            const gridCell = this.grid[nextRow] && this.grid[nextRow][nextCol];
+            const gridCell = this.grid.getCellAt(nextRow, nextCol);
 
             if (gridCell) {
                 this.row = nextRow;

@@ -1,18 +1,36 @@
-import Grid from "../grid";
-import GridCell from "../../classes/grid-cell";
+import GridComponent from "../grid";
+import { GridCellConfig } from "../../classes/grid";
 import Swatch from "../../classes/swatch";
 import { Color } from "../../constants";
 import logo from "./logo.svg";
 import "./app.css";
 
+interface GridProps {
+    gridConfig: GridCellConfig[][],
+    playerRow: number,
+    playerCol: number
+}
+
 function App() {
-    const gridProps = {
-        grid: [
-            [ new GridCell(Color.RED), new GridCell(Color.DEFAULT, new Swatch(Color.BLUE)) ],
-            [ new GridCell(Color.GREEN), new GridCell(Color.GREEN), new GridCell(Color.GREEN),
-                new GridCell(Color.GREEN), new GridCell(Color.GREEN),
-                new GridCell(Color.DEFAULT, new Swatch(Color.GREEN)) ],
-            [ null, new GridCell(Color.RED), null, new GridCell() ]
+    const gridProps: GridProps = {
+        gridConfig: [
+            [
+                { hasTile: true, tileColor: Color.BLUE, solutionColor: Color.GREEN },
+                { hasTile: true, solutionColor: Color.BLUE, item: new Swatch(Color.BLUE) }
+            ],
+            [
+                { hasTile: true, solutionColor: Color.GREEN },
+                { hasTile: true, solutionColor: Color.GREEN },
+                { hasTile: true, solutionColor: Color.GREEN },
+                { hasTile: true, solutionColor: Color.GREEN },
+                { hasTile: true, solutionColor: Color.GREEN, item: new Swatch(Color.GREEN) }
+            ],
+            [
+                { hasTile: false },
+                { hasTile: true, solutionColor: Color.BLUE },
+                { hasTile: false },
+                { hasTile: true, solutionColor: Color.BLUE }
+            ]
         ],
         playerRow: 1,
         playerCol: 0
@@ -35,7 +53,7 @@ function App() {
                 </a>
             </header>
 
-            <Grid {...gridProps} />
+            <GridComponent {...gridProps} />
         </div>
     );
 }
