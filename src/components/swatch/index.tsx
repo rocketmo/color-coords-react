@@ -16,7 +16,7 @@ export default class SwatchComponent extends React.Component<SwatchComponentProp
 
     constructor(props: SwatchComponentProps) {
         super(props);
-        this.animationDelay = Math.random();
+        this.animationDelay = Math.random() * 4;
     }
 
     render(): JSX.Element {
