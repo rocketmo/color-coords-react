@@ -23,9 +23,9 @@ export default class GridCell {
         const key = `tile-${this.row}-${this.col}`;
         const elements = [];
         elements.push(
-            <Tile color={this.color} alt={(this.row + this.col) % 2 === 0}
+            <Tile key={key} color={this.color} alt={(this.row + this.col) % 2 === 0}
                 solution={this.solutionColor} showSolution={showSolution}
-                row={this.row} col={this.col} key={key} />
+                row={this.row} col={this.col} />
         );
 
         if (this.item) {

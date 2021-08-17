@@ -1,4 +1,5 @@
 import React from "react";
+import { GridOffsetContext } from "../grid";
 import "./swatch.css";
 import { TILE_SIZE, Color } from "../../constants";
 
@@ -12,6 +13,7 @@ interface SwatchComponentProps {
 }
 
 export default class SwatchComponent extends React.Component<SwatchComponentProps> {
+    static contextType = GridOffsetContext;
     animationDelay: number;
 
     constructor(props: SwatchComponentProps) {
@@ -22,8 +24,8 @@ export default class SwatchComponent extends React.Component<SwatchComponentProp
     render(): JSX.Element {
         const colorClass = `swatch bg-${this.props.color}`;
         const swatchStyle = {
-            left: `${(this.props.col * TILE_SIZE) + QUARTER_DIFF}px`,
-            top: `${(this.props.row * TILE_SIZE) + QUARTER_DIFF}px`,
+            left: `${(this.props.col * TILE_SIZE) + QUARTER_DIFF + this.context.x}px`,
+            top: `${(this.props.row * TILE_SIZE) + QUARTER_DIFF + this.context.y}px`,
             animationDelay: `-${this.animationDelay}s`
         };
 

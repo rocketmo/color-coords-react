@@ -12,7 +12,9 @@ export interface GridCellConfig {
 
 export default class Grid {
     [ immerable ] = true;
-    cells: (GridCell | null)[][];
+    private cells: (GridCell | null)[][];
+    width: number;
+    height: number;
 
     constructor(config: GridCellConfig[][]) {
         this.cells = config.map((row, rowIdx) => {
@@ -22,6 +24,9 @@ export default class Grid {
                     null;
             });
         });
+
+        this.height = this.cells.length;
+        this.width = Math.max(...this.cells.map(row => row.length));
     }
 
     // Returns GridCell if one exists at the given position

@@ -1,18 +1,10 @@
-import GridComponent from "../grid";
-import { GridCellConfig } from "../../classes/grid";
+import Game, { GameProps } from "../game";
 import Swatch from "../../classes/swatch";
 import { Color } from "../../constants";
-import logo from "./logo.svg";
 import "./app.css";
 
-interface GridProps {
-    gridConfig: GridCellConfig[][],
-    playerRow: number,
-    playerCol: number
-}
-
 function App() {
-    const gridProps: GridProps = {
+    const gameProps: GameProps = {
         gridConfig: [
             [
                 { hasTile: true, tileColor: Color.BLUE, solutionColor: Color.GREEN },
@@ -38,22 +30,7 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
-
-            <GridComponent {...gridProps} />
+            <Game {...gameProps} />
         </div>
     );
 }
