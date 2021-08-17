@@ -3,18 +3,20 @@ import { Queue } from '@datastructures-js/queue';
 import { cloneDeep } from "lodash";
 import produce from "immer";
 import GridComponent from "../grid";
-import Player, { PlayerMovement } from "../../classes/player";
-import Grid, { GridCellConfig } from "../../classes/grid";
-import GridAnimationFrame from "../../classes/grid-animation-frame";
+import Player from "../../classes/player";
+import Grid from "../../classes/grid";
 import PlayerAnimationFrame from "../../classes/player-animation-frame";
 import TileAnimationFrame from "../../classes/tile-animation-frame";
-import "./game.css";
 import { Color, Direction } from "../../constants";
 import { sleep } from "../../services/util";
+import "./game.css";
 
+import type GridAnimationFrame from "../../classes/grid-animation-frame";
 import type { KeyboardEvent } from "react";
+import type { GridCellConfig } from "../../classes/grid";
+import type { PlayerMovement } from "../../classes/player";
 
-export interface GameProps {
+interface GameProps {
     gridConfig: GridCellConfig[][],
     playerRow: number,
     playerCol: number
@@ -30,6 +32,8 @@ interface GameState {
     gameOver: boolean,
     isPlayerMoving: boolean;
 }
+
+export type { GameProps };
 
 export default class Game extends React.Component<GameProps, GameState> {
     keyFnMap: Record<string, Function>;

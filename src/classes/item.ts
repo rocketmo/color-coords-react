@@ -1,6 +1,5 @@
 import { immerable } from "immer";
-import { JSX } from "@babel/types";
-import { Color } from "../constants";
+import type { Color } from "../constants";
 
 export default abstract class Item {
     [ immerable ] = true;

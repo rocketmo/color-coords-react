@@ -1,9 +1,11 @@
-import React, { KeyboardEventHandler } from "react";
+import React from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
-import Grid from "../../classes/grid";
-import "./grid.css";
 import { Color, TILE_SIZE } from "../../constants";
+import "./grid.css";
+
+import type Grid from "../../classes/grid";
+import type { KeyboardEventHandler } from "react";
 
 interface GridProps {
     grid: Grid,

@@ -1,14 +1,16 @@
 import { immerable } from "immer";
-import { Color } from "../constants";
 import GridCell from "./grid-cell";
-import Item from "./item";
+import type Item from "./item";
+import type { Color } from "../constants";
 
-export interface GridCellConfig {
+interface GridCellConfig {
     hasTile: boolean,
     tileColor?: Color,
     solutionColor?: Color,
     item?: Item
 }
+
+export type { GridCellConfig };
 
 export default class Grid {
     [ immerable ] = true;

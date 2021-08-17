@@ -1,7 +1,7 @@
 import { immerable } from "immer";
 import { Color } from "../constants";
-import Item from "./item";
 import Tile from "../components/tile";
+import type Item from "./item";
 
 export default class GridCell {
     [ immerable ] = true;

@@ -1,4 +1,3 @@
-import { JSX } from "@babel/types";
 import Item from "./item";
 import SwatchComponent from "../components/swatch"
 import { Color } from "../constants";

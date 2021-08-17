@@ -1,8 +1,9 @@
-import { Color, Direction, DIR_OFFSET } from "../constants";
-import Grid from "./grid";
-import GridCell from "./grid-cell";
+import { Color, DIR_OFFSET } from "../constants";
+import type Grid from "./grid";
+import type GridCell from "./grid-cell";
+import type { Direction } from "../constants";
 
-export interface PlayerMovement {
+interface PlayerMovement {
     currentDirection: (Direction | null),
     prevDirection: (Direction | null)
 }
@@ -15,6 +16,8 @@ interface PlayerMovementResult {
     directionMoved?: Direction,
     gridCellMovedTo?: GridCell
 }
+
+export type { PlayerMovement };
 
 export default class Player {
     row: number;

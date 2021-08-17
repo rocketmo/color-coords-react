@@ -1,7 +1,9 @@
-import Game, { GameProps } from "../game";
+import Game from "../game";
 import Swatch from "../../classes/swatch";
 import { Color } from "../../constants";
 import "./app.css";
+
+import type { GameProps } from "../game";
 
 function App() {
     const gameProps: GameProps = {
