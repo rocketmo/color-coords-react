@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { usePrevious } from "../../services/hooks";
 import { easeQuadInOut } from "d3-ease";
-import { GridOffsetContext } from "../grid";
+import { GridOffsetContext } from "../../services/context";
 import { TILE_SIZE, Color } from "../../constants";
 import "./player.css";
 

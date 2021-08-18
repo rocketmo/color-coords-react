@@ -1,0 +1,16 @@
+.game-hud {
+    box-sizing: border-box;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.game-hud .top-bar {
+    background-color: #171717;
+    box-sizing: border-box;
+    color: #fff;
+    padding: 4px 12px;
+    width: 100%;
+}

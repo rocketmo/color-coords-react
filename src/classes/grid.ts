@@ -70,4 +70,20 @@ export default class Grid {
 
         return elements;
     }
+
+    renderSolution(): JSX.Element[] {
+        const elements = [];
+
+        for (let i = 0; i < this.cells.length; i += 1) {
+            for (let j = 0; j < this.cells[i].length; j += 1) {
+                const gridCell = this.cells[i][j];
+
+                if (gridCell) {
+                    elements.push(gridCell.renderSolution());
+                }
+            }
+        }
+
+        return elements;
+    }
 }

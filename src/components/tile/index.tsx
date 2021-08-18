@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { GridOffsetContext } from "../grid";
-import { TILE_SIZE, Color } from "../../constants";
+import { GridOffsetContext } from "../../services/context";
+import { TILE_SIZE, SOLUTION_TILE_SIZE, Color } from "../../constants";
 import "./tile.css";
 
 interface TileProps {
@@ -9,7 +9,8 @@ interface TileProps {
     color?: Color,
     solution?: Color,
     alt?: boolean,
-    showSolution?: boolean
+    showSolution?: boolean,
+    isSolutionTile?: boolean
 }
 
 export default function Tile(props: TileProps) {
@@ -18,12 +19,13 @@ export default function Tile(props: TileProps) {
     const colorClass = `tile-front bg-${color} ${props.alt ? "alt" : ""}`;
 
     const solutionColor = props.solution ?? Color.DEFAULT;
-    const solutionClass = `tile-solution bg-${solutionColor} ${props.alt ? "alt" : ""}`
+    const solutionClass = `tile-solution bg-${solutionColor} ${props.alt ? "alt" : ""}`;
     const solutionStyle = { opacity: props.showSolution ? "1" : "0" };
 
+    const tileSize = props.isSolutionTile ? SOLUTION_TILE_SIZE : TILE_SIZE;
     const tilePositionStyle = {
-        left: `${(props.col * TILE_SIZE) + offset.x}px`,
-        top: `${(props.row * TILE_SIZE) + offset.y}px`,
+        left: `${(props.col * tileSize) + offset.x}px`,
+        top: `${(props.row * tileSize) + offset.y}px`,
     };
 
     return (

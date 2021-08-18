@@ -1,0 +1,41 @@
+.solution-player-cursor {
+    box-sizing: border-box;
+    height: 20px;
+    position: absolute;
+    width: 20px;
+    z-index: 20;
+}
+
+.solution-player-cursor .cursor-corner {
+    height: 4px;
+    position: absolute;
+    width: 4px;
+}
+
+.solution-player-cursor .cursor-corner.cursor-corner-top-left {
+    border-top: 3px solid #fff;
+    border-left: 3px solid #fff;
+    left: 0;
+    top: 0;
+}
+
+.solution-player-cursor .cursor-corner.cursor-corner-top-right {
+    border-top: 3px solid #fff;
+    border-right: 3px solid #fff;
+    right: 0;
+    top: 0;
+}
+
+.solution-player-cursor .cursor-corner.cursor-corner-bottom-left {
+    border-bottom: 3px solid #fff;
+    border-left: 3px solid #fff;
+    left: 0;
+    bottom: 0;
+}
+
+.solution-player-cursor .cursor-corner.cursor-corner-bottom-right {
+    border-bottom: 3px solid #fff;
+    border-right: 3px solid #fff;
+    right: 0;
+    bottom: 0;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { GridOffsetContext } from "../grid";
+import { GridOffsetContext } from "../../services/context";
 import "./swatch.css";
 import { TILE_SIZE, Color } from "../../constants";
 

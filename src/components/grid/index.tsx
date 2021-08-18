@@ -1,10 +1,12 @@
 import React from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
-import { Color, TILE_SIZE } from "../../constants";
+import { GridOffsetContext } from "../../services/context";
+import { TILE_SIZE } from "../../constants";
 import "./grid.css";
 
 import type Grid from "../../classes/grid";
+import type { Color } from "../../constants";
 import type { KeyboardEventHandler } from "react";
 
 interface GridProps {
@@ -19,8 +21,6 @@ interface GridProps {
     resetFlags: () => void
     onPlayerAnimationEnd: () => void
 }
-
-export const GridOffsetContext = React.createContext({ x: 0, y: 0 });
 
 export default function GridComponent(props: GridProps) {
     const { width, height, ref } = useResizeDetector({

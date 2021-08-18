@@ -4,6 +4,11 @@
     width: 48px;
 }
 
+.solution .tile {
+    height: 20px;
+    width: 20px;
+}
+
 .tile .tile-front {
     height: 100%;
     position: absolute;
@@ -28,4 +33,11 @@
     top: -10%;
     width: 120%;
     z-index: 1;
+}
+
+.solution .tile .tile-back {
+    height: 125%;
+    left: -12.5%;
+    top: -12.5%;
+    width: 125%;
 }

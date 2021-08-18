@@ -3,6 +3,7 @@ import { Queue } from '@datastructures-js/queue';
 import { cloneDeep } from "lodash";
 import produce from "immer";
 import GridComponent from "../grid";
+import GameHUD from "../game-hud";
 import Player from "../../classes/player";
 import Grid from "../../classes/grid";
 import PlayerAnimationFrame from "../../classes/player-animation-frame";
@@ -19,7 +20,8 @@ import type { PlayerMovement } from "../../classes/player";
 interface GameProps {
     gridConfig: GridCellConfig[][],
     playerRow: number,
-    playerCol: number
+    playerCol: number,
+    level: number
 }
 
 interface GameState {
@@ -224,28 +226,29 @@ export default class Game extends React.Component<GameProps, GameState> {
             playerCol,
             playerColor,
             showSolution,
-            isPlayerMoving
+            isPlayerMoving,
+            movesTaken
         } = this.state;
 
-        // TODO: Replace Moves text with component
         return (
             <div className="game">
-                <div className="game-grid-container">
-                    <GridComponent
-                        grid={grid}
-                        playerRow={playerRow}
-                        playerCol={playerCol}
-                        playerColor={playerColor}
-                        showSolution={showSolution}
-                        isPlayerMoving={isPlayerMoving}
-                        onKeyDown={this.onKeyDown}
-                        onKeyUp={this.onKeyUp}
-                        resetFlags={this.resetFlags}
-                        onPlayerAnimationEnd={this.onPlayerAnimationEnd} />
-                </div>
-                <div style={{position: "absolute", left: "0", top: "0"}}>
-                    Moves: {this.state.movesTaken}
-                </div>
+                <GameHUD
+                    grid={grid}
+                    playerRow={playerRow}
+                    playerCol={playerCol}
+                    movesTaken={movesTaken}
+                    level={this.props.level} />
+                <GridComponent
+                    grid={grid}
+                    playerRow={playerRow}
+                    playerCol={playerCol}
+                    playerColor={playerColor}
+                    showSolution={showSolution}
+                    isPlayerMoving={isPlayerMoving}
+                    onKeyDown={this.onKeyDown}
+                    onKeyUp={this.onKeyUp}
+                    resetFlags={this.resetFlags}
+                    onPlayerAnimationEnd={this.onPlayerAnimationEnd} />
             </div>
         );
     }

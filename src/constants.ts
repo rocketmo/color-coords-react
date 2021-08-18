@@ -1,4 +1,5 @@
 export const TILE_SIZE = 48;
+export const SOLUTION_TILE_SIZE = 20;
 
 export enum Color {
     BLUE = "blue",

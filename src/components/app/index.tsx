@@ -27,11 +27,12 @@ function App() {
             ]
         ],
         playerRow: 1,
-        playerCol: 0
+        playerCol: 0,
+        level: 1
     };
 
     return (
-        <div className="App">
+        <div className="app">
             <Game {...gameProps} />
         </div>
     );
