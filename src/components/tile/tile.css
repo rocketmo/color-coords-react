@@ -27,6 +27,7 @@
 
 .tile .tile-back {
     background-color: #171717;
+    border-radius: 4px;
     height: 120%;
     left: -10%;
     position: absolute;
@@ -36,6 +37,7 @@
 }
 
 .solution .tile .tile-back {
+    border-radius: 2px;
     height: 125%;
     left: -12.5%;
     top: -12.5%;
