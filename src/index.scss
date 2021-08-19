@@ -1,0 +1,44 @@
+@use "./styles/colors";
+@use "sass:color";
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.bg-default {
+    background-color: colors.$default;
+}
+
+.bg-default.alt {
+    background-color: color.scale(colors.$default, $lightness: 50%);
+}
+
+$color-map: (
+    "blue": colors.$blue,
+    "green": colors.$green,
+    "orange": colors.$orange,
+    "purple": colors.$purple,
+    "red": colors.$red,
+    "yellow": colors.$yellow
+);
+
+@each $name, $col in $color-map {
+    .bg-#{$name} {
+        background-color: $col;
+    }
+
+    .bg-#{$name}.alt {
+        background-color: color.scale($col, $lightness: 25%);
+    }
+}

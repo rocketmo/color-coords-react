@@ -1,0 +1,45 @@
+@use "../../styles/sizes";
+
+$cursor-border: 3px solid #fff;
+
+.solution-player-cursor {
+    box-sizing: border-box;
+    height: sizes.$solution-tile-size;
+    position: absolute;
+    width: sizes.$solution-tile-size;
+    z-index: 20;
+
+    .cursor-corner {
+        height: 4px;
+        position: absolute;
+        width: 4px;
+
+        &.cursor-corner-top-left {
+            border-top: $cursor-border;
+            border-left: $cursor-border;
+            left: 0;
+            top: 0;
+        }
+
+        &.cursor-corner-top-right {
+            border-top :$cursor-border;
+            border-right: $cursor-border;
+            right: 0;
+            top: 0;
+        }
+
+        &.cursor-corner-bottom-left {
+            border-bottom: $cursor-border;
+            border-left: $cursor-border;
+            left: 0;
+            bottom: 0;
+        }
+
+        &.cursor-corner-bottom-right {
+            border-bottom: $cursor-border;
+            border-right: $cursor-border;
+            right: 0;
+            bottom: 0;
+        }
+    }
+}

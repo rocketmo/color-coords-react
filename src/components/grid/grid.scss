@@ -1,5 +1,7 @@
+@use "../../styles/colors";
+
 .tile-grid {
-    background-color: #ced8f3;
+    background-color: colors.$game-bg;
     box-sizing: border-box;
     height: 100%;
     overflow: hidden;

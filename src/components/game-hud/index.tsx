@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Turn as Hamburger } from "hamburger-react";
 import Solution from "../solution";
 import GameMenu from "../game-menu";
-import "./game-hud.css";
+import "./game-hud.scss";
+
 import type Grid from "../../classes/grid";
 
 interface GameHUDProps {

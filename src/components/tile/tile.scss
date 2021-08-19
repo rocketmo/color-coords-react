@@ -1,0 +1,56 @@
+@use "../../styles/colors";
+@use "../../styles/sizes";
+
+$tile-back-pct: 120%;
+$tile-offset: -10%;
+$tile-back-radius: 4px;
+
+$solution-tile-back-pct: 125%;
+$solution-tile-offset: -12.5%;
+$solution-tile-back-radius: 2px;
+
+.tile {
+    height: sizes.$tile-size;
+    position: absolute;
+    width: sizes.$tile-size;
+
+    .tile-front {
+        height: 100%;
+        position: absolute;
+        transition: background-color .4s ease-out 0.15s;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .tile-solution {
+        height: 100%;
+        position: absolute;
+        transition: opacity .4s ease-out;
+        width: 100%;
+        z-index: 3;
+    }
+
+    .tile-back {
+        background-color: colors.$black;
+        border-radius: $tile-back-radius;
+        height: $tile-back-pct;
+        left: $tile-offset;
+        position: absolute;
+        top: $tile-offset;
+        width: $tile-back-pct;
+        z-index: 1;
+    }
+}
+
+.solution .tile {
+    height: sizes.$solution-tile-size;
+    width: sizes.$solution-tile-size;
+
+    .tile-back {
+        border-radius: $solution-tile-back-radius;
+        height: $solution-tile-back-pct;
+        left: $solution-tile-offset;
+        top: $solution-tile-offset;
+        width: $solution-tile-back-pct;
+    }
+}

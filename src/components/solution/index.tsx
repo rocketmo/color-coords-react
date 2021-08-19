@@ -3,7 +3,7 @@ import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import { GridOffsetContext } from "../../services/context";
 import { SOLUTION_TILE_SIZE } from "../../services/constants";
 import SolutionPlayerCursor from "../solution-player-cursor";
-import "./solution.css";
+import "./solution.scss";
 
 import type Grid from "../../classes/grid";
 

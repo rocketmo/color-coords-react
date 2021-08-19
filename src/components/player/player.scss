@@ -1,0 +1,33 @@
+$player-border: 4px solid #fff;
+$player-size: 40px;
+
+.player {
+    background-color: #333;
+    border-radius: $player-size;
+    height: $player-size;
+    position: absolute;
+    width: $player-size;
+    z-index: 20;
+
+    .player-color {
+        border: $player-border;
+        border-radius: $player-size;
+        box-sizing: border-box;
+        height: 100%;
+        opacity: 0.85;
+        position: absolute;
+        transition: background-color .3s ease-out 0.15s;
+        width: 100%;
+        z-index: 21;
+    }
+
+    .player-border {
+        border: $player-border;
+        border-radius: $player-size;
+        box-sizing: border-box;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 22;
+    }
+}

@@ -1,7 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faThLarge, faQuestionCircle, faCog } from '@fortawesome/free-solid-svg-icons';
-import "./game-menu.css";
+import "./game-menu.scss";
 import React from "react";
+
+import type { PointerEvent } from "react";
 
 interface GameMenuProps {
     isOpen: boolean,
@@ -13,7 +15,9 @@ export default function GameMenu(props: GameMenuProps) {
     const overlayClass = `game-menu-overlay ${openClass}`;
     const navClass = `game-menu-nav ${openClass}`;
     const tabIndex = props.isOpen ? 0 : -1;
-    const handleClose = () => {
+
+    const handleClose = (event: PointerEvent) => {
+        event.preventDefault();
         props.setOpen(false);
     };
 

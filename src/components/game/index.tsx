@@ -10,7 +10,7 @@ import PlayerAnimationFrame from "../../classes/player-animation-frame";
 import TileAnimationFrame from "../../classes/tile-animation-frame";
 import { Color, Direction } from "../../services/constants";
 import { sleep } from "../../services/util";
-import "./game.css";
+import "./game.scss";
 
 import type GridAnimationFrame from "../../classes/grid-animation-frame";
 import type { KeyboardEvent } from "react";

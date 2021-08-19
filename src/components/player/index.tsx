@@ -3,7 +3,7 @@ import { usePrevious } from "../../services/hooks";
 import { easeQuadInOut } from "d3-ease";
 import { GridOffsetContext } from "../../services/context";
 import { TILE_SIZE, Color } from "../../services/constants";
-import "./player.css";
+import "./player.scss";
 
 const PLAYER_SIZE = 40;
 const ANIM_FRAMES = 70;

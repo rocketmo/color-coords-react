@@ -1,6 +1,6 @@
 import React from "react";
 import { GridOffsetContext } from "../../services/context";
-import "./swatch.css";
+import "./swatch.scss";
 import { TILE_SIZE, Color } from "../../services/constants";
 
 const SWATCH_SIZE = 20;

@@ -1,7 +1,7 @@
 import Game from "../game";
 import Swatch from "../../classes/swatch";
 import { Color } from "../../services/constants";
-import "./app.css";
+import "./app.scss";
 
 import type { GameProps } from "../game";
 
