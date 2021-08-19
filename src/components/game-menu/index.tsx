@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSync, faThLarge, faQuestionCircle, faCog, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faSync, faThLarge, faQuestionCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import "./game-menu.css";
 import React from "react";
 
