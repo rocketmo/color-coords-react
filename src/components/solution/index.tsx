@@ -28,9 +28,9 @@ export default function Solution(props: SolutionProps) {
 
     return (
         <GridOffsetContext.Provider value={offset}>
-            <div className="solution-container" ref={ref}>
+            <div className="solution-container">
                 <span className="solution-target-text">Target</span>
-                <div className="solution">
+                <div className="solution" ref={ref}>
                     {solutionTiles}
                     <SolutionPlayerCursor row={props.playerRow} col={props.playerCol} />
                 </div>
