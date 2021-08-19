@@ -2,11 +2,11 @@ import React from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
 import { GridOffsetContext } from "../../services/context";
-import { TILE_SIZE } from "../../constants";
+import { TILE_SIZE } from "../../services/constants";
 import "./grid.css";
 
 import type Grid from "../../classes/grid";
-import type { Color } from "../../constants";
+import type { Color } from "../../services/constants";
 import type { KeyboardEventHandler } from "react";
 
 interface GridProps {

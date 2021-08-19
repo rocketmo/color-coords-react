@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { GridOffsetContext } from "../../services/context";
-import { TILE_SIZE, SOLUTION_TILE_SIZE, Color } from "../../constants";
+import { TILE_SIZE, SOLUTION_TILE_SIZE, Color } from "../../services/constants";
 import "./tile.css";
 
 interface TileProps {

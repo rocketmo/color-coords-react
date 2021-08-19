@@ -1,6 +1,6 @@
 import Game from "../game";
 import Swatch from "../../classes/swatch";
-import { Color } from "../../constants";
+import { Color } from "../../services/constants";
 import "./app.css";
 
 import type { GameProps } from "../game";

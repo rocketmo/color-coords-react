@@ -1,7 +1,7 @@
 import { immerable } from "immer";
 import GridCell from "./grid-cell";
 import type Item from "./item";
-import type { Color } from "../constants";
+import type { Color } from "../services/constants";
 
 interface GridCellConfig {
     hasTile: boolean,

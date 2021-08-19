@@ -1,6 +1,6 @@
 import Item from "./item";
 import SwatchComponent from "../components/swatch"
-import { Color } from "../constants";
+import { Color } from "../services/constants";
 
 export default class Swatch extends Item {
     color: Color;

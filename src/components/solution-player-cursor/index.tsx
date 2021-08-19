@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { GridOffsetContext } from "../../services/context";
-import { SOLUTION_TILE_SIZE } from "../../constants";
+import { SOLUTION_TILE_SIZE } from "../../services/constants";
 import "./solution-player-cursor.css";
 
 export default function SolutionPlayerCursor(props: { row: number, col: number }) {

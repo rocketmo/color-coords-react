@@ -1,7 +1,7 @@
-import { Color, DIR_OFFSET } from "../constants";
+import { Color, DIR_OFFSET } from "../services/constants";
 import type Grid from "./grid";
 import type GridCell from "./grid-cell";
-import type { Direction } from "../constants";
+import type { Direction } from "../services/constants";
 
 interface PlayerMovement {
     currentDirection: (Direction | null),

@@ -1,7 +1,7 @@
 import React from "react";
 import { GridOffsetContext } from "../../services/context";
 import "./swatch.css";
-import { TILE_SIZE, Color } from "../../constants";
+import { TILE_SIZE, Color } from "../../services/constants";
 
 const SWATCH_SIZE = 20;
 const QUARTER_DIFF = (TILE_SIZE - SWATCH_SIZE) / 2;

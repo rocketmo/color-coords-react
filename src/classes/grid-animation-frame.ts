@@ -1,5 +1,5 @@
-import { AnimationType } from "../constants";
-import type { Color } from "../constants";
+import { AnimationType } from "../services/constants";
+import type { Color } from "../services/constants";
 
 export default abstract class GridAnimationFrame {
     row: number;

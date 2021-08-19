@@ -1,5 +1,5 @@
 import { immerable } from "immer";
-import { Color } from "../constants";
+import { Color } from "../services/constants";
 import Tile from "../components/tile";
 import type Item from "./item";
 

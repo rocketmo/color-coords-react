@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { usePrevious } from "../../services/hooks";
 import { easeQuadInOut } from "d3-ease";
 import { GridOffsetContext } from "../../services/context";
-import { TILE_SIZE, Color } from "../../constants";
+import { TILE_SIZE, Color } from "../../services/constants";
 import "./player.css";
 
 const PLAYER_SIZE = 40;

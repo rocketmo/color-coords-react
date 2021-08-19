@@ -1,7 +1,7 @@
 import React from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import { GridOffsetContext } from "../../services/context";
-import { SOLUTION_TILE_SIZE } from "../../constants";
+import { SOLUTION_TILE_SIZE } from "../../services/constants";
 import SolutionPlayerCursor from "../solution-player-cursor";
 import "./solution.css";
 

@@ -1,5 +1,5 @@
 import { immerable } from "immer";
-import type { Color } from "../constants";
+import type { Color } from "../services/constants";
 
 export default abstract class Item {
     [ immerable ] = true;
