@@ -1,0 +1,76 @@
+.game-menu {
+    position: relative;
+    z-index: 200;
+}
+
+.game-menu-overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+
+.game-menu-overlay.game-menu-open {
+    opacity: 1;
+    transform: translate(0, 0);
+    transition: opacity 0.3s;
+}
+
+.game-menu-overlay.game-menu-closed {
+    opacity: 0;
+    transform: translate(-100%, 0);
+    transition: opacity 0.3s, transform 0s ease 0.3s;
+}
+
+.game-menu-nav {
+    background-color: #3d4253;
+    box-sizing: border-box;
+    height: 100%;
+    max-width: 100%;
+    padding: 20px 30px;
+    position: fixed;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    width: 250px;
+    z-index: 2
+}
+
+.game-menu-nav.game-menu-open {
+    box-shadow: 0 0 10px 0 #333;
+    transform: translate(0, 0);
+}
+
+.game-menu-nav.game-menu-closed {
+    box-shadow: 0 0 0 0 #333;
+    transform: translate(-100%, 0);
+}
+
+.game-menu-nav a {
+    color: #fff;
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.game-menu-nav a span {
+    margin-left: 12px;
+}
+
+.game-menu-nav a.level-select-btn:hover {
+    color: #f3bfc0;
+}
+
+.game-menu-nav a.restart-btn:hover {
+    color: #a1cfe2;
+}
+
+.game-menu-nav a.how-to-btn:hover {
+    color: #f5dea8;
+}
+
+.game-menu-nav a.settings-btn:hover {
+    color: #c3dfb0;
+}

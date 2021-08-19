@@ -12,6 +12,12 @@ code {
         monospace;
 }
 
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 .bg-default {
     background-color: #ddd;
 }
