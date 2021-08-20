@@ -11,7 +11,8 @@ interface GameHUDProps {
     playerRow: number,
     playerCol: number,
     movesTaken: number,
-    level: number
+    level: number,
+    restartHandler: () => void
 }
 
 export default function GameHUD(props: GameHUDProps) {
@@ -32,8 +33,14 @@ export default function GameHUD(props: GameHUDProps) {
                 </div>
                 <div className="clearfix"></div>
             </div>
-            <GameMenu isOpen={isMenuOpen} setOpen={setMenuOpen} />
-            <Solution grid={props.grid} playerRow={props.playerRow} playerCol={props.playerCol} />
+            <GameMenu
+                isOpen={isMenuOpen}
+                setOpen={setMenuOpen}
+                restartHandler={props.restartHandler} />
+            <Solution
+                grid={props.grid}
+                playerRow={props.playerRow}
+                playerCol={props.playerCol} />
         </div>
     );
 }

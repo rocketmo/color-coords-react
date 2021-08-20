@@ -5,10 +5,10 @@ $menu-shadow-color: #333;
 $overlay-opacity-time: 0.3s;
 
 $link-hover-map: (
-    ".level-select-btn:hover": colors.$red,
-    ".restart-btn:hover": colors.$orange,
-    ".how-to-btn:hover": colors.$yellow,
-    ".settings-btn:hover": colors.$green
+    ".level-select-btn": colors.$red,
+    ".restart-btn": colors.$orange,
+    ".how-to-btn": colors.$yellow,
+    ".settings-btn": colors.$green
 );
 
 .game-menu {
@@ -56,22 +56,29 @@ $link-hover-map: (
             transform: translate(-100%, 0);
         }
 
-        a {
+        .game-menu-btn {
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
             color: #fff;
             display: block;
             font-size: 18px;
             font-weight: 700;
+            height: 24px;
             margin-bottom: 20px;
+            padding: 0;
+            text-align: left;
             text-decoration: none;
             transition: color 0.2s;
+            width: 100%;
 
             span {
                 margin-left: 12px;
             }
 
             @each $sel, $col in $link-hover-map {
-                &#{$sel} {
+                &#{$sel}:hover {
                     color: color.scale($col, $lightness: 50%);
+                    cursor: pointer;
                 }
             }
         }

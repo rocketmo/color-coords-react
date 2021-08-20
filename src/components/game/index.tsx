@@ -61,6 +61,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.onKeyUp = this.onKeyUp.bind(this);
         this.resetFlags = this.resetFlags.bind(this);
         this.onPlayerAnimationEnd = this.onPlayerAnimationEnd.bind(this);
+        this.restartGame = this.restartGame.bind(this);
 
         this.keyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -219,6 +220,19 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    restartGame(): void {
+        this.setState({
+            grid: new Grid(this.props.gridConfig),
+            playerRow: this.props.playerRow,
+            playerCol: this.props.playerCol,
+            playerColor: Color.DEFAULT,
+            movesTaken: 0,
+            gameOver: false,
+            isPlayerMoving: false,
+            showSolution: false
+        });
+    }
+
     render() {
         const {
             grid,
@@ -237,7 +251,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                     playerRow={playerRow}
                     playerCol={playerCol}
                     movesTaken={movesTaken}
-                    level={this.props.level} />
+                    level={this.props.level}
+                    restartHandler={this.restartGame} />
                 <GridComponent
                     grid={grid}
                     playerRow={playerRow}

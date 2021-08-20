@@ -32,7 +32,7 @@ function App() {
     };
 
     return (
-        <div className="app">
+        <div className="app" onContextMenu={event => event.preventDefault()}>
             <Game {...gameProps} />
         </div>
     );
