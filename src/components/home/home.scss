@@ -155,7 +155,7 @@ $nav-min-default-width: 320px;
             border: none;
             color: colors.$black;
             display: inline-block;
-            font-family: Nunito, Arial, sans-serif;
+            font-family: functions.sans-serif-family(Nunito);
             font-size: $nav-text-min-size;
             font-weight: 700;
             margin: 4px 0;
@@ -166,6 +166,7 @@ $nav-min-default-width: 320px;
             &:hover {
                 cursor: pointer;
                 color: rgba(255, 255, 255, 0.8);
+                font-weight: 800;
             }
         }
 

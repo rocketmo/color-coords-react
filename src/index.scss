@@ -1,5 +1,6 @@
 @use "./styles/colors";
 @use "./styles/fonts";
+@use "./styles/functions";
 @use "sass:color";
 
 $color-map: (
@@ -14,9 +15,8 @@ $color-map: (
 body {
     background-color: colors.$black;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-        sans-serif;
+    font-family: functions.sans-serif-family(NunitoSans);
+    font-size: 16px;
     user-select: none;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;

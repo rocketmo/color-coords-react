@@ -1,15 +1,9 @@
 @use "../../styles/colors";
+@use "../../styles/functions";
 @use "sass:color";
 
 $menu-shadow-color: #333;
 $overlay-opacity-time: 0.3s;
-
-$link-hover-map: (
-    ".level-select-btn": colors.$red,
-    ".restart-btn": colors.$orange,
-    ".how-to-btn": colors.$yellow,
-    ".settings-btn": colors.$green
-);
 
 .game-menu {
     position: relative;
@@ -36,11 +30,11 @@ $link-hover-map: (
     }
 
     .game-menu-nav {
-        background-color: color.scale(colors.$game-bg, $lightness: -70%, $saturation: -60%);
+        background-color: colors.$menu-bg;
         box-sizing: border-box;
         height: 100%;
         max-width: 100%;
-        padding: 20px 30px;
+        padding: 20px 0;
         position: fixed;
         transition: transform 0.5s ease, box-shadow 0.5s ease;
         width: 250px;
@@ -59,13 +53,14 @@ $link-hover-map: (
         .game-menu-btn {
             background-color: rgba(0, 0, 0, 0);
             border: none;
+            box-sizing: border-box;
             color: #fff;
             display: block;
+            font-family: functions.sans-serif-family(Nunito);
             font-size: 18px;
             font-weight: 700;
-            height: 24px;
-            margin-bottom: 20px;
-            padding: 0;
+            margin-bottom: 4px;
+            padding: 8px 30px;
             text-align: left;
             text-decoration: none;
             transition: color 0.2s;
@@ -75,11 +70,11 @@ $link-hover-map: (
                 margin-left: 12px;
             }
 
-            @each $sel, $col in $link-hover-map {
-                &#{$sel}:hover {
-                    color: color.scale($col, $lightness: 50%);
-                    cursor: pointer;
-                }
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                border-right: 2px solid colors.$menu-highlight;
+                cursor: pointer;
+                font-weight: 800;
             }
         }
     }

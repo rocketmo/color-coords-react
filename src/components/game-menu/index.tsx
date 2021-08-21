@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync, faThLarge, faQuestionCircle, faCog } from '@fortawesome/free-solid-svg-icons';
 import { mainButtonPressHandler } from "../../services/util";
@@ -36,20 +37,20 @@ export default function GameMenu(props: GameMenuProps) {
         <div className="game-menu">
             <div className={overlayClass} onPointerUp={onOverlayPress}></div>
             <nav className={navClass}>
-                <a className="game-menu-btn level-select-btn" href="#!" tabIndex={tabIndex}>
+                <Link to="/" className="game-menu-btn" tabIndex={tabIndex}>
                     <FontAwesomeIcon icon={faThLarge} />
                     <span>Level Select</span>
-                </a>
-                <button className="game-menu-btn restart-btn" tabIndex={tabIndex}
+                </Link>
+                <button className="game-menu-btn" tabIndex={tabIndex}
                     onPointerUp={onRestartPress}>
                     <FontAwesomeIcon icon={faSync} />
                     <span>Restart</span>
                 </button>
-                <button className="game-menu-btn how-to-btn" tabIndex={tabIndex}>
+                <button className="game-menu-btn" tabIndex={tabIndex}>
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     <span>How to Play</span>
                 </button>
-                <button className="game-menu-btn settings-btn" tabIndex={tabIndex}>
+                <button className="game-menu-btn" tabIndex={tabIndex}>
                     <FontAwesomeIcon icon={faCog} />
                     <span>Settings</span>
                 </button>
