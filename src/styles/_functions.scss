@@ -1,0 +1,17 @@
+// Credit: https://css-tricks.com/snippets/sass/strip-unit-function/
+@function strip-unit($number) {
+    @if type-of($number) == 'number' and not unitless($number) {
+        @return $number / ($number * 0 + 1);
+    }
+
+    @return $number;
+}
+
+// Credit: https://css-tricks.com/snippets/css/fluid-typography/
+// Note: Keep sizes and widths the same unit
+// Size refers to size of the property you wish to scale; width refers to the width of the window
+@function fluid-size($min-size, $max-size, $min-width, $max-width) {
+    @return calc(#{$min-size} + (#{strip-unit($max-size - $min-size)} *
+        ((100vw - #{$min-width}) / #{strip-unit($max-width - $min-width)}))
+    );
+}

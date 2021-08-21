@@ -1,0 +1,290 @@
+@use "../../styles/colors";
+@use "../../styles/functions";
+@use "sass:math";
+
+$title-col-map: (
+    1: colors.$red,
+    2: colors.$orange,
+    3: colors.$yellow,
+    4: colors.$green,
+    5: colors.$blue,
+    6: colors.$purple
+);
+
+$bg-col-map: (
+    1: #e25255,
+    2: #e55954,
+    3: #e85f53,
+    4: #eb6552,
+    5: #ee6b50,
+    6: #f1724f,
+    7: #f4784d,
+    8: #f77e4c,
+    9: #f9844a,
+    10: #f98d4b,
+    11: #f9954c,
+    12: #f99e4d,
+    13: #f9a64d,
+    14: #f9af4e,
+    15: #f9b74e,
+    16: #f9bf4f,
+    17: #f9c74f,
+    18: #ecc653,
+    19: #dfc557,
+    20: #d2c45b,
+    21: #c5c35e,
+    22: #b8c262,
+    23: #abc166,
+    24: #9ec06a,
+    25: #90be6d,
+    26: #8bbd7a,
+    27: #85bb86,
+    28: #7fb993,
+    29: #79b79f,
+    30: #74b5ac,
+    31: #6eb3b8,
+    32: #68b1c4,
+    33: #62afd0,
+    34: #68a7cd,
+    35: #6e9fc9,
+    36: #7497c6,
+    37: #7a8fc2,
+    38: #8087bf,
+    39: #867fbb,
+    40: #8c77b7,
+    41: #916fb3,
+    42: #9c6ca8,
+    43: #a6689c,
+    44: #b06590,
+    45: #ba6184,
+    46: #c45e79,
+    47: #ce5a6d,
+    48: #d85661,
+);
+
+$fade-in-x-offset: 1.5px;
+$fade-in-y-offset: -2em;
+$title-height: 150px;
+$title-fade-time: 2s;
+$title-fade-delay: 0.4s;
+$title-default-font-size: 80px;
+$title-mobile-font-size: 10vw;
+$title-max-default-width: $title-default-font-size * 10;
+
+$bg-layer-height: 10vmin;
+$bg-gradient-anim-time: 300s;
+
+$nav-min-margin: 10px;
+$nav-max-margin: 80px;
+$nav-text-min-size: 16px;
+$nav-text-max-size: 22px;
+$nav-min-default-width: 320px;
+
+.home-container {
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 100vh;
+    position: relative;
+    text-align: center;
+
+    .title-container {
+        padding-top: 25vmin;
+        height: $title-height;
+        font-size: $title-default-font-size;
+        position: relative;
+        z-index: 10;
+
+        .title-box {
+            left: 50%;
+            position: absolute;
+
+            .title-text {
+                display: block;
+                font-family: FredokaOne, cursive;
+                font-size: 1em;
+                font-weight: 700;
+                left: -50%;
+                margin: 0;
+                position: relative;
+                text-shadow: -1px -1px 0 colors.$black,
+                    1px -1px 0 colors.$black,
+                    -1px 1px 0 colors.$black,
+                    1px 1px 0 colors.$black,
+                    4px 4px 0 rgba(0, 0, 0, 0.2);
+                white-space: nowrap;
+
+                .first-letter {
+                    font-size: 1.4em;
+                }
+            }
+
+            &.title-main {
+                animation:
+                    simple-fade-in math.div($title-fade-time, 2) ease
+                        $title-fade-delay 1 normal forwards,
+                    title-fade-in $title-fade-time ease $title-fade-delay 1 normal forwards;
+                color: #fff;
+                opacity: 0;
+                z-index: 10;
+            }
+
+            @each $idx, $col in $title-col-map {
+                &.title-colored-#{$idx} {
+                    animation:
+                        simple-fade-in math.div($title-fade-time, 2) ease
+                            ($title-fade-delay + (0.1s * $idx)) 1 normal forwards,
+                        title-fade-in-#{$idx} $title-fade-time ease
+                            ($title-fade-delay + (0.1s * $idx)) 1 normal forwards;
+                    color: $col;
+                    opacity: 0;
+                    z-index: 9 - $idx;
+                }
+            }
+        }
+    }
+
+    .home-nav {
+        margin-top: $nav-min-margin;
+        padding-bottom: 30px;
+        position: relative;
+        text-align: center;
+        z-index: 5;
+
+        a, button {
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
+            color: colors.$black;
+            display: inline-block;
+            font-family: Nunito, Arial, sans-serif;
+            font-size: $nav-text-min-size;
+            font-weight: 700;
+            margin: 4px 0;
+            opacity: 0;
+            padding: 4px 12px;
+            text-decoration: none;
+
+            &:hover {
+                cursor: pointer;
+                color: rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        @for $i from 1 through 3 {
+            .home-nav-btn-#{$i} {
+                animation: nav-fade-in 1.5s ease (1.4s + (0.15s * $i)) 1 normal forwards;
+            }
+        }
+    }
+
+    .home-bg {
+        animation: simple-fade-in 3s ease 0s 1 normal forwards;
+        background-color: #ddd;
+        height: 100%;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+
+        .home-bg-gradient {
+            animation: bg-slide $bg-gradient-anim-time linear 0s infinite;
+            position: relative;
+
+            .bg-layer {
+                height: $bg-layer-height;
+                width: 100%;
+            }
+
+            @each $idx, $col in $bg-col-map {
+                .bg-layer-#{$idx} {
+                    background-color: $col;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: $title-max-default-width) {
+    .home-container {
+        .title-container {
+            font-size: $title-mobile-font-size;
+            height: calc(#{$title-height} +
+                (1.8 * (#{$title-mobile-font-size} - #{$title-default-font-size})));
+        }
+    }
+}
+
+@media only screen and (min-width: $nav-min-default-width) {
+    .home-container {
+        .home-nav {
+            margin-top: functions.fluid-size($nav-min-margin, $nav-max-margin,
+                $nav-min-default-width, $title-max-default-width);
+
+            a, button {
+                font-size: functions.fluid-size($nav-text-min-size, $nav-text-max-size,
+                    $nav-min-default-width, $title-max-default-width);
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: $title-max-default-width) {
+    .home-container {
+        .home-nav {
+            margin-top: $nav-max-margin;
+
+            a, button {
+                font-size: $nav-text-max-size;
+            }
+        }
+    }
+}
+
+@keyframes title-fade-in {
+    from {
+        transform: translateY($fade-in-y-offset);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@each $idx, $col in $title-col-map {
+    @keyframes title-fade-in-#{$idx} {
+        from {
+            transform: translate(($fade-in-x-offset * $idx), $fade-in-y-offset);
+        }
+        to {
+            transform: translate(0, 0);
+        }
+    }
+}
+
+@keyframes simple-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes nav-fade-in {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bg-slide {
+    from {
+        bottom: length($bg-col-map) * $bg-layer-height;
+    }
+    to {
+        bottom: 0;
+    }
+}

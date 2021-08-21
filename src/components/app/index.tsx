@@ -1,41 +1,24 @@
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Game from "../game";
-import Swatch from "../../classes/swatch";
-import { Color } from "../../services/constants";
+import Home from "../home";
+import { sampleGame } from "../../services/levels";
 import "./app.scss";
 
-import type { GameProps } from "../game";
-
-function App() {
-    const gameProps: GameProps = {
-        gridConfig: [
-            [
-                { hasTile: true, tileColor: Color.BLUE, solutionColor: Color.GREEN },
-                { hasTile: true, solutionColor: Color.BLUE, item: new Swatch(Color.BLUE) }
-            ],
-            [
-                { hasTile: true, solutionColor: Color.GREEN },
-                { hasTile: true, solutionColor: Color.GREEN },
-                { hasTile: true, solutionColor: Color.GREEN },
-                { hasTile: true, solutionColor: Color.GREEN },
-                { hasTile: true, solutionColor: Color.GREEN, item: new Swatch(Color.GREEN) }
-            ],
-            [
-                { hasTile: false },
-                { hasTile: true, solutionColor: Color.BLUE },
-                { hasTile: false },
-                { hasTile: true, solutionColor: Color.BLUE }
-            ]
-        ],
-        playerRow: 1,
-        playerCol: 0,
-        level: 1
-    };
-
+export default function App() {
     return (
-        <div className="app" onContextMenu={event => event.preventDefault()}>
-            <Game {...gameProps} />
+        // TODO: Uncomment and replace other app
+        // <div className="app" onContextMenu={event => event.preventDefault()}>
+        <div className="app">
+            <Router>
+                <Switch>
+                    <Route path="/game">
+                        <Game {...sampleGame} />
+                    </Route>
+                    <Route path="*">
+                        <Home />
+                    </Route>
+                </Switch>
+            </Router>
         </div>
     );
 }
-
-export default App;

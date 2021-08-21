@@ -1,0 +1,47 @@
+@font-face {
+    font-family: FredokaOne;
+    src: url("./fonts/FredokaOne/FredokaOne.woff2") format("woff2"),
+        url("./fonts/FredokaOne/FredokaOne.woff") format("woff"),
+        url("./fonts/FredokaOne/FredokaOne.eot") format("embedded-opentype"),
+        url("./fonts/FredokaOne/FredokaOne.ttf") format("truetype"),
+        url("./fonts/FredokaOne/FredokaOne.otf") format("opentype"),
+        url("./fonts/FredokaOne/FredokaOne.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url("./fonts/Nunito/Nunito-Regular.woff2") format("woff2"),
+        url("./fonts/Nunito/Nunito-Regular.woff") format("woff"),
+        url("./fonts/Nunito/Nunito-Regular.eot") format("embedded-opentype"),
+        url("./fonts/Nunito/Nunito-Regular.ttf") format("truetype"),
+        url("./fonts/Nunito/Nunito-Regular.otf") format("opentype"),
+        url("./fonts/Nunito/Nunito-Regular.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url("./fonts/Nunito/Nunito-SemiBold.woff2") format("woff2"),
+        url("./fonts/Nunito/Nunito-SemiBold.woff") format("woff"),
+        url("./fonts/Nunito/Nunito-SemiBold.eot") format("embedded-opentype"),
+        url("./fonts/Nunito/Nunito-SemiBold.ttf") format("truetype"),
+        url("./fonts/Nunito/Nunito-SemiBold.otf") format("opentype"),
+        url("./fonts/Nunito/Nunito-SemiBold.svg") format("svg");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url("./fonts/Nunito/Nunito-Bold.woff2") format("woff2"),
+        url("./fonts/Nunito/Nunito-Bold.woff") format("woff"),
+        url("./fonts/Nunito/Nunito-Bold.eot") format("embedded-opentype"),
+        url("./fonts/Nunito/Nunito-Bold.ttf") format("truetype"),
+        url("./fonts/Nunito/Nunito-Bold.otf") format("opentype"),
+        url("./fonts/Nunito/Nunito-Bold.svg") format("svg");
+    font-weight: 700;
+    font-style: normal;
+}

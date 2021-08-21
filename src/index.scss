@@ -1,13 +1,25 @@
 @use "./styles/colors";
+@use "./styles/fonts";
 @use "sass:color";
 
+$color-map: (
+    "blue": colors.$blue,
+    "green": colors.$green,
+    "orange": colors.$orange,
+    "purple": colors.$purple,
+    "red": colors.$red,
+    "yellow": colors.$yellow
+);
+
 body {
+    background-color: colors.$black;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
         "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
         sans-serif;
-    -webkit-font-smoothing: antialiased;
+    user-select: none;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
 }
 
 .clearfix:after {
@@ -23,15 +35,6 @@ body {
 .bg-default.alt {
     background-color: color.scale(colors.$default, $lightness: 50%);
 }
-
-$color-map: (
-    "blue": colors.$blue,
-    "green": colors.$green,
-    "orange": colors.$orange,
-    "purple": colors.$purple,
-    "red": colors.$red,
-    "yellow": colors.$yellow
-);
 
 @each $name, $col in $color-map {
     .bg-#{$name} {
