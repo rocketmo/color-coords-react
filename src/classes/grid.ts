@@ -1,4 +1,5 @@
 import { immerable } from "immer";
+import { cloneDeep } from "lodash";
 import GridCell from "./grid-cell";
 import type Item from "./item";
 import type { Color } from "../services/constants";
@@ -22,8 +23,13 @@ export default class Grid {
         this.cells = config.map((row, rowIdx) => {
             return row.map((cell, colIdx) => {
                 return (cell.hasTile) ?
-                    new GridCell(rowIdx, colIdx, cell.tileColor, cell.solutionColor, cell.item) :
-                    null;
+                    new GridCell(
+                        rowIdx,
+                        colIdx,
+                        cell.tileColor,
+                        cell.solutionColor,
+                        cloneDeep(cell.item)
+                    ) : null;
             });
         });
 
