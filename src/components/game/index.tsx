@@ -21,7 +21,8 @@ interface GameProps {
     gridConfig: GridCellConfig[][],
     playerRow: number,
     playerCol: number,
-    level: number
+    levelNumber: number,
+    levelName: string
 }
 
 interface GameState {
@@ -34,8 +35,6 @@ interface GameState {
     gameOver: boolean,
     isPlayerMoving: boolean;
 }
-
-export type { GameProps };
 
 export default class Game extends React.Component<GameProps, GameState> {
     keyFnMap: Record<string, Function>;
@@ -251,7 +250,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                     playerRow={playerRow}
                     playerCol={playerCol}
                     movesTaken={movesTaken}
-                    level={this.props.level}
+                    levelNumber={this.props.levelNumber}
+                    levelName={this.props.levelName}
                     restartHandler={this.restartGame} />
                 <GridComponent
                     grid={grid}

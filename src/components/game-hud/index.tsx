@@ -11,7 +11,8 @@ interface GameHUDProps {
     playerRow: number,
     playerCol: number,
     movesTaken: number,
-    level: number,
+    levelNumber: number,
+    levelName: string,
     restartHandler: () => void
 }
 
@@ -26,7 +27,7 @@ export default function GameHUD(props: GameHUDProps) {
                         size={24} label="Toggle menu" hideOutline={false}></Hamburger>
                 </div>
                 <div className="game-level">
-                    <span className="top-bar-text">Level {props.level}</span>
+                    <span className="top-bar-text">{props.levelNumber}. {props.levelName}</span>
                 </div>
                 <div className="moves-taken">
                     <span className="top-bar-text">Moves: {props.movesTaken}</span>

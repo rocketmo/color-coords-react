@@ -1,28 +1,17 @@
-import { Color } from "./constants";
-import Swatch from "../classes/swatch";
-import type { GameProps } from "../components/game";
+import LEVEL_SWATCHES_1 from "./_levels/swatches-1";
+import type { GridCellConfig } from "../classes/grid";
 
-export const sampleGame: GameProps = {
-    gridConfig: [
-        [
-            { hasTile: true, tileColor: Color.BLUE, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.BLUE, item: new Swatch(Color.BLUE) }
-        ],
-        [
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.GREEN, item: new Swatch(Color.GREEN) }
-        ],
-        [
-            { hasTile: false },
-            { hasTile: true, solutionColor: Color.BLUE },
-            { hasTile: false },
-            { hasTile: true, solutionColor: Color.BLUE }
-        ]
-    ],
-    playerRow: 1,
-    playerCol: 0,
-    level: 1
-};
+interface GameConfig {
+    gridConfig: GridCellConfig[][],
+    playerRow: number,
+    playerCol: number,
+    levelName: string
+}
+
+export type { GameConfig };
+
+const LEVELS: GameConfig[] = [
+    LEVEL_SWATCHES_1
+];
+
+export default LEVELS;

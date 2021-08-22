@@ -55,7 +55,7 @@ export default function Home() {
             </div>
 
             <nav className="home-nav">
-                <Link to="/game" className="home-nav-btn-1">Level Select</Link><br />
+                <Link to="/game/1" className="home-nav-btn-1">Level Select</Link><br />
                 <button className="home-nav-btn-2">How to Play</button><br />
                 <button className="home-nav-btn-3">Settings</button>
             </nav>

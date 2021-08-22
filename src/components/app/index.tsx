@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Game from "../game";
+import GameRedirect from "../game-redirect";
 import Home from "../home";
-import { sampleGame } from "../../services/levels";
 import "./app.scss";
 
 export default function App() {
@@ -11,8 +10,8 @@ export default function App() {
         <div className="app">
             <Router>
                 <Switch>
-                    <Route path="/game">
-                        <Game {...sampleGame} />
+                    <Route path="/game/:levelNumber">
+                        <GameRedirect />
                     </Route>
                     <Route path="*">
                         <Home />
