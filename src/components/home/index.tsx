@@ -23,7 +23,7 @@ export default function Home() {
         const titleClass = `title-box title-colored ${key}`;
         coloredTitles.push(
             <div className={titleClass} key={key}>
-                <span className="title-text">{TITLE}</span>
+                <span className="title-text" aria-hidden>{TITLE}</span>
             </div>
         );
     }
@@ -49,7 +49,7 @@ export default function Home() {
             </div>
             <div className="title-container">
                 <div className="title-box title-main">
-                    <h1 className="title-text">{TITLE}</h1>
+                    <h1 className="title-text" aria-label="Color Coords">{TITLE}</h1>
                 </div>
                 {coloredTitles}
             </div>
