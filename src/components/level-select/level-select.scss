@@ -1,0 +1,64 @@
+@use "../../styles/colors";
+
+$top-bar-font-size: 16px;
+$hover-opacity: 0.7;
+
+.level-select {
+    background-color: #fff;
+    min-height: 100vh;
+
+    .top-bar {
+        padding: 0 16px;
+
+        .back-btn {
+            color: #fff;
+            float: left;
+            font-size: 24px;
+
+            &:hover {
+                opacity: $hover-opacity;
+            }
+        }
+
+        .level-select-title {
+            float: left;
+            padding-left: 28px;
+
+            .top-bar-text {
+                font-size: $top-bar-font-size;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+
+        .level-select-other {
+            float: right;
+
+            button {
+                background-color: rgba(0, 0, 0, 0);
+                border: none;
+                color: #fff;
+                font-size: $top-bar-font-size;
+                margin-left: 12px;
+                padding: 0;
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: $hover-opacity;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    .level-select-other {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 200px) {
+    .level-select-title {
+        display: none;
+    }
+}

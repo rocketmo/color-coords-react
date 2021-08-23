@@ -37,7 +37,7 @@ export default function GameMenu(props: GameMenuProps) {
         <div className="game-menu">
             <div className={overlayClass} onPointerUp={onOverlayPress}></div>
             <nav className={navClass}>
-                <Link to="/" className="game-menu-btn" tabIndex={tabIndex}>
+                <Link to="/level-select" className="game-menu-btn" tabIndex={tabIndex}>
                     <FontAwesomeIcon icon={faThLarge} />
                     <span>Level Select</span>
                 </Link>

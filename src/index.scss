@@ -45,3 +45,20 @@ body {
         background-color: color.scale($col, $lightness: 25%);
     }
 }
+
+// For menus
+.top-bar {
+    background-color: colors.$black;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0 16px 0 4px;
+    width: 100%;
+
+    .top-bar-text {
+        align-items: center;
+        display: inline-flex;
+        height: 48px;
+    }
+}
