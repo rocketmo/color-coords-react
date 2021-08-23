@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Turn as Hamburger } from "hamburger-react";
 import Solution from "../solution";
 import GameMenu from "../game-menu";
+import GameTopBar from "../game-top-bar";
 import "./game-hud.scss";
 
 import type Grid from "../../classes/grid";
@@ -21,19 +21,11 @@ export default function GameHUD(props: GameHUDProps) {
 
     return (
         <div className="game-hud">
-            <div className="top-bar">
-                <div className="hamburger-btn">
-                    <Hamburger toggled={isMenuOpen} toggle={setMenuOpen} rounded
-                        size={24} label="Toggle menu" hideOutline={false}></Hamburger>
-                </div>
-                <div className="game-level">
-                    <span className="top-bar-text">{props.levelNumber}. {props.levelName}</span>
-                </div>
-                <div className="moves-taken">
-                    <span className="top-bar-text">Moves: {props.movesTaken}</span>
-                </div>
-                <div className="clearfix"></div>
-            </div>
+            <GameTopBar isMenuOpen={isMenuOpen}
+                setMenuOpen={setMenuOpen}
+                levelNumber={props.levelNumber}
+                levelName={props.levelName}
+                movesTaken={props.movesTaken} />
             <GameMenu
                 isOpen={isMenuOpen}
                 setOpen={setMenuOpen}
