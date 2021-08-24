@@ -11,7 +11,7 @@ interface SolutionProps {
     grid: Grid,
     playerRow: number,
     playerCol: number
-}
+};
 
 export default function Solution(props: SolutionProps) {
     const { width, height, ref } = useResizeDetector({
@@ -19,11 +19,7 @@ export default function Solution(props: SolutionProps) {
         refreshRate: 40
     });
 
-    const offset = {
-        x: ((width ?? 0) - (props.grid.width * SOLUTION_TILE_SIZE)) / 2,
-        y: ((height ?? 0) - (props.grid.height * SOLUTION_TILE_SIZE)) / 2
-    };
-
+    const offset = props.grid.getCenterOffset(SOLUTION_TILE_SIZE, width ?? 0, height ?? 0);
     const solutionTiles = props.grid.renderSolution();
 
     return (

@@ -28,11 +28,7 @@ export default function GridComponent(props: GridProps) {
         refreshRate: 40
     });
 
-    const offset = {
-        x: ((width ?? 0) - (props.grid.width * TILE_SIZE)) / 2,
-        y: ((height ?? 0) - (props.grid.height * TILE_SIZE)) / 2
-    };
-
+    const offset = props.grid.getCenterOffset(TILE_SIZE, width ?? 0, height ?? 0);
     const gridElements = props.grid.renderElements(props.showSolution);
 
     return (

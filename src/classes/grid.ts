@@ -1,8 +1,10 @@
 import { immerable } from "immer";
 import { cloneDeep } from "lodash";
 import GridCell from "./grid-cell";
+
 import type Item from "./item";
 import type { Color } from "../services/constants";
+import type { GridOffset } from "../services/context";
 
 interface GridCellConfig {
     hasTile: boolean,
@@ -91,5 +93,18 @@ export default class Grid {
         }
 
         return elements;
+    }
+
+    /**
+     * Calculates the x and y offset to center the grid in a given window
+     * @param tileSize Size of a single tile, in px
+     * @param windowWidth Width of the window containing the grid, in px
+     * @param windowHeight Height of the window containing the grid, in px
+     */
+    getCenterOffset(tileSize: number, windowWidth: number, windowHeight: number): GridOffset {
+        return {
+            x: (windowWidth - (this.width * tileSize)) / 2,
+            y: (windowHeight - (this.height * tileSize)) / 2
+        };
     }
 }

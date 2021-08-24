@@ -1,3 +1,10 @@
 import React from "react";
 
-export const GridOffsetContext = React.createContext({ x: 0, y: 0 });
+interface GridOffset {
+    x: number,
+    y: number
+};
+
+export type { GridOffset };
+
+export const GridOffsetContext: React.Context<GridOffset> = React.createContext({ x: 0, y: 0 });
