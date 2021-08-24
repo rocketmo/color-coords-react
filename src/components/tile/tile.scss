@@ -42,15 +42,21 @@ $solution-tile-back-radius: 2px;
     }
 }
 
-.solution .tile {
-    height: sizes.$solution-tile-size;
-    width: sizes.$solution-tile-size;
+.solution, .level-preview-grid {
+    .tile {
+        height: sizes.$solution-tile-size;
+        width: sizes.$solution-tile-size;
 
-    .tile-back {
-        border-radius: $solution-tile-back-radius;
-        height: $solution-tile-back-pct;
-        left: $solution-tile-offset;
-        top: $solution-tile-offset;
-        width: $solution-tile-back-pct;
+        .tile-front {
+            transition: background-color 0s;
+        }
+
+        .tile-back {
+            border-radius: $solution-tile-back-radius;
+            height: $solution-tile-back-pct;
+            left: $solution-tile-offset;
+            top: $solution-tile-offset;
+            width: $solution-tile-back-pct;
+        }
     }
 }

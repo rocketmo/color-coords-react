@@ -1,0 +1,13 @@
+@use "../../styles/colors";
+@use "../../styles/functions";
+@use "sass:color";
+
+.level-preview-grid {
+    background-color: colors.$game-bg;
+    border-radius: 8px;
+    box-sizing: border-box;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}

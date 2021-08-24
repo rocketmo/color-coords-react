@@ -1,64 +1,128 @@
 @use "../../styles/colors";
+@use "../../styles/functions";
+@use "sass:color";
 
-$top-bar-font-size: 16px;
-$hover-opacity: 0.7;
+$preview-width: 300px;
+$preview-lg-width: 400px;
+$preview-xl-width: 450px;
 
-.level-select {
-    background-color: #fff;
-    min-height: 100vh;
+@mixin preview-media($screen-width, $preview-width) {
+    @media only screen and (min-width: $screen-width) {
+        .level-select {
+            .level-select-main {
+                .level-preview {
+                    width: $preview-width;
+                }
 
-    .top-bar {
-        padding: 0 16px;
-
-        .back-btn {
-            color: #fff;
-            float: left;
-            font-size: 24px;
-
-            &:hover {
-                opacity: $hover-opacity;
-            }
-        }
-
-        .level-select-title {
-            float: left;
-            padding-left: 28px;
-
-            .top-bar-text {
-                font-size: $top-bar-font-size;
-                font-weight: 600;
-                margin: 0;
-            }
-        }
-
-        .level-select-other {
-            float: right;
-
-            button {
-                background-color: rgba(0, 0, 0, 0);
-                border: none;
-                color: #fff;
-                font-size: $top-bar-font-size;
-                margin-left: 12px;
-                padding: 0;
-
-                &:hover {
-                    cursor: pointer;
-                    opacity: $hover-opacity;
+                &.level-selected {
+                    .level-preview {
+                        transform: translateX(-$preview-width);
+                    }
                 }
             }
         }
     }
 }
 
-@media only screen and (max-width: 300px) {
-    .level-select-other {
-        display: none;
+.level-select {
+    background-color: color.scale(colors.$menu-bg, $lightness: 10%);
+
+    .level-select-main {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto;
+        grid-template: "levels preview";
+        height: calc(100vh - 48px);
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .level-btn-container {
+            align-items: flex-start;
+            align-content: flex-start;
+            display: flex;
+            flex-flow: row wrap;
+            grid-area: levels;
+            justify-content: flex-start;
+            width: 100vw;
+
+            .level-select-btn {
+                align-items: center;
+                background-color: colors.$default;
+                border: none;
+                border-radius: 4px;
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+                display: inline-flex;
+                font-family: functions.sans-serif-family(Nunito);
+                font-size: 16px;
+                font-weight: 800;
+                height: 50px;
+                margin: 10px;
+                justify-content: center;
+                transition: background-color 0.5s, border 0.5s, color 0.25s, box-shadow 0.5s;
+                width: 50px;
+
+                &:hover {
+                    background-color: #fff;
+                    cursor: pointer;
+                }
+
+                &.btn-highlight {
+                    border: 2px solid #fff;
+                    background-color: colors.$menu-bg;
+                    box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
+                    color: #fff;
+                }
+            }
+        }
+
+        .level-preview {
+            background-color: colors.$menu-bg;
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            color: #fff;
+            grid-area: preview;
+            padding: 10px 20px;
+            height: 100%;
+            transition: width 0.75s, transform 0.75s, box-shadow 0.75s;
+            width: $preview-width;
+
+            h2 {
+                font-family: functions.sans-serif-family(Nunito);
+                font-size: 20px;
+                font-weight: 700;
+                margin: 10px 0 5px;
+            }
+
+            p {
+                margin: 5px 0 8px;
+            }
+
+            .play-btn {
+                background-color: colors.$menu-highlight;
+                border: none;
+                border-radius: 4px;
+                display: inline-block;
+                color: colors.$black;
+                font-family: functions.sans-serif-family(Nunito);
+                font-weight: 600;
+                margin-top: 12px;
+                padding: 4px 8px;
+                text-decoration: none;
+
+                &:hover {
+                    background-color: color.scale(colors.$menu-highlight, $lightness: 25%);
+                }
+            }
+        }
+
+        &.level-selected {
+            .level-preview {
+                box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+                transform: translateX(-$preview-width);
+            }
+        }
     }
 }
 
-@media only screen and (max-width: 200px) {
-    .level-select-title {
-        display: none;
-    }
-}
+@include preview-media(992px, $preview-lg-width);
+@include preview-media(1200px, $preview-xl-width);
