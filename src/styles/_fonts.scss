@@ -93,3 +93,15 @@
     font-weight: 700;
     font-style: normal;
 }
+
+@font-face {
+    font-family: NunitoSans;
+    src: url("./fonts/NunitoSans/NunitoSans-Italic.woff2") format("woff2"),
+        url("./fonts/NunitoSans/NunitoSans-Italic.woff") format("woff"),
+        url("./fonts/NunitoSans/NunitoSans-Italic.eot") format("embedded-opentype"),
+        url("./fonts/NunitoSans/NunitoSans-Italic.ttf") format("truetype"),
+        url("./fonts/NunitoSans/NunitoSans-Italic.otf") format("opentype"),
+        url("./fonts/NunitoSans/NunitoSans-Italic.svg") format("svg");
+    font-weight: normal;
+    font-style: italic;
+}
