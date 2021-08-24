@@ -3,6 +3,8 @@ import LEVEL_SWATCHES_2 from "./_levels/swatches-2";
 import type { GridCellConfig } from "../classes/grid";
 
 interface GameConfig {
+    id: string,
+    description?: React.ReactElement,
     gridConfig: GridCellConfig[][],
     playerRow: number,
     playerCol: number,

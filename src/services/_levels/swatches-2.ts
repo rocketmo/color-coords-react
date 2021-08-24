@@ -3,6 +3,7 @@ import Swatch from "../../classes/swatch";
 import type { GameConfig } from "../levels";
 
 const LEVEL_SWATCHES_2: GameConfig = {
+    id: "ZascZkE+A0CjlYxEmU65cQ==",
     gridConfig: [
         [
             { hasTile: true, solutionColor: Color.GREEN, item: new Swatch(Color.GREEN) },
