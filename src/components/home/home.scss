@@ -63,15 +63,15 @@ $bg-col-map: (
 );
 
 $fade-in-x-offset: 1.5px;
-$fade-in-y-offset: -2.5em;
+$fade-in-y-offset: -1.5em;
 $title-height: 150px;
 $title-fade-time: 2s;
-$title-fade-delay: 0.4s;
+$title-fade-delay: 1.8s;
 $title-default-font-size: 80px;
 $title-mobile-font-size: 10vw;
 $title-max-default-width: $title-default-font-size * 10;
 
-$bg-fade-delay: 2s;
+$bg-fade-delay: 3s;
 $bg-layer-height: 10vmin;
 $bg-gradient-anim-time: 300s;
 
@@ -121,8 +121,8 @@ $nav-min-default-width: 320px;
 
             &.title-main {
                 animation:
-                    simple-fade-in math.div($title-fade-time, 2) ease
-                        ($title-fade-delay + $bg-fade-delay) 1 normal forwards;
+                    simple-fade-in $title-fade-time ease
+                        ($title-fade-time * 1.5) 1 normal forwards;
                 color: #fff;
                 opacity: 0;
                 z-index: 10;
@@ -131,10 +131,10 @@ $nav-min-default-width: 320px;
             @each $idx, $col in $title-col-map {
                 &.title-colored-#{$idx} {
                     animation:
-                        simple-fade-in ($title-fade-time * 2.2) ease
-                            ($title-fade-delay + (0.1s * $idx)) 1 normal forwards,
+                        simple-fade-in ($title-fade-time * 0.75) ease
+                            ($title-fade-delay - (0.2s * $idx)) 1 normal forwards,
                         title-fade-in-#{$idx} $title-fade-time ease
-                            ($title-fade-delay + (0.1s * $idx)) 1 normal forwards;
+                            ($title-fade-delay - (0.2s * $idx)) 1 normal forwards;
                     color: $col;
                     opacity: 0;
                     z-index: 9 - $idx;
