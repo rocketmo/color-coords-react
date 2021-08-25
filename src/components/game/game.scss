@@ -1,5 +1,16 @@
+@use "../../styles/colors";
+
 .game {
+    background-color: colors.$game-won-bg;
     height: 100vh;
+    max-width: 100%;
     overflow: hidden;
     width: 100vw;
+}
+
+.game.game-won {
+    .tile-grid, .solution-container {
+        opacity: 0;
+        transition: opacity 1.5s;
+    }
 }

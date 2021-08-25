@@ -31,3 +31,8 @@ $player-size: 40px;
         z-index: 22;
     }
 }
+
+// Turn off player color transition for games that have not started yet
+.game.game-pending .tile-grid .player .player-color {
+    transition: background-color 0s;
+}

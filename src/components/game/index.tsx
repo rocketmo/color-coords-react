@@ -4,6 +4,7 @@ import { cloneDeep } from "lodash";
 import produce from "immer";
 import GridComponent from "../grid";
 import GameHUD from "../game-hud";
+import GameComplete from "../game-complete";
 import Player from "../../classes/player";
 import Grid from "../../classes/grid";
 import PlayerAnimationFrame from "../../classes/player-animation-frame";
@@ -21,9 +22,9 @@ interface GameProps {
     gridConfig: GridCellConfig[][],
     playerRow: number,
     playerCol: number,
-    levelNumber: number,
+    levelNumber: number, // 1-indexed
     levelName: string
-}
+};
 
 interface GameState {
     grid: Grid,
@@ -32,9 +33,11 @@ interface GameState {
     playerColor: Color,
     showSolution: boolean,
     movesTaken: number,
+    gameStarted: boolean,
     gameOver: boolean,
-    isPlayerMoving: boolean;
-}
+    gameWon: boolean,
+    isPlayerMoving: boolean
+};
 
 export default class Game extends React.Component<GameProps, GameState> {
     keyFnMap: Record<string, Function>;
@@ -50,7 +53,9 @@ export default class Game extends React.Component<GameProps, GameState> {
             playerColor: Color.DEFAULT,
             showSolution: false,
             movesTaken: 0,
+            gameStarted: false,
             gameOver: false,
+            gameWon: false,
             isPlayerMoving: false
         };
 
@@ -186,7 +191,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                     playerRow: animationFrame.row,
                     playerCol: animationFrame.col,
                     playerColor: animationFrame.color,
-                    isPlayerMoving: true
+                    isPlayerMoving: true,
+                    gameStarted: true
                 });
 
                 break;
@@ -214,8 +220,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         if (this.gridAnimationQueue.size() > 0) {
             this.startNextAnimation();
         } else if (this.state.grid.isGridSolved()) {
-            console.log("Solved."); // TODO: Remove this line
-            this.setState({ gameOver: true });
+            this.setState({ gameOver: true, gameWon: true });
         }
     }
 
@@ -226,10 +231,18 @@ export default class Game extends React.Component<GameProps, GameState> {
             playerCol: this.props.playerCol,
             playerColor: Color.DEFAULT,
             movesTaken: 0,
+            gameStarted: false,
             gameOver: false,
+            gameWon: false,
             isPlayerMoving: false,
             showSolution: false
         });
+    }
+
+    componentDidUpdate(prevProps: GameProps): void {
+        if (this.props.levelNumber !== prevProps.levelNumber) {
+            this.restartGame();
+        }
     }
 
     render() {
@@ -240,11 +253,22 @@ export default class Game extends React.Component<GameProps, GameState> {
             playerColor,
             showSolution,
             isPlayerMoving,
-            movesTaken
+            movesTaken,
+            gameStarted,
+            gameWon
         } = this.state;
 
+        let gameClass = "game";
+        gameClass += gameWon ? " game-won" : "";
+        gameClass += !gameStarted ? " game-pending" : "";
+
+        const gameCompleteEle = gameWon ?
+            <GameComplete levelNumber={this.props.levelNumber}
+                restartHandler={this.restartGame} /> :
+            null;
+
         return (
-            <div className="game">
+            <div className={gameClass}>
                 <GameHUD
                     grid={grid}
                     playerRow={playerRow}
@@ -264,6 +288,7 @@ export default class Game extends React.Component<GameProps, GameState> {
                     onKeyUp={this.onKeyUp}
                     resetFlags={this.resetFlags}
                     onPlayerAnimationEnd={this.onPlayerAnimationEnd} />
+                {gameCompleteEle}
             </div>
         );
     }

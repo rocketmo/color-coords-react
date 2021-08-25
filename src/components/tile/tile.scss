@@ -60,3 +60,8 @@ $solution-tile-back-radius: 2px;
         }
     }
 }
+
+// Turn off tile color transition for games that have not started yet
+.game.game-pending .tile-grid .tile .tile-front {
+    transition: background-color 0s;
+}

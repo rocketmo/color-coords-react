@@ -81,3 +81,13 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #666;
 }
+
+// Animations
+@keyframes simple-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
