@@ -26,7 +26,7 @@ export default function PlayerComponent(props: PlayerProps) {
     const prevProps = usePrevious({ row, col })
 
     useEffect(() => {
-        // Do not animate player position change
+        // Only animate player movement if it's toggled on and we have an initial starting position
         if (movementToggle && prevProps) {
             let frameCount = 0;
 
