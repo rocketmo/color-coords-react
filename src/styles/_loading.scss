@@ -1,0 +1,81 @@
+@use "./colors";
+@use "sass:math";
+
+$bar-states: 2;
+
+#loading-anim-window {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-evenly;
+    width: 100vw;
+
+    &.loading-finished {
+        opacity: 0;
+        transition: opacity 2s;
+    }
+
+    .loader-container {
+        max-width: 500px;
+        width: 90%;
+
+        #loading-text {
+            color: #fff;
+            font-family: monospace;
+            font-size: 16px;
+
+            &.loading-text-anim-on:after {
+                animation: loading-ellipsis 2s steps(4, end) 0s infinite;
+                content: "\2026";
+                display: inline-block;
+                overflow: hidden;
+                vertical-align: bottom;
+                width: 0px;
+            }
+        }
+
+        .loader-bar {
+            border: 2px solid #fff;
+            box-sizing: border-box;
+            height: 12px;
+            padding: 2px;
+
+            #loader-bar-fill {
+                animation: loading-rainbow 4s linear 0s infinite normal forwards;
+                background-color: #fff;
+                height: 100%;
+                transition: width 1s;
+                width: 0%;
+
+                @for $i from 1 through $bar-states {
+                    &.loader-bar-fill-state-#{$i} {
+                        width: math.div($i, $bar-states) * 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes loading-ellipsis {
+    to {
+        width: 0.75em;
+    }
+}
+
+@keyframes to-white {
+    to {
+        background-color: #fff;
+    }
+}
+
+@keyframes loading-rainbow {
+    0% { background-color: colors.$red; }
+    16.667% { background-color: colors.$orange; }
+    33.333% { background-color: colors.$yellow; }
+    50% { background-color: colors.$green; }
+    66.667% { background-color: colors.$blue; }
+    83.333% { background-color: colors.$purple; }
+    100% { background-color: colors.$red; }
+}

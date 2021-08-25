@@ -1,7 +1,7 @@
 $swatch-size: 20px;
 
 .swatch {
-    animation: swatch-spin infinite 15s linear;
+    animation: simple-spin infinite 15s linear;
     height: $swatch-size;
     position: absolute;
     width: $swatch-size;
@@ -14,14 +14,5 @@ $swatch-size: 20px;
         position: absolute;
         width: 100%;
         z-index: 11;
-    }
-}
-
-@keyframes swatch-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
     }
 }
