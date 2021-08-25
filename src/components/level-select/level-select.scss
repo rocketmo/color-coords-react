@@ -25,6 +25,7 @@ $preview-xl-width: 450px;
 }
 
 .level-select {
+    animation: simple-fade-in 1s;
     background-color: color.scale(colors.$menu-bg, $lightness: 10%);
 
     .level-select-main {

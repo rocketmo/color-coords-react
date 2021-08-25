@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./home.scss";
 
+interface HomeProps {
+    playAnimation: boolean
+};
+
 const TITLE = (
     <>
         <span className="first-letter">C</span>OLOR&nbsp;
@@ -13,8 +17,13 @@ const TITLE_COL_NUM = 6;
 const BG_LAYER_NUM = 48;
 const GRADIENT_ANIM_TIME = 300;
 
-export default function Home() {
+export default function Home(props: HomeProps) {
     const [ gradientDelay ] = useState(Math.random() * GRADIENT_ANIM_TIME);
+    const [ playAnimation ] = useState(props.playAnimation);
+
+    let homeClass = "home-container";
+    homeClass += !playAnimation ? " home-anim-off" : "";
+
     const coloredTitles = [];
     const bgLayers = [];
 
@@ -43,7 +52,7 @@ export default function Home() {
     };
 
     return (
-        <div className="home-container">
+        <div className={homeClass}>
             <div className="home-bg">
                 <div className="home-bg-gradient" style={gradientStyle}>{bgLayers}</div>
             </div>

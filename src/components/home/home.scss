@@ -204,6 +204,37 @@ $nav-min-default-width: 320px;
     }
 }
 
+.home-container.home-anim-off {
+    animation: simple-fade-in 1s;
+
+    .title-container {
+        .title-box {
+            &.title-main {
+                animation: simple-fade-in 0s ease 0s 1 normal forwards;
+            }
+
+            @each $idx, $col in $title-col-map {
+                &.title-colored-#{$idx} {
+                    animation: simple-fade-in 0s ease 0s 1 normal forwards,
+                        title-fade-in-#{$idx} 0s ease 0s 1 normal forwards;
+                }
+            }
+        }
+    }
+
+    .home-nav {
+        @for $i from 1 through 3 {
+            .home-nav-btn-#{$i} {
+                animation: nav-fade-in 0s ease 0s 1 normal forwards;
+            }
+        }
+    }
+
+    .home-bg {
+        animation: simple-fade-in 0s ease 0s 1 normal forwards;
+    }
+}
+
 @media only screen and (max-width: $title-max-default-width) {
     .home-container {
         .title-container {

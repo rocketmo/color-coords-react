@@ -1,6 +1,7 @@
 @use "../../styles/colors";
 
 .game {
+    animation: simple-fade-in 1s;
     background-color: colors.$game-won-bg;
     height: 100vh;
     max-width: 100%;
