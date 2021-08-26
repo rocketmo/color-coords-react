@@ -25,7 +25,7 @@ interface GridProps {
 export default function GridComponent(props: GridProps) {
     const { width, height, ref } = useResizeDetector({
         refreshMode: "throttle",
-        refreshRate: 40
+        refreshRate: 10
     });
 
     const offset = props.grid.getCenterOffset(TILE_SIZE, width ?? 0, height ?? 0);

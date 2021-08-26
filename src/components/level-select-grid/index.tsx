@@ -13,7 +13,7 @@ interface LevelSelectGridProps {
 export default function LevelSelectGrid(props: LevelSelectGridProps) {
     const { width, height, ref } = useResizeDetector({
         refreshMode: "throttle",
-        refreshRate: 40
+        refreshRate: 10
     });
 
     const offset = props.grid.getCenterOffset(SOLUTION_TILE_SIZE, width ?? 0, height ?? 0);
