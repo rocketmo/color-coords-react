@@ -23,7 +23,8 @@ interface GameProps {
     playerRow: number,
     playerCol: number,
     levelNumber: number, // 1-indexed
-    levelName: string
+    levelName: string,
+    handleStarUpdate: (levelNumber: number, movesTaken: number) => number
 };
 
 interface GameState {
@@ -36,6 +37,7 @@ interface GameState {
     gameStarted: boolean,
     gameOver: boolean,
     gameWon: boolean,
+    starsWon: number,
     isPlayerMoving: boolean
 };
 
@@ -56,6 +58,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameStarted: false,
             gameOver: false,
             gameWon: false,
+            starsWon: 0,
             isPlayerMoving: false
         };
 
@@ -212,15 +215,20 @@ export default class Game extends React.Component<GameProps, GameState> {
 
     // This method is called after player animation is completed
     onPlayerAnimationEnd(): void {
+        const nextMovesTaken = this.state.movesTaken + 1;
         this.setState({
-            movesTaken: this.state.movesTaken + 1,
+            movesTaken: nextMovesTaken,
             isPlayerMoving: false
         });
 
         if (this.gridAnimationQueue.size() > 0) {
             this.startNextAnimation();
         } else if (this.state.grid.isGridSolved()) {
-            this.setState({ gameOver: true, gameWon: true });
+            this.setState({
+                gameOver: true,
+                gameWon: true,
+                starsWon: this.props.handleStarUpdate(this.props.levelNumber, nextMovesTaken)
+            });
         }
     }
 
@@ -234,6 +242,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameStarted: false,
             gameOver: false,
             gameWon: false,
+            starsWon: 0,
             isPlayerMoving: false,
             showSolution: false
         });
@@ -262,8 +271,9 @@ export default class Game extends React.Component<GameProps, GameState> {
         gameClass += gameWon ? " game-won" : "";
         gameClass += !gameStarted ? " game-pending" : "";
 
+        // Only show the completion component when the user beats the puzzle
         const gameCompleteEle = gameWon ?
-            <GameComplete levelNumber={this.props.levelNumber}
+            <GameComplete levelNumber={this.props.levelNumber} stars={this.state.starsWon}
                 restartHandler={this.restartGame} /> :
             null;
 

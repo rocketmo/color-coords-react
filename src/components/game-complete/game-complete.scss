@@ -26,17 +26,36 @@
         transform: translateX(-100%);
         width: 100vw;
 
+        .level-complete-star-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+            .level-complete-star {
+                padding: 0 2px;
+                opacity: 0;
+
+                @for $i from 1 through 3 {
+                    &.lcs-#{$i} {
+                        animation: simple-fade-in 1.5s ease (1.25s + (($i - 1) * 0.1s))
+                            1 normal forwards;
+                    }
+                }
+            }
+        }
+
         .level-complete-msg {
-            animation: simple-fade-in 0.75s ease 1.25s 1 normal forwards;
+            animation: simple-fade-in 0.75s ease 1.55s 1 normal forwards;
             color: #fff;
             font-family: functions.sans-serif-family(Nunito);
             font-size: 24px;
             font-weight: 600;
+            margin: 10px 0 0;
             opacity: 0;
         }
 
         .level-complete-btn-container {
-            animation: simple-fade-in 0.75s ease 1.75s 1 normal forwards;
+            animation: simple-fade-in 0.75s ease 2.05s 1 normal forwards;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;

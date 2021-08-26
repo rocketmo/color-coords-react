@@ -1,0 +1,63 @@
+@use "../../styles/colors";
+@use "../../styles/sizes";
+@use "../../styles/functions";
+@use "sass:color";
+
+@mixin level-buttons-media($screen-width, $preview-width) {
+    @media only screen and (min-width: $screen-width) {
+        .level-select .level-select-main.level-selected .level-btn-container {
+            width: calc(100vw - #{$preview-width});
+        }
+    }
+}
+
+.level-select-main {
+    .level-btn-container {
+        align-items: flex-start;
+        align-content: flex-start;
+        display: flex;
+        flex-flow: row wrap;
+        grid-area: levels;
+        justify-content: flex-start;
+        transition: width 0.75s;
+        width: 100vw;
+
+        .level-select-btn {
+            align-items: center;
+            background-color: colors.$default;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+            display: inline-flex;
+            font-family: functions.sans-serif-family(Nunito);
+            font-size: 16px;
+            font-weight: 800;
+            height: 50px;
+            margin: 10px;
+            justify-content: center;
+            transition: background-color 0.5s, border 0.5s, color 0.25s, box-shadow 0.5s;
+            width: 50px;
+
+            &:hover {
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+            &.btn-highlight {
+                border: 2px solid #fff;
+                background-color: colors.$menu-bg;
+                box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
+                color: #fff;
+            }
+        }
+    }
+
+    &.level-selected {
+        .level-btn-container {
+            width: calc(100vw - #{sizes.$preview-width});
+        }
+    }
+}
+
+@include level-buttons-media(992px, sizes.$preview-lg-width);
+@include level-buttons-media(1200px, sizes.$preview-xl-width);

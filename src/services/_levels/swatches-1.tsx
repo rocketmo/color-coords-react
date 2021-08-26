@@ -24,7 +24,10 @@ const LEVEL_SWATCHES_1: GameConfig = {
     ],
     playerRow: 1,
     playerCol: 1,
-    levelName: "Swatches I"
+    levelName: "Swatches I",
+    starRequirement3: 12,
+    starRequirement2: 16,
+    requiredToUnlock: 0
 };
 
 export default LEVEL_SWATCHES_1;

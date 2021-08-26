@@ -1,20 +1,71 @@
 import { useState, useEffect } from "react";
+import produce from "immer";
 import WebFont from "webfontloader";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LevelSelect from "../level-select";
 import GameRedirect from "../game-redirect";
 import Home from "../home";
 import { sleep } from "../../services/util";
+import LEVELS from "../../services/levels";
 import "./app.scss";
 
-function getLoaderBarFill(): (HTMLElement | null) {
-    return document.getElementById("loader-bar-fill");
+interface LevelScore {
+    solved: boolean,
+    moves: number,
+    stars: number
+};
+
+// Map level ID to stars scored on the level
+const initialLevelScoreMap: Record<string, LevelScore> = {};
+for (const levelConfig of LEVELS) {
+    initialLevelScoreMap[levelConfig.id] = {
+        solved: false,
+        moves: 0,
+        stars: 0
+    };
 }
 
 export default function App() {
+    const [ starCount, setStarCount ] = useState(0);
     const [ playHomeAnimation, setPlayHomeAnimation ] = useState(true);
     const [ isReady, setIsReady ] = useState(false);
     const [ areFontsLoaded, setAreFontsLoaded ] = useState(false);
+    const [ levelScoreMap, setLevelScoreMap ] = useState(initialLevelScoreMap);
+
+    /**
+     * Handler to update star counts after a level is completed
+     * @param levelNumber - Level identifier (1-indexed)
+     * @param movesTaken - Moves taken to complete the level
+     * @returns Number of stars awarded for the given level attempt
+     */
+    const handleStarUpdate = (levelNumber: number, movesTaken: number) => {
+        const levelConfig = LEVELS[levelNumber - 1];
+        if (!levelConfig) { return 0; }
+
+        // Get the star score for the current level attempt
+        let starsScored = 1;
+        if (movesTaken <= levelConfig.starRequirement3) {
+            starsScored = 3;
+        } else if (movesTaken <= levelConfig.starRequirement2) {
+            starsScored = 2;
+        }
+
+        if (movesTaken < levelScoreMap[levelConfig.id]?.moves ||
+            levelScoreMap[levelConfig.id]?.solved === false) {
+
+            const prevStars = levelScoreMap[levelConfig.id]?.stars ?? 0;
+            const nextLevelScoreMap = produce(levelScoreMap, draft => {
+                draft[levelConfig.id].solved = true;
+                draft[levelConfig.id].moves = movesTaken;
+                draft[levelConfig.id].stars = starsScored;
+            });
+
+            setLevelScoreMap(nextLevelScoreMap);
+            setStarCount(starCount + (starsScored - prevStars));
+        }
+
+        return starsScored;
+    };
 
     // On mount
     useEffect(() => {
@@ -85,10 +136,10 @@ export default function App() {
             <Router>
                 <Switch>
                     <Route path="/game/:levelNumber">
-                        <GameRedirect />
+                        <GameRedirect handleStarUpdate={handleStarUpdate} />
                     </Route>
                     <Route path="/level-select">
-                        <LevelSelect />
+                        <LevelSelect starCount={starCount} />
                     </Route>
                     <Route path="*">
                         <Home playAnimation={playHomeAnimation} />
@@ -97,4 +148,8 @@ export default function App() {
             </Router>
         </div>
     );
+}
+
+function getLoaderBarFill(): (HTMLElement | null) {
+    return document.getElementById("loader-bar-fill");
 }

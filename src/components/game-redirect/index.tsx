@@ -6,7 +6,11 @@ interface GameParams {
     levelNumber: string
 };
 
-export default function GameRedirect() {
+interface GameRedirectProps {
+    handleStarUpdate: (levelNumber: number, movesTaken: number) => number
+};
+
+export default function GameRedirect(props: GameRedirectProps) {
     const { levelNumber } = useParams<GameParams>();
     const levelInt = parseInt(levelNumber);
 
@@ -18,6 +22,7 @@ export default function GameRedirect() {
 
     return (
         <Game gridConfig={gridConfig} playerRow={playerRow} playerCol={playerCol}
-            levelName={levelName} levelNumber={levelInt} />
+            levelName={levelName} levelNumber={levelInt} 
+            handleStarUpdate={props.handleStarUpdate} />
     );
 }

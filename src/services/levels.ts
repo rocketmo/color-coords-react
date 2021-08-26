@@ -4,11 +4,14 @@ import type { GridCellConfig } from "../classes/grid";
 
 interface GameConfig {
     id: string,
+    levelName: string,
     description?: React.ReactElement,
-    gridConfig: GridCellConfig[][],
-    playerRow: number,
-    playerCol: number,
-    levelName: string
+    gridConfig: GridCellConfig[][], // Specifies layout of the grid
+    playerRow: number,              // Starting row for the player
+    playerCol: number,              // Starting column for the player
+    starRequirement3: number,       // Move requirement to get 3 stars on the level
+    starRequirement2: number,       // Move requirement to get 2 stars
+    requiredToUnlock: number        // Number of stars required to unlock the level
 }
 
 export type { GameConfig };

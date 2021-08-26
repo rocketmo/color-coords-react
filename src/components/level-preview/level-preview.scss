@@ -1,0 +1,104 @@
+@use "../../styles/colors";
+@use "../../styles/sizes";
+@use "../../styles/functions";
+@use "sass:color";
+
+@mixin preview-media($screen-width, $preview-width) {
+    @media only screen and (min-width: $screen-width) {
+        .level-select .level-select-main.level-selected .level-preview {
+            width: $preview-width;
+        }
+    }
+}
+
+.level-select-main {
+    .level-preview {
+        background-color: colors.$menu-bg;
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
+        box-sizing: border-box;
+        color: #fff;
+        grid-area: preview;
+        overflow: hidden;
+        place-self: end center;
+        padding: 10px 20px;
+        height: 100%;
+        transform: translateX(sizes.$preview-width);
+        transition: width 0.75s, transform 0.75s, box-shadow 0.75s;
+        width: sizes.$preview-width;
+
+        h2, h3 {
+            font-family: functions.sans-serif-family(Nunito);
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin: 10px 0 5px;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin: 4px 0;
+        }
+
+        p {
+            margin: 5px 0 8px;
+        }
+
+        hr {
+            border: 0;
+            border-bottom: 2px solid #fff;
+            margin: 16px 0;
+        }
+
+        table {
+            border: none;
+            width: 100%;
+
+            td {
+                border: none;
+                font-size: 16px;
+            }
+
+            td:first-child {
+                white-space: nowrap;
+            }
+
+            td:last-child {
+                max-width: 99%;
+            }
+
+            // Star images
+            img {
+                height: 16px;
+            }
+        }
+
+        .play-btn {
+            background-color: colors.$menu-highlight;
+            border: none;
+            border-radius: 4px;
+            display: inline-block;
+            color: colors.$black;
+            font-family: functions.sans-serif-family(Nunito);
+            font-weight: 600;
+            margin-top: 12px;
+            padding: 4px 8px;
+            text-decoration: none;
+
+            &:hover {
+                background-color: color.scale(colors.$menu-highlight, $lightness: 25%);
+            }
+        }
+    }
+
+    &.level-selected {
+        .level-preview {
+            box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+            transform: translateX(0);
+        }
+    }
+}
+
+@include preview-media(sizes.$window-lg, sizes.$preview-lg-width);
+@include preview-media(sizes.$window-xl, sizes.$preview-xl-width);

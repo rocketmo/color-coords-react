@@ -27,34 +27,18 @@ $hover-opacity: 0.7;
         }
     }
 
-    .level-select-other {
+    .level-select-stars {
+        color: #fff;
         float: right;
+        font-size: 16px;
 
-        button {
-            background-color: rgba(0, 0, 0, 0);
-            border: none;
-            color: #fff;
-            font-size: $top-bar-font-size;
-            margin-left: 12px;
-            padding: 0;
-
-            &:hover {
-                cursor: pointer;
-                opacity: $hover-opacity;
-            }
+        img {
+            padding: 0 2px 0 0;
         }
     }
 }
 
 @media only screen and (max-width: 300px) {
-    .level-select-top-bar {
-        .level-select-other {
-            display: none;
-        }
-    }
-}
-
-@media only screen and (max-width: 200px) {
     .level-select-top-bar {
         .level-select-title {
             display: none;
