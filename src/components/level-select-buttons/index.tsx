@@ -7,7 +7,9 @@ interface LevelSelectButtonsProps {
     isSelected: boolean,
     setSelectedLevel: React.Dispatch<React.SetStateAction<number | null>>,
     setIsSelected: React.Dispatch<React.SetStateAction<boolean>>,
-    containerRef: React.RefObject<HTMLElement>
+    containerRef: React.RefObject<HTMLElement>,
+    starCount: number,
+    hasUnlockedLevel: (levelNum: number) => number
 };
 
 export default function LevelSelectButtons(props: LevelSelectButtonsProps) {
@@ -24,15 +26,34 @@ export default function LevelSelectButtons(props: LevelSelectButtonsProps) {
 
     const buttons = LEVELS.map((level, idx) => {
         let btnClass = "level-select-btn";
-        if (props.isSelected && (props.selectedLevel === idx + 1)) {
+        const levelNum = idx + 1;
+        const starsScored = props.hasUnlockedLevel(levelNum);
+
+        // Button is currently being previewed
+        if (props.isSelected && (props.selectedLevel === levelNum)) {
             btnClass += " btn-highlight";
+        }
+
+        // Gotten 3 stars on this level
+        else if (starsScored >= 3) {
+            btnClass += " btn-star-3";
+        }
+
+        // Gotten 1 or 2 stars on this level
+        else if (starsScored > 0) {
+            btnClass += " btn-star-1";
+        }
+
+        // Level not unlocked yet
+        else if (starsScored < 0) {
+            btnClass += " btn-locked";
         }
 
         return (
             <button className={btnClass} key={`level-btn-${level.id}`}
-                onClick={toggleSelected.bind(null, idx + 1)}
-                aria-label={`Toggle preview of level ${idx + 1}`}>
-                {idx + 1}
+                onClick={toggleSelected.bind(null, levelNum)}
+                aria-label={`Toggle preview of level ${levelNum}`}>
+                {levelNum}
             </button>
         );
     });

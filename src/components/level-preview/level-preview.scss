@@ -3,10 +3,16 @@
 @use "../../styles/functions";
 @use "sass:color";
 
-@mixin preview-media($screen-width, $preview-width) {
+@mixin preview-media($screen-width, $preview-width, $td-size) {
     @media only screen and (min-width: $screen-width) {
         .level-select .level-select-main.level-selected .level-preview {
             width: $preview-width;
+
+            table {
+                td:first-child {
+                    width: $td-size;
+                }
+            }
         }
     }
 }
@@ -25,6 +31,31 @@
         transform: translateX(sizes.$preview-width);
         transition: width 0.75s, transform 0.75s, box-shadow 0.75s;
         width: sizes.$preview-width;
+
+        .locked-box {
+            align-items: center;
+            background-color: #333;
+            border-radius: 8px;
+            box-sizing: border-box;
+            color: #888;
+            display: flex;
+            font-size: 60px;
+            flex-direction: column;
+            height: 250px;
+            justify-content: space-evenly;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .unlock-text {
+            color: #ccc;
+            font-style: italic;
+
+            span {
+                vertical-align: middle;
+            }
+        }
 
         h2, h3 {
             font-family: functions.sans-serif-family(Nunito);
@@ -53,6 +84,7 @@
 
         table {
             border: none;
+            margin-bottom: 10px;
             width: 100%;
 
             td {
@@ -61,11 +93,9 @@
             }
 
             td:first-child {
+                transition: width 0.75s;
                 white-space: nowrap;
-            }
-
-            td:last-child {
-                max-width: 99%;
+                width: 66px;
             }
 
             // Star images
@@ -100,5 +130,5 @@
     }
 }
 
-@include preview-media(sizes.$window-lg, sizes.$preview-lg-width);
-@include preview-media(sizes.$window-xl, sizes.$preview-xl-width);
+@include preview-media(sizes.$window-lg, sizes.$preview-lg-width, 80px);
+@include preview-media(sizes.$window-xl, sizes.$preview-xl-width, 100px);

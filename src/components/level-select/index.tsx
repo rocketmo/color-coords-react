@@ -5,9 +5,12 @@ import LevelSelectButtons from "../level-select-buttons";
 import "./level-select.scss";
 
 import type { MouseEvent } from "react";
+import type { LevelScore } from "../../services/definitions";
 
 interface LevelSelectProps {
-    starCount: number
+    starCount: number,
+    levelScoreMap: Record<string, LevelScore>,
+    hasUnlockedLevel: (levelNum: number) => number
 };
 
 export default function LevelSelect(props: LevelSelectProps) {
@@ -30,8 +33,10 @@ export default function LevelSelect(props: LevelSelectProps) {
             <main className={mainClassName} onClick={onBtnContainerClick}>
                 <LevelSelectButtons selectedLevel={selectedLevel} isSelected={isSelected}
                     setSelectedLevel={setSelectedLevel} setIsSelected={setIsSelected}
-                    containerRef={btnContainerRef} />
-                <LevelPreview selectedLevel={selectedLevel} />
+                    containerRef={btnContainerRef} starCount={props.starCount}
+                    hasUnlockedLevel={props.hasUnlockedLevel} />
+                <LevelPreview selectedLevel={selectedLevel} starCount={props.starCount}
+                    levelScoreMap={props.levelScoreMap} hasUnlockedLevel={props.hasUnlockedLevel} />
             </main>
         </div>
     );

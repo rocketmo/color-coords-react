@@ -9,11 +9,7 @@ import { sleep } from "../../services/util";
 import LEVELS from "../../services/levels";
 import "./app.scss";
 
-interface LevelScore {
-    solved: boolean,
-    moves: number,
-    stars: number
-};
+import type { LevelScore } from "../../services/definitions";
 
 // Map level ID to stars scored on the level
 const initialLevelScoreMap: Record<string, LevelScore> = {};
@@ -65,6 +61,23 @@ export default function App() {
         }
 
         return starsScored;
+    };
+
+    /**
+     *
+     * @param levelNum 1-indexed
+     * @returns If the level is unlocked, return the number of stars scored on the level; returns
+     *          -1 if the level is locked
+     */
+    const hasUnlockedLevel = (levelNum: number) => {
+        const level = LEVELS[levelNum - 1];
+        if (!level) { return -1; }
+
+        if (levelScoreMap[level.id]?.stars > 0 || starCount >= level?.requiredToUnlock) {
+            return (levelScoreMap[level.id]?.stars ?? 0);
+        }
+
+        return -1;
     };
 
     // On mount
@@ -139,7 +152,8 @@ export default function App() {
                         <GameRedirect handleStarUpdate={handleStarUpdate} />
                     </Route>
                     <Route path="/level-select">
-                        <LevelSelect starCount={starCount} />
+                        <LevelSelect starCount={starCount} levelScoreMap={levelScoreMap}
+                            hasUnlockedLevel={hasUnlockedLevel} />
                     </Route>
                     <Route path="*">
                         <Home playAnimation={playHomeAnimation} />

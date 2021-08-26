@@ -1,22 +1,5 @@
 @use "../../styles/colors";
-@use "../../styles/functions";
 @use "sass:color";
-
-$preview-width: 300px;
-$preview-lg-width: 400px;
-$preview-xl-width: 450px;
-
-@mixin preview-media($screen-width, $preview-width) {
-    @media only screen and (min-width: $screen-width) {
-        .level-select {
-            .level-select-main.level-selected {
-                .level-btn-container {
-                    width: calc(100vw - #{$preview-width});
-                }
-            }
-        }
-    }
-}
 
 .level-select {
     animation: simple-fade-in 1s;
@@ -31,54 +14,5 @@ $preview-xl-width: 450px;
         height: calc(100vh - 48px);
         overflow-x: hidden;
         overflow-y: auto;
-
-        .level-btn-container {
-            align-items: flex-start;
-            align-content: flex-start;
-            display: flex;
-            flex-flow: row wrap;
-            grid-area: levels;
-            justify-content: flex-start;
-            transition: width 0.75s;
-            width: 100vw;
-
-            .level-select-btn {
-                align-items: center;
-                background-color: colors.$default;
-                border: none;
-                border-radius: 4px;
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
-                display: inline-flex;
-                font-family: functions.sans-serif-family(Nunito);
-                font-size: 16px;
-                font-weight: 800;
-                height: 50px;
-                margin: 10px;
-                justify-content: center;
-                transition: background-color 0.5s, border 0.5s, color 0.25s, box-shadow 0.5s;
-                width: 50px;
-
-                &:hover {
-                    background-color: #fff;
-                    cursor: pointer;
-                }
-
-                &.btn-highlight {
-                    border: 2px solid #fff;
-                    background-color: colors.$menu-bg;
-                    box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
-                    color: #fff;
-                }
-            }
-        }
-
-        &.level-selected {
-            .level-btn-container {
-                width: calc(100vw - #{$preview-width});
-            }
-        }
     }
 }
-
-@include preview-media(992px, $preview-lg-width);
-@include preview-media(1200px, $preview-xl-width);
