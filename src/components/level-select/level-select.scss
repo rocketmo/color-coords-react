@@ -9,15 +9,13 @@ $preview-xl-width: 450px;
 @mixin preview-media($screen-width, $preview-width) {
     @media only screen and (min-width: $screen-width) {
         .level-select {
-            .level-select-main {
-                .level-preview {
-                    width: $preview-width;
+            .level-select-main.level-selected {
+                .level-btn-container {
+                    width: calc(100vw - #{$preview-width});
                 }
 
-                &.level-selected {
-                    .level-preview {
-                        transform: translateX(-$preview-width);
-                    }
+                .level-preview {
+                    width: $preview-width;
                 }
             }
         }
@@ -33,6 +31,7 @@ $preview-xl-width: 450px;
         grid-template-columns: auto 1fr;
         grid-template-rows: auto;
         grid-template: "levels preview";
+        justify-content: space-between;
         height: calc(100vh - 48px);
         overflow-x: hidden;
         overflow-y: auto;
@@ -44,6 +43,7 @@ $preview-xl-width: 450px;
             flex-flow: row wrap;
             grid-area: levels;
             justify-content: flex-start;
+            transition: width 0.75s;
             width: 100vw;
 
             .level-select-btn {
@@ -82,8 +82,11 @@ $preview-xl-width: 450px;
             box-sizing: border-box;
             color: #fff;
             grid-area: preview;
+            overflow: hidden;
+            place-self: end center;
             padding: 10px 20px;
             height: 100%;
+            transform: translateX($preview-width);
             transition: width 0.75s, transform 0.75s, box-shadow 0.75s;
             width: $preview-width;
 
@@ -117,9 +120,13 @@ $preview-xl-width: 450px;
         }
 
         &.level-selected {
+            .level-btn-container {
+                width: calc(100vw - #{$preview-width});
+            }
+
             .level-preview {
                 box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
-                transform: translateX(-$preview-width);
+                transform: translateX(0);
             }
         }
     }
