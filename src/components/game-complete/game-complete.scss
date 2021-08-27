@@ -50,8 +50,25 @@
             font-family: functions.sans-serif-family(Nunito);
             font-size: 24px;
             font-weight: 600;
-            margin: 10px 0 0;
+            margin: 10px 0 2px;
             opacity: 0;
+        }
+
+        .level-complete-3s-text {
+            animation: simple-fade-in 0.75s ease 1.75s 1 normal forwards;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 400;
+            margin: 4px 0 12px;
+            opacity: 0;
+
+            span {
+                vertical-align: middle;
+            }
+
+            strong {
+                color: colors.$menu-highlight;
+            }
         }
 
         .level-complete-btn-container {
@@ -76,7 +93,29 @@
 
                 &:hover {
                     background-color: color.scale(colors.$menu-highlight, $lightness: 25%);
+                    cursor: pointer;
                 }
+
+                &.locked-next-btn {
+                    background-color: #888;
+
+                    &:hover {
+                        cursor: default;
+                    }
+                }
+            }
+        }
+
+        .level-complete-unlock-text {
+            animation: simple-fade-in 0.75s ease 2.5s 1 normal forwards;
+            color: #ccc;
+            font-size: 16px;
+            font-style: italic;
+            margin: 4px 0;
+            opacity: 0;
+
+            span {
+                vertical-align: middle;
             }
         }
     }

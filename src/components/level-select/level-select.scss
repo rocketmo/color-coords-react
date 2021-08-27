@@ -10,8 +10,9 @@
         grid-template-columns: auto 1fr;
         grid-template-rows: auto;
         grid-template: "levels preview";
+        height: 100%;
         justify-content: space-between;
-        height: calc(100vh - 48px);
+        min-height: calc(100vh - 48px);
         overflow-x: hidden;
         overflow-y: auto;
     }

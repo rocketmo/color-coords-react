@@ -10,7 +10,8 @@ import type { LevelScore } from "../../services/definitions";
 interface LevelSelectProps {
     starCount: number,
     levelScoreMap: Record<string, LevelScore>,
-    hasUnlockedLevel: (levelNum: number) => number
+    starsScoredOnLevel: (levelNum: number) => number,
+    starsToUnlockLevel: (levelNum: number) => number
 };
 
 export default function LevelSelect(props: LevelSelectProps) {
@@ -34,9 +35,11 @@ export default function LevelSelect(props: LevelSelectProps) {
                 <LevelSelectButtons selectedLevel={selectedLevel} isSelected={isSelected}
                     setSelectedLevel={setSelectedLevel} setIsSelected={setIsSelected}
                     containerRef={btnContainerRef} starCount={props.starCount}
-                    hasUnlockedLevel={props.hasUnlockedLevel} />
-                <LevelPreview selectedLevel={selectedLevel} starCount={props.starCount}
-                    levelScoreMap={props.levelScoreMap} hasUnlockedLevel={props.hasUnlockedLevel} />
+                    starsScoredOnLevel={props.starsScoredOnLevel} />
+                <LevelPreview selectedLevel={selectedLevel}
+                    levelScoreMap={props.levelScoreMap}
+                    starsScoredOnLevel={props.starsScoredOnLevel}
+                    starsToUnlockLevel={props.starsToUnlockLevel} />
             </main>
         </div>
     );

@@ -11,9 +11,9 @@ import type { LevelScore } from "../../services/definitions";
 
 interface LevelPreviewProps {
     selectedLevel: number | null, // 1-indexed
-    starCount: number,
     levelScoreMap: Record<string, LevelScore>,
-    hasUnlockedLevel: (levelNum: number) => number
+    starsScoredOnLevel: (levelNum: number) => number,
+    starsToUnlockLevel: (levelNum: number) => number
 };
 
 const STAR_SIZE = 16;
@@ -21,11 +21,11 @@ const STAR_SIZE = 16;
 export default function LevelPreview(props: LevelPreviewProps) {
     if (props.selectedLevel !== null && LEVELS[props.selectedLevel - 1]) {
         const level = LEVELS[props.selectedLevel - 1];
-        const starsScored = props.hasUnlockedLevel(props.selectedLevel);
+        const starsScored = props.starsScoredOnLevel(props.selectedLevel);
+        const toNextLevel = props.starsToUnlockLevel(props.selectedLevel);
 
         // Level has not been unlocked
         if (starsScored < 0) {
-            const starsToUnlock = level.requiredToUnlock - props.starCount;
             return (
                 <section className="level-preview">
                     <div className="locked-box">
@@ -33,8 +33,12 @@ export default function LevelPreview(props: LevelPreviewProps) {
                     </div>
                     <h2>{props.selectedLevel}. {level.levelName}</h2>
                     <p className="unlock-text">
-                        Score {starsToUnlock}<span><Star filled size={STAR_SIZE} /></span>
-                        {" to unlock this level."}
+                        Collect a total of {level.requiredToUnlock}
+                        <span><Star filled size={STAR_SIZE} /></span>
+                        {" to unlock this level (you need "}
+                        {toNextLevel}
+                        <span><Star filled size={STAR_SIZE} /></span>
+                        {" more)."}
                     </p>
                     {level.description}
                 </section>

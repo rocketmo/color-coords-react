@@ -64,20 +64,39 @@ export default function App() {
     };
 
     /**
-     *
+     * Returns the number stars the player has collected from the given level
      * @param levelNum 1-indexed
      * @returns If the level is unlocked, return the number of stars scored on the level; returns
      *          -1 if the level is locked
      */
-    const hasUnlockedLevel = (levelNum: number) => {
+    const starsScoredOnLevel = (levelNum: number) => {
         const level = LEVELS[levelNum - 1];
         if (!level) { return -1; }
 
-        if (levelScoreMap[level.id]?.stars > 0 || starCount >= level?.requiredToUnlock) {
+        if (levelScoreMap[level.id]?.stars > 0 || starCount >= level.requiredToUnlock) {
             return (levelScoreMap[level.id]?.stars ?? 0);
         }
 
         return -1;
+    };
+
+    /**
+     * Returns the number of additional stars the player must collect in order to unlock the given
+     * level
+     * @param levelNum 1-indexed
+     * @returns If the level is unlocked, returns 0; if given level is invalid, returns -1;
+     *          otherwise returns the difference between the stars required and the current
+     *          number of collected stars
+     */
+    const starsToUnlockLevel = (levelNum: number) => {
+        if (starsScoredOnLevel(levelNum) >= 0) {
+            return 0;
+        }
+
+        const level = LEVELS[levelNum - 1];
+        if (!level) { return -1; }
+
+        return level.requiredToUnlock - starCount;
     };
 
     // On mount
@@ -149,11 +168,14 @@ export default function App() {
             <Router>
                 <Switch>
                     <Route path="/game/:levelNumber">
-                        <GameRedirect handleStarUpdate={handleStarUpdate} />
+                        <GameRedirect handleStarUpdate={handleStarUpdate}
+                            starsScoredOnLevel={starsScoredOnLevel}
+                            starsToUnlockLevel={starsToUnlockLevel} />
                     </Route>
                     <Route path="/level-select">
                         <LevelSelect starCount={starCount} levelScoreMap={levelScoreMap}
-                            hasUnlockedLevel={hasUnlockedLevel} />
+                            starsScoredOnLevel={starsScoredOnLevel}
+                            starsToUnlockLevel={starsToUnlockLevel} />
                     </Route>
                     <Route path="*">
                         <Home playAnimation={playHomeAnimation} />

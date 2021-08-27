@@ -9,7 +9,7 @@ interface LevelSelectButtonsProps {
     setIsSelected: React.Dispatch<React.SetStateAction<boolean>>,
     containerRef: React.RefObject<HTMLElement>,
     starCount: number,
-    hasUnlockedLevel: (levelNum: number) => number
+    starsScoredOnLevel: (levelNum: number) => number
 };
 
 export default function LevelSelectButtons(props: LevelSelectButtonsProps) {
@@ -27,7 +27,7 @@ export default function LevelSelectButtons(props: LevelSelectButtonsProps) {
     const buttons = LEVELS.map((level, idx) => {
         let btnClass = "level-select-btn";
         const levelNum = idx + 1;
-        const starsScored = props.hasUnlockedLevel(levelNum);
+        const starsScored = props.starsScoredOnLevel(levelNum);
 
         // Button is currently being previewed
         if (props.isSelected && (props.selectedLevel === levelNum)) {

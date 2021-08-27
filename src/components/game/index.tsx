@@ -24,7 +24,9 @@ interface GameProps {
     playerCol: number,
     levelNumber: number, // 1-indexed
     levelName: string,
-    handleStarUpdate: (levelNumber: number, movesTaken: number) => number
+    handleStarUpdate: (levelNumber: number, movesTaken: number) => number,
+    starsScoredOnLevel: (levelNum: number) => number,
+    starsToUnlockLevel: (levelNum: number) => number
 };
 
 interface GameState {
@@ -273,8 +275,11 @@ export default class Game extends React.Component<GameProps, GameState> {
 
         // Only show the completion component when the user beats the puzzle
         const gameCompleteEle = gameWon ?
-            <GameComplete levelNumber={this.props.levelNumber} stars={this.state.starsWon}
-                restartHandler={this.restartGame} /> :
+            <GameComplete levelNumber={this.props.levelNumber}
+                stars={this.state.starsWon}
+                restartHandler={this.restartGame}
+                starsScoredOnLevel={this.props.starsScoredOnLevel}
+                starsToUnlockLevel={this.props.starsToUnlockLevel} /> :
             null;
 
         return (
