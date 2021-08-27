@@ -1,32 +1,28 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import produce from "immer";
 import WebFont from "webfontloader";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import LevelSelect from "../level-select";
 import GameRedirect from "../game-redirect";
 import Home from "../home";
 import { sleep } from "../../services/util";
 import LEVELS from "../../services/levels";
+import { loadLevelScores, saveScore } from "../../services/idb";
+import { getStarsScoredByMoves, getDefaultLevelScoreMap } from "../../services/cc-util";
+
 import "./app.scss";
+import 'react-toastify/dist/ReactToastify.css';
 
 import type { LevelScore } from "../../services/definitions";
-
-// Map level ID to stars scored on the level
-const initialLevelScoreMap: Record<string, LevelScore> = {};
-for (const levelConfig of LEVELS) {
-    initialLevelScoreMap[levelConfig.id] = {
-        solved: false,
-        moves: 0,
-        stars: 0
-    };
-}
 
 export default function App() {
     const [ starCount, setStarCount ] = useState(0);
     const [ playHomeAnimation, setPlayHomeAnimation ] = useState(true);
     const [ isReady, setIsReady ] = useState(false);
     const [ areFontsLoaded, setAreFontsLoaded ] = useState(false);
-    const [ levelScoreMap, setLevelScoreMap ] = useState(initialLevelScoreMap);
+    const [ isSavedDataLoaded, setIsSavedDataLoaded ] = useState(false);
+    const [ levelScoreMap, setLevelScoreMap ] = useState<Record<string, LevelScore>>({});
 
     /**
      * Handler to update star counts after a level is completed
@@ -39,12 +35,8 @@ export default function App() {
         if (!levelConfig) { return 0; }
 
         // Get the star score for the current level attempt
-        let starsScored = 1;
-        if (movesTaken <= levelConfig.starRequirement3) {
-            starsScored = 3;
-        } else if (movesTaken <= levelConfig.starRequirement2) {
-            starsScored = 2;
-        }
+        let starsScored = getStarsScoredByMoves(movesTaken, levelConfig.starRequirement3,
+            levelConfig.starRequirement2);
 
         if (movesTaken < levelScoreMap[levelConfig.id]?.moves ||
             levelScoreMap[levelConfig.id]?.solved === false) {
@@ -59,6 +51,12 @@ export default function App() {
             setLevelScoreMap(nextLevelScoreMap);
             setStarCount(starCount + (starsScored - prevStars));
         }
+
+        // Update DB
+        saveScore(levelConfig.id, movesTaken)
+            .catch(() => {
+                toast.error("Unable to save data.");
+            });
 
         return starsScored;
     };
@@ -118,12 +116,33 @@ export default function App() {
             active: onFontsLoad,
             inactive: onFontsLoad
         });
+
+        // Load saved data
+        loadLevelScores()
+            .then((mapping) => {
+                setLevelScoreMap(mapping);
+
+                // Calculate total stars
+                let totalStars = 0;
+                for (const key in mapping) {
+                    totalStars += mapping[key].stars;
+                }
+
+                setStarCount(totalStars);
+                setIsSavedDataLoaded(true);
+            })
+            .catch(() => {
+                setLevelScoreMap(getDefaultLevelScoreMap());
+                setIsSavedDataLoaded(true);
+                toast.error("Could not retrieve saved data. Please refresh and try again.");
+            });
+
     }, []);
 
     // Runs after each loading stage is completed
     useEffect(() => {
         // Update loading bar width
-        const numFinished = 1 + (areFontsLoaded ? 1 : 0);
+        const numFinished = 1 + (areFontsLoaded ? 1 : 0) + (isSavedDataLoaded ? 1 : 0);
         const loaderBarFill = getLoaderBarFill();
         loaderBarFill && loaderBarFill.classList.add(`loader-bar-fill-state-${numFinished}`);
 
@@ -151,10 +170,10 @@ export default function App() {
             setPlayHomeAnimation(false);
         }
 
-        if (areFontsLoaded && !isReady) {
+        if (areFontsLoaded && isSavedDataLoaded && !isReady) {
             onFinish();
         }
-    }, [ areFontsLoaded ]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [ areFontsLoaded, isSavedDataLoaded ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Do not render anything until everything is loaded
     if (!isReady) {
@@ -165,6 +184,7 @@ export default function App() {
         // TODO: Uncomment and replace other app
         // <div className="app" onContextMenu={event => event.preventDefault()}>
         <div className="app">
+            <ToastContainer />
             <Router>
                 <Switch>
                     <Route path="/game/:levelNumber">
