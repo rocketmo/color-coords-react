@@ -1,5 +1,8 @@
 import LEVEL_SWATCHES_1 from "./_levels/swatches-1";
 import LEVEL_SWATCHES_2 from "./_levels/swatches-2";
+import LEVEL_SWATCHES_3 from "./_levels/swatches-3";
+import UP_THE_MIDDLE from "./_levels/up-the-middle";
+import KEYS from "./_levels/keys";
 import type { GridCellConfig } from "../classes/grid";
 
 interface GameConfig {
@@ -18,7 +21,10 @@ export type { GameConfig };
 
 const LEVELS: GameConfig[] = [
     LEVEL_SWATCHES_1,
-    LEVEL_SWATCHES_2
+    LEVEL_SWATCHES_2,
+    LEVEL_SWATCHES_3,
+    KEYS,
+    UP_THE_MIDDLE
 ];
 
 export default LEVELS;

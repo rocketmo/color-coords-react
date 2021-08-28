@@ -3,42 +3,38 @@ import Swatch from "../../classes/swatch";
 import type { GameConfig } from "../levels";
 
 const LEVEL_SWATCHES_2: GameConfig = {
-    id: "ZascZkE+A0CjlYxEmU65cQ==",
+    id: "czdtzyW72UKVkwfmYkRCAA==",
     gridConfig: [
         [
-            { hasTile: true, solutionColor: Color.GREEN, item: new Swatch(Color.GREEN) },
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.YELLOW, item: new Swatch(Color.YELLOW) }
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.ORANGE }
         ],
         [
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: true, solutionColor: Color.YELLOW }
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.ORANGE },
+            { hasTile: true, solutionColor: Color.ORANGE },
+            { hasTile: true, solutionColor: Color.ORANGE }
         ],
         [
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: false },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.GREEN }
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.ORANGE, item: new Swatch(Color.ORANGE) },
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.PURPLE, item: new Swatch(Color.PURPLE) }
         ],
         [
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: true, solutionColor: Color.GREEN },
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: true, solutionColor: Color.YELLOW },
-            { hasTile: true, solutionColor: Color.GREEN }
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.PURPLE },
+            { hasTile: true, solutionColor: Color.PURPLE }
         ]
     ],
-    playerRow: 3,
+    playerRow: 2,
     playerCol: 2,
     levelName: "Swatches II",
-    starRequirement3: 47,
-    starRequirement2: 54,
+    starRequirement3: 17,
+    starRequirement2: 20,
     requiredToUnlock: 1
 };
 
