@@ -21,7 +21,7 @@ const KEYS: GameConfig = {
             { hasTile: true, solutionColor: Color.ORANGE },
             { hasTile: true, solutionColor: Color.PURPLE },
             { hasTile: true, solutionColor: Color.PURPLE },
-            { hasTile: true, solutionColor: Color.PURPLE }
+            { hasTile: true, solutionColor: Color.ORANGE }
         ],
         [
             { hasTile: true, solutionColor: Color.BLUE },
@@ -36,8 +36,8 @@ const KEYS: GameConfig = {
     playerRow: 0,
     playerCol: 0,
     levelName: "Keys",
-    starRequirement3: 31,
-    starRequirement2: 38,
+    starRequirement3: 30,
+    starRequirement2: 35,
     requiredToUnlock: 3
 };
 
