@@ -7,7 +7,6 @@ import "./grid.scss";
 
 import type Grid from "../../classes/grid";
 import type { Color } from "../../services/constants";
-import type { KeyboardEventHandler } from "react";
 
 interface GridProps {
     grid: Grid,
@@ -15,10 +14,7 @@ interface GridProps {
     playerCol: number,
     playerColor: Color,
     showSolution: boolean,
-    isPlayerMoving: boolean,
-    onKeyDown: KeyboardEventHandler,
-    onKeyUp: KeyboardEventHandler,
-    resetFlags: () => void
+    isPlayerMoving: boolean
     onPlayerAnimationEnd: () => void
 }
 
@@ -33,8 +29,7 @@ export default function GridComponent(props: GridProps) {
 
     return (
         <GridOffsetContext.Provider value={offset}>
-            <div className="tile-grid" ref={ref} tabIndex={1} onKeyDown={props.onKeyDown}
-                onKeyUp={props.onKeyUp} onFocus={props.resetFlags} onBlur={props.resetFlags}>
+            <div className="tile-grid" ref={ref}>
                 { gridElements }
                 <PlayerComponent color={props.playerColor} row={props.playerRow}
                     col={props.playerCol} movementToggle={props.isPlayerMoving}

@@ -40,13 +40,15 @@ interface GameState {
     gameOver: boolean,
     gameWon: boolean,
     starsWon: number,
-    isPlayerMoving: boolean
+    isPlayerMoving: boolean,
+    isMenuOpen: boolean
 };
 
 export default class Game extends React.Component<GameProps, GameState> {
     keyFnMap: Record<string, Function>;
     keyPressFlagMap: Record<string, boolean>;
     gridAnimationQueue: Queue<GridAnimationFrame>;
+    gameContainerRef: React.RefObject<HTMLDivElement>;
 
     constructor(props: GameProps) {
         super(props);
@@ -61,16 +63,19 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameOver: false,
             gameWon: false,
             starsWon: 0,
-            isPlayerMoving: false
+            isPlayerMoving: false,
+            isMenuOpen: false
         };
 
         this.gridAnimationQueue = new Queue();
+        this.gameContainerRef = React.createRef();
 
         this.onKeyDown = this.onKeyDown.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.resetFlags = this.resetFlags.bind(this);
         this.onPlayerAnimationEnd = this.onPlayerAnimationEnd.bind(this);
         this.restartGame = this.restartGame.bind(this);
+        this.setMenuOpen = this.setMenuOpen.bind(this);
 
         this.keyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -88,16 +93,74 @@ export default class Game extends React.Component<GameProps, GameState> {
     }
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.keyFnMap[event.key]) {
+
+        // Toggle menu
+        if (event.key === "Escape" || event.key === "Esc") {
+            event.preventDefault();
+            this.setMenuOpen(!this.state.isMenuOpen);
+        }
+
+        // Button press while menu is opened
+        else if (this.state.isMenuOpen) {
+            this.handleMenuKeyDown(event);
+        }
+
+        // Player movement
+        else if (this.keyFnMap[event.key]) {
             event.preventDefault();
 
             if (!this.keyPressFlagMap[event.key]) {
                 this.keyPressFlagMap[event.key] = true;
                 this.keyFnMap[event.key](event);
             }
-        } else if (event.key.toLowerCase() === "z") {
+        }
+
+        // Toggle solution
+        else if (event.key.toLowerCase() === "z") {
             event.preventDefault();
             this.setState({ showSolution: true });
+        }
+    }
+
+    // Handles key presses while the game menu is opened
+    handleMenuKeyDown(event: KeyboardEvent): void {
+        const activeEle = document.activeElement;
+        const isActiveOnHam = !!activeEle && activeEle.classList.contains("hamburger-react");
+        const isActiveOnLink = !!activeEle && activeEle.classList.contains("game-menu-btn");
+        const isActiveOnFirst = !!activeEle && activeEle.classList.contains("game-menu-first");
+        const isActiveOnLast = !!activeEle && activeEle.classList.contains("game-menu-last");
+
+        // Go to next menu item
+        if (event.key === "ArrowDown") {
+            event.preventDefault();
+
+            if (!activeEle || isActiveOnLast || (!isActiveOnHam && !isActiveOnLink)) {
+                const hamBtn = document.querySelector<HTMLElement>(".hamburger-react");
+                hamBtn && hamBtn.focus();
+            } else if (isActiveOnHam) {
+                const firstBtn = document.querySelector<HTMLElement>(".game-menu-btn");
+                firstBtn && firstBtn.focus();
+            } else {
+                const sibling = activeEle.nextSibling as HTMLElement;
+                sibling && sibling.focus();
+            }
+
+        }
+
+        // Go to previous menu item
+        else if (event.key === "ArrowUp") {
+            event.preventDefault();
+
+            if (!activeEle || isActiveOnHam || !isActiveOnLink) {
+                const lastBtn = document.querySelector<HTMLElement>(".game-menu-last");
+                lastBtn && lastBtn.focus();
+            } else if (isActiveOnFirst) {
+                const hamBtn = document.querySelector<HTMLElement>(".hamburger-react");
+                hamBtn && hamBtn.focus();
+            } else {
+                const sibling = activeEle.previousSibling as HTMLElement;
+                sibling && sibling.focus();
+            }
         }
     }
 
@@ -123,8 +186,9 @@ export default class Game extends React.Component<GameProps, GameState> {
 
         let movedPrevLoop = false; // Flag to prevent infinite loop
 
-        // Continuously move the player while key is pressed down and game is not over
-        while (this.keyPressFlagMap[event.key] && !this.state.gameOver) {
+        // Continuously move the player while key is pressed down, game is not over,
+        // and menu is closed
+        while (this.keyPressFlagMap[event.key] && !this.state.gameOver && !this.state.isMenuOpen) {
 
             // Do not move the player if already in motion; wait until next cycle and check again
             if (this.gridAnimationQueue.size() > 0 || this.state.isPlayerMoving || movedPrevLoop) {
@@ -250,6 +314,24 @@ export default class Game extends React.Component<GameProps, GameState> {
         });
     }
 
+    setMenuOpen(isOpen: boolean): void {
+        this.setState({
+            isMenuOpen: isOpen
+        });
+
+        this.resetFlags();
+
+        // If closing the menu, refocus on the game container
+        if (!isOpen) {
+            this.gameContainerRef.current && this.gameContainerRef.current.focus();
+        }
+    }
+
+    // Focus on the game container after mounting
+    componentDidMount(): void {
+        this.gameContainerRef.current && this.gameContainerRef.current.focus();
+    }
+
     componentDidUpdate(prevProps: GameProps): void {
         if (this.props.levelNumber !== prevProps.levelNumber) {
             this.restartGame();
@@ -266,7 +348,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             isPlayerMoving,
             movesTaken,
             gameStarted,
-            gameWon
+            gameWon,
+            isMenuOpen
         } = this.state;
 
         let gameClass = "game";
@@ -283,7 +366,14 @@ export default class Game extends React.Component<GameProps, GameState> {
             null;
 
         return (
-            <div className={gameClass}>
+            <div className={gameClass}
+                ref={this.gameContainerRef}
+                tabIndex={1}
+                onKeyDown={this.onKeyDown}
+                onKeyUp={this.onKeyUp}
+                onFocus={this.resetFlags}
+                onBlur={this.resetFlags}>
+
                 <GameHUD
                     grid={grid}
                     playerRow={playerRow}
@@ -291,7 +381,9 @@ export default class Game extends React.Component<GameProps, GameState> {
                     movesTaken={movesTaken}
                     levelNumber={this.props.levelNumber}
                     levelName={this.props.levelName}
-                    restartHandler={this.restartGame} />
+                    restartHandler={this.restartGame}
+                    isMenuOpen={isMenuOpen}
+                    setMenuOpen={this.setMenuOpen} />
                 <GridComponent
                     grid={grid}
                     playerRow={playerRow}
@@ -299,9 +391,6 @@ export default class Game extends React.Component<GameProps, GameState> {
                     playerColor={playerColor}
                     showSolution={showSolution}
                     isPlayerMoving={isPlayerMoving}
-                    onKeyDown={this.onKeyDown}
-                    onKeyUp={this.onKeyUp}
-                    resetFlags={this.resetFlags}
                     onPlayerAnimationEnd={this.onPlayerAnimationEnd} />
                 {gameCompleteEle}
             </div>

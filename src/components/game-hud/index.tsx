@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Solution from "../solution";
 import GameMenu from "../game-menu";
 import GameTopBar from "../game-top-bar";
@@ -13,22 +12,22 @@ interface GameHUDProps {
     movesTaken: number,
     levelNumber: number,
     levelName: string,
-    restartHandler: () => void
+    isMenuOpen: boolean,
+    restartHandler: () => void,
+    setMenuOpen: (isOpen: boolean) => void
 }
 
 export default function GameHUD(props: GameHUDProps) {
-    const [isMenuOpen, setMenuOpen] = useState(false);
-
     return (
         <div className="game-hud">
-            <GameTopBar isMenuOpen={isMenuOpen}
-                setMenuOpen={setMenuOpen}
+            <GameTopBar isMenuOpen={props.isMenuOpen}
+                setMenuOpen={props.setMenuOpen}
                 levelNumber={props.levelNumber}
                 levelName={props.levelName}
                 movesTaken={props.movesTaken} />
             <GameMenu
-                isOpen={isMenuOpen}
-                setOpen={setMenuOpen}
+                isOpen={props.isMenuOpen}
+                setOpen={props.setMenuOpen}
                 restartHandler={props.restartHandler} />
             <Solution
                 grid={props.grid}

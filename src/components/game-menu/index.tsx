@@ -8,7 +8,7 @@ import type { MouseEvent } from "react";
 
 interface GameMenuProps {
     isOpen: boolean,
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    setOpen: (isOpen: boolean) => void,
     restartHandler: () => void
 }
 
@@ -33,7 +33,8 @@ export default function GameMenu(props: GameMenuProps) {
         <div className="game-menu">
             <div className={overlayClass} onClick={onOverlayClick}></div>
             <nav className={navClass}>
-                <Link to="/level-select" className="game-menu-btn" tabIndex={tabIndex}>
+                <Link to="/level-select" tabIndex={tabIndex}
+                    className="game-menu-btn game-menu-first">
                     <FontAwesomeIcon icon={faThLarge} />
                     <span>Level Select</span>
                 </Link>
@@ -46,7 +47,7 @@ export default function GameMenu(props: GameMenuProps) {
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     <span>How to Play</span>
                 </button>
-                <button className="game-menu-btn" tabIndex={tabIndex}>
+                <button className="game-menu-btn game-menu-last" tabIndex={tabIndex}>
                     <FontAwesomeIcon icon={faCog} />
                     <span>Settings</span>
                 </button>
