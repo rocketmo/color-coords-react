@@ -8,6 +8,11 @@ import "./grid.scss";
 import type Grid from "../../classes/grid";
 import type { Color } from "../../services/constants";
 
+const TOP_MENU_HEIGHT = 48;
+const SOLUTION_WIDTH_MIN = 200;
+const SOLUTION_WIDTH_MAX = 300;
+const SOLUTION_VW = 0.2;
+
 interface GridProps {
     grid: Grid,
     playerRow: number,
@@ -24,7 +29,16 @@ export default function GridComponent(props: GridProps) {
         refreshRate: 10
     });
 
+    // Get grid offset, accounting for the top menu and solution window
+    // TODO: Allow user to move re-position grid
     const offset = props.grid.getCenterOffset(TILE_SIZE, width ?? 0, height ?? 0);
+    let solutionWidth = ((width ?? 0) * SOLUTION_VW);
+    solutionWidth = Math.max(SOLUTION_WIDTH_MIN, solutionWidth);
+    solutionWidth = Math.min(SOLUTION_WIDTH_MAX, solutionWidth);
+
+    offset.y += (TOP_MENU_HEIGHT / 2);
+    offset.x -= (solutionWidth / 2);
+
     const gridElements = props.grid.renderElements(props.showSolution);
 
     return (

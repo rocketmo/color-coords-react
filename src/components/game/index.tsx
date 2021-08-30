@@ -5,8 +5,11 @@ import produce from "immer";
 import GridComponent from "../grid";
 import GameHUD from "../game-hud";
 import GameComplete from "../game-complete";
+import Solution from "../solution";
+import GameAdjustMenu from "../game-adjust-menu";
 import Player from "../../classes/player";
 import Grid from "../../classes/grid";
+import GameHistory from "../../classes/game-history";
 import PlayerAnimationFrame from "../../classes/player-animation-frame";
 import TileAnimationFrame from "../../classes/tile-animation-frame";
 import { Color, Direction } from "../../services/constants";
@@ -49,6 +52,7 @@ export default class Game extends React.Component<GameProps, GameState> {
     keyPressFlagMap: Record<string, boolean>;
     gridAnimationQueue: Queue<GridAnimationFrame>;
     gameContainerRef: React.RefObject<HTMLDivElement>;
+    gameHistory: GameHistory;
 
     constructor(props: GameProps) {
         super(props);
@@ -69,13 +73,22 @@ export default class Game extends React.Component<GameProps, GameState> {
 
         this.gridAnimationQueue = new Queue();
         this.gameContainerRef = React.createRef();
+        this.gameHistory = new GameHistory(
+            this.state.grid,
+            this.state.playerRow,
+            this.state.playerCol,
+            this.state.playerColor
+        );
 
         this.onKeyDown = this.onKeyDown.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.resetFlags = this.resetFlags.bind(this);
         this.onPlayerAnimationEnd = this.onPlayerAnimationEnd.bind(this);
         this.restartGame = this.restartGame.bind(this);
+        this.inGameRestart = this.inGameRestart.bind(this);
         this.setMenuOpen = this.setMenuOpen.bind(this);
+        this.undo = this.undo.bind(this);
+        this.redo = this.redo.bind(this);
 
         this.keyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -239,6 +252,9 @@ export default class Game extends React.Component<GameProps, GameState> {
                 moveResult = player.move(playerMovement);
             }
 
+            // Record final state in game history
+            this.gameHistory.push(gridClone, player.row, player.col, player.color);
+
             // Process next animation
             this.startNextAnimation();
 
@@ -261,13 +277,14 @@ export default class Game extends React.Component<GameProps, GameState> {
                     playerCol: animationFrame.col,
                     playerColor: animationFrame.color,
                     isPlayerMoving: true,
-                    gameStarted: true
+                    gameStarted: true,
+                    movesTaken: this.state.movesTaken + 1
                 });
 
                 break;
             }
 
-            // Proces tile animation
+            // Process tile animation
             else {
                 this.setState({
                     grid: produce(this.state.grid, draft => {
@@ -281,11 +298,7 @@ export default class Game extends React.Component<GameProps, GameState> {
 
     // This method is called after player animation is completed
     onPlayerAnimationEnd(): void {
-        const nextMovesTaken = this.state.movesTaken + 1;
-        this.setState({
-            movesTaken: nextMovesTaken,
-            isPlayerMoving: false
-        });
+        this.setState({ isPlayerMoving: false });
 
         if (this.gridAnimationQueue.size() > 0) {
             this.startNextAnimation();
@@ -293,14 +306,16 @@ export default class Game extends React.Component<GameProps, GameState> {
             this.setState({
                 gameOver: true,
                 gameWon: true,
-                starsWon: this.props.handleStarUpdate(this.props.levelNumber, nextMovesTaken)
+                starsWon: this.props.handleStarUpdate(this.props.levelNumber, this.state.movesTaken)
             });
         }
     }
 
     restartGame(): void {
+        const newGrid = new Grid(this.props.gridConfig);
+
         this.setState({
-            grid: new Grid(this.props.gridConfig),
+            grid: newGrid,
             playerRow: this.props.playerRow,
             playerCol: this.props.playerCol,
             playerColor: Color.DEFAULT,
@@ -310,8 +325,71 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameWon: false,
             starsWon: 0,
             isPlayerMoving: false,
-            showSolution: false
+            showSolution: false,
+            isMenuOpen: false
         });
+
+        this.gameHistory = new GameHistory(
+            newGrid,
+            this.props.playerRow,
+            this.props.playerCol,
+            Color.DEFAULT
+        );
+
+        this.gridAnimationQueue.clear();
+
+        // Re-focus on the game container
+        this.gameContainerRef.current && this.gameContainerRef.current.focus();
+    }
+
+    // Only restart in the middle of a game if certain conditions are met
+    inGameRestart(): void {
+        if (!this.canAlterGameState()) {
+            return;
+        }
+
+        this.restartGame();
+    }
+
+    canAlterGameState() {
+        return (!this.state.isPlayerMoving && this.gridAnimationQueue.size() <= 0 &&
+            !this.state.gameOver && !this.state.isMenuOpen);
+    }
+
+    undo(): void {
+        if (!this.canAlterGameState()) {
+            return;
+        }
+
+        const gameHistoryState = this.gameHistory.undo();
+
+        if (gameHistoryState) {
+            this.setState({
+                grid: gameHistoryState.grid,
+                playerRow: gameHistoryState.playerRow,
+                playerCol: gameHistoryState.playerCol,
+                playerColor: gameHistoryState.playerColor,
+                movesTaken: this.state.movesTaken - 1
+            });
+        }
+    }
+
+    redo(): void {
+        if (!this.canAlterGameState()) {
+            return;
+        }
+
+        const gameHistoryState = this.gameHistory.redo();
+
+        if (gameHistoryState) {
+            this.setState({
+                grid: gameHistoryState.grid,
+                playerRow: gameHistoryState.playerRow,
+                playerCol: gameHistoryState.playerCol,
+                playerColor: gameHistoryState.playerColor,
+                movesTaken: this.state.movesTaken + 1
+            });
+        }
     }
 
     setMenuOpen(isOpen: boolean): void {
@@ -375,15 +453,21 @@ export default class Game extends React.Component<GameProps, GameState> {
                 onBlur={this.resetFlags}>
 
                 <GameHUD
-                    grid={grid}
-                    playerRow={playerRow}
-                    playerCol={playerCol}
                     movesTaken={movesTaken}
                     levelNumber={this.props.levelNumber}
                     levelName={this.props.levelName}
-                    restartHandler={this.restartGame}
                     isMenuOpen={isMenuOpen}
                     setMenuOpen={this.setMenuOpen} />
+                <Solution
+                    grid={grid}
+                    playerRow={playerRow}
+                    playerCol={playerCol} />
+                <GameAdjustMenu
+                    canUndo={this.gameHistory.canUndo()}
+                    canRedo={this.gameHistory.canRedo()}
+                    restartHandler={this.inGameRestart}
+                    undoHandler={this.undo}
+                    redoHandler={this.redo} />
                 <GridComponent
                     grid={grid}
                     playerRow={playerRow}

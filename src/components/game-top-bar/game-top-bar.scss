@@ -1,6 +1,5 @@
-.game-top-bar {
-    position: relative;
-    z-index: 201;
+.top-bar.game-top-bar {
+    z-index: 700;
 
     .hamburger-btn {
         float: left;

@@ -1,5 +1,6 @@
 @use "./styles/colors";
 @use "./styles/fonts";
+@use "./styles/sizes";
 @use "./styles/animations";
 @use "./styles/loading";
 @use "./styles/functions";
@@ -56,12 +57,13 @@ body {
     font-size: 16px;
     font-weight: 600;
     padding: 0 16px 0 4px;
+    position: fixed;
     width: 100%;
 
     .top-bar-text {
         align-items: center;
         display: inline-flex;
-        height: 48px;
+        height: sizes.$top-bar-height;
     }
 }
 

@@ -5,12 +5,13 @@
     background-color: colors.$game-won-bg;
     height: 100vh;
     max-width: 100%;
-    overflow: hidden;
+    min-height: 300px;
+    overflow-x: hidden;
     width: 100vw;
 }
 
 .game.game-won {
-    .tile-grid, .solution-container {
+    .tile-grid, .solution-container, .game-adjust-menu {
         opacity: 0;
         transition: opacity 1.5s;
     }
