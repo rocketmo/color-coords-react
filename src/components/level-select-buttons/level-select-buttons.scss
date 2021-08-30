@@ -19,6 +19,7 @@
         flex-flow: row wrap;
         grid-area: levels;
         justify-content: flex-start;
+        overflow-y: auto;
         transition: width 0.75s;
         width: 100vw;
 

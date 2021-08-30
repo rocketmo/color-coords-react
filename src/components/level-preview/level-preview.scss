@@ -3,6 +3,8 @@
 @use "../../styles/functions";
 @use "sass:color";
 
+$preview-transition-time: 0.75s;
+
 @mixin preview-media($screen-width, $preview-width, $td-size) {
     @media only screen and (min-width: $screen-width) {
         .level-select .level-select-main.level-selected .level-preview {
@@ -28,8 +30,11 @@
         place-self: end center;
         padding: 10px 20px;
         height: 100%;
+        overflow-y: auto;
         transform: translateX(sizes.$preview-width);
-        transition: width 0.75s, transform 0.75s, box-shadow 0.75s;
+        transition: width $preview-transition-time,
+            transform $preview-transition-time,
+            box-shadow $preview-transition-time;
         width: sizes.$preview-width;
 
         .locked-box {
