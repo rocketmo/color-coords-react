@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import Settings from "../settings";
 import "./home.scss";
 
+import type { MouseEvent } from "react";
+
 interface HomeProps {
     playAnimation: boolean,
     onEraseData: () => void
@@ -27,6 +29,11 @@ export default function Home(props: HomeProps) {
     const onReturnFromSettings = () => {
         setShowSettings(false);
         setPlayAnimation(false);
+    };
+
+    const onSettingsClick = (event: MouseEvent) => {
+        event.preventDefault();
+        setShowSettings(true);
     };
 
     let homeClass = "home-container";
@@ -79,7 +86,7 @@ export default function Home(props: HomeProps) {
                 <nav className="home-nav">
                     <Link to="/level-select" className="home-nav-btn-1">Level Select</Link><br />
                     <button className="home-nav-btn-2">How to Play</button><br />
-                    <button className="home-nav-btn-3" onClick={setShowSettings.bind(null, true)}>
+                    <button className="home-nav-btn-3" onClick={onSettingsClick}>
                         Settings
                     </button>
                 </nav>

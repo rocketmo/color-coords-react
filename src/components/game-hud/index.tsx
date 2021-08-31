@@ -7,7 +7,8 @@ interface GameHUDProps {
     levelNumber: number,
     levelName: string,
     isMenuOpen: boolean,
-    setMenuOpen: (isOpen: boolean) => void
+    setMenuOpen: (isOpen: boolean) => void,
+    showSettings: () => void
 }
 
 export default function GameHUD(props: GameHUDProps) {
@@ -20,7 +21,8 @@ export default function GameHUD(props: GameHUDProps) {
                 movesTaken={props.movesTaken} />
             <GameMenu
                 isOpen={props.isMenuOpen}
-                setOpen={props.setMenuOpen} />
+                setOpen={props.setMenuOpen}
+                showSettings={props.showSettings} />
         </div>
     );
 }

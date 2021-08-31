@@ -7,7 +7,8 @@ import type { MouseEvent } from "react";
 
 interface GameMenuProps {
     isOpen: boolean,
-    setOpen: (isOpen: boolean) => void
+    setOpen: (isOpen: boolean) => void,
+    showSettings: () => void
 }
 
 export default function GameMenu(props: GameMenuProps) {
@@ -19,6 +20,11 @@ export default function GameMenu(props: GameMenuProps) {
     const onOverlayClick = (event: MouseEvent) => {
         event.preventDefault();
         props.setOpen(false);
+    };
+
+    const onSettingsClick = (event: MouseEvent) => {
+        event.preventDefault();
+        props.showSettings();
     };
 
     return (
@@ -34,7 +40,8 @@ export default function GameMenu(props: GameMenuProps) {
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     <span>How to Play</span>
                 </button>
-                <button className="game-menu-btn game-menu-last" tabIndex={tabIndex}>
+                <button className="game-menu-btn game-menu-last" tabIndex={tabIndex}
+                    onClick={onSettingsClick}>
                     <FontAwesomeIcon icon={faCog} />
                     <span>Settings</span>
                 </button>

@@ -7,6 +7,7 @@ import GameHUD from "../game-hud";
 import GameComplete from "../game-complete";
 import Solution from "../solution";
 import GameAdjustMenu from "../game-adjust-menu";
+import Settings from "../settings";
 import Player from "../../classes/player";
 import Grid from "../../classes/grid";
 import GameHistory from "../../classes/game-history";
@@ -44,7 +45,8 @@ interface GameState {
     gameWon: boolean,
     starsWon: number,
     isPlayerMoving: boolean,
-    isMenuOpen: boolean
+    isMenuOpen: boolean,
+    areSettingsOpened: boolean
 };
 
 export default class Game extends React.Component<GameProps, GameState> {
@@ -68,7 +70,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameWon: false,
             starsWon: 0,
             isPlayerMoving: false,
-            isMenuOpen: false
+            isMenuOpen: false,
+            areSettingsOpened: false
         };
 
         this.gridAnimationQueue = new Queue();
@@ -89,6 +92,8 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.setMenuOpen = this.setMenuOpen.bind(this);
         this.undo = this.undo.bind(this);
         this.redo = this.redo.bind(this);
+        this.showSettings = this.showSettings.bind(this);
+        this.hideSettings = this.hideSettings.bind(this);
 
         this.keyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -405,6 +410,18 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    showSettings(): void {
+        this.setState({
+            areSettingsOpened: true
+        });
+    }
+
+    hideSettings(): void {
+        this.setState({
+            areSettingsOpened: false
+        });
+    }
+
     // Focus on the game container after mounting
     componentDidMount(): void {
         this.gameContainerRef.current && this.gameContainerRef.current.focus();
@@ -427,12 +444,17 @@ export default class Game extends React.Component<GameProps, GameState> {
             movesTaken,
             gameStarted,
             gameWon,
-            isMenuOpen
+            isMenuOpen,
+            areSettingsOpened
         } = this.state;
 
         let gameClass = "game";
         gameClass += gameWon ? " game-won" : "";
         gameClass += !gameStarted ? " game-pending" : "";
+
+        const gameStyle = {
+            display: this.state.areSettingsOpened ? "none" : "block"
+        };
 
         // Only show the completion component when the user beats the puzzle
         const gameCompleteEle = gameWon ?
@@ -444,39 +466,47 @@ export default class Game extends React.Component<GameProps, GameState> {
             null;
 
         return (
-            <div className={gameClass}
-                ref={this.gameContainerRef}
-                tabIndex={1}
-                onKeyDown={this.onKeyDown}
-                onKeyUp={this.onKeyUp}
-                onFocus={this.resetFlags}
-                onBlur={this.resetFlags}>
+            <div>
+                <div className={gameClass}
+                    ref={this.gameContainerRef}
+                    tabIndex={1}
+                    onKeyDown={this.onKeyDown}
+                    onKeyUp={this.onKeyUp}
+                    onFocus={this.resetFlags}
+                    onBlur={this.resetFlags}
+                    style={gameStyle}>
 
-                <GameHUD
-                    movesTaken={movesTaken}
-                    levelNumber={this.props.levelNumber}
-                    levelName={this.props.levelName}
-                    isMenuOpen={isMenuOpen}
-                    setMenuOpen={this.setMenuOpen} />
-                <Solution
-                    grid={grid}
-                    playerRow={playerRow}
-                    playerCol={playerCol} />
-                <GameAdjustMenu
-                    canUndo={this.gameHistory.canUndo()}
-                    canRedo={this.gameHistory.canRedo()}
-                    restartHandler={this.inGameRestart}
-                    undoHandler={this.undo}
-                    redoHandler={this.redo} />
-                <GridComponent
-                    grid={grid}
-                    playerRow={playerRow}
-                    playerCol={playerCol}
-                    playerColor={playerColor}
-                    showSolution={showSolution}
-                    isPlayerMoving={isPlayerMoving}
-                    onPlayerAnimationEnd={this.onPlayerAnimationEnd} />
-                {gameCompleteEle}
+                    <GameHUD
+                        movesTaken={movesTaken}
+                        levelNumber={this.props.levelNumber}
+                        levelName={this.props.levelName}
+                        isMenuOpen={isMenuOpen}
+                        setMenuOpen={this.setMenuOpen}
+                        showSettings={this.showSettings} />
+                    <Solution
+                        grid={grid}
+                        playerRow={playerRow}
+                        playerCol={playerCol} />
+                    <GameAdjustMenu
+                        canUndo={this.gameHistory.canUndo()}
+                        canRedo={this.gameHistory.canRedo()}
+                        restartHandler={this.inGameRestart}
+                        undoHandler={this.undo}
+                        redoHandler={this.redo} />
+                    <GridComponent
+                        grid={grid}
+                        playerRow={playerRow}
+                        playerCol={playerCol}
+                        playerColor={playerColor}
+                        showSolution={showSolution}
+                        isPlayerMoving={isPlayerMoving}
+                        onPlayerAnimationEnd={this.onPlayerAnimationEnd} />
+                    {gameCompleteEle}
+                </div>
+
+                <Settings
+                    visible={areSettingsOpened}
+                    onGoBack={this.hideSettings} />
             </div>
         );
     }
