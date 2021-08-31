@@ -1,4 +1,7 @@
+@use "../../styles/colors";
 @use "../../styles/sizes";
+
+$tooltip-fade-time: 0.25s;
 
 .game-adjust-menu {
     align-items: center;
@@ -16,6 +19,7 @@
         border: none;
         display: inline-block;
         padding: 0 2px;
+        position: relative;
 
         button {
             background: none;
@@ -30,12 +34,51 @@
             }
         }
 
-        &.adjust-disabled button {
-            color: rgba(0, 0, 0, 0.2);
+        .game-adjust-tooltip {
+            background-color: colors.$menu-bg;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            opacity: 0;
+            padding: 4px 10px;
+            position: absolute;
+            top: -9999%;
+            transition: opacity $tooltip-fade-time, top 0s linear $tooltip-fade-time;
 
-            &:hover {
-                cursor: default;
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 100%;
+                left: 16px;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: transparent transparent colors.$menu-bg transparent;
+            }
+        }
+
+        &:hover {
+            .game-adjust-tooltip {
+                opacity: 1;
+                top: 150%;
+                transition: opacity $tooltip-fade-time, top 0s linear 0s;
+            }
+        }
+
+        &.adjust-disabled {
+            button {
                 color: rgba(0, 0, 0, 0.2);
+
+                &:hover {
+                    cursor: default;
+                    color: rgba(0, 0, 0, 0.2);
+                }
+            }
+
+            .game-adjust-tooltip {
+                opacity: 0;
+                top: -9999%;
+                transition: opacity $tooltip-fade-time, top 0s linear $tooltip-fade-time;
             }
         }
     }

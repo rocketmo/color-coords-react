@@ -40,6 +40,8 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
                 <button tabIndex={0} onClick={onRestartClick} aria-label="Restart game">
                     <FontAwesomeIcon icon={faSync} />
                 </button>
+
+                <div className="game-adjust-tooltip">Restart</div>
             </div>
 
             <div className="game-adjust-separator"></div>
@@ -48,12 +50,16 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
                 <button tabIndex={0} onClick={onUndoClick} aria-label="Undo">
                     <FontAwesomeIcon icon={faUndoAlt} />
                 </button>
+
+                <div className="game-adjust-tooltip">Undo</div>
             </div>
 
             <div className={redoClass}>
                 <button tabIndex={0} onClick={onRedoClick} aria-label="Redo">
                     <FontAwesomeIcon icon={faRedoAlt} />
                 </button>
+
+                <div className="game-adjust-tooltip">Redo</div>
             </div>
         </div>
     );
