@@ -1,0 +1,115 @@
+@use "../../styles/colors";
+@use "../../styles/sizes";
+@use "../../styles/functions";
+@use "sass:color";
+
+.settings {
+    animation: simple-fade-in 1s;
+    background-color: colors.$menu-bg;
+    display: none;
+    min-height: 100vh;
+    position: relative;
+
+    &.settings-enabled {
+        display: block;
+    }
+
+    .top-bar.settings-top-bar {
+        padding: 0 16px;
+        z-index: 1000;
+
+        .back-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            float: left;
+            font-size: 24px;
+            padding: 0;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.7;
+            }
+        }
+
+        .level-select-title {
+            float: left;
+            padding-left: 28px;
+
+            .top-bar-text {
+                font-size: 16px;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+    }
+
+    .settings-main {
+        padding: 10px 0 48px;
+        position: relative;
+        top: sizes.$top-bar-height;
+
+        .settings-section {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-sizing: border-box;
+            color: #fff;
+            margin: 0 auto;
+            padding: 20px 30px;
+            width: calc(100% - 20px);
+
+            h2 {
+                color: #fff;
+                font-family: functions.sans-serif-family(Nunito);
+                font-size: 24px;
+                font-weight: 700;
+                margin: 10px 0 20px;
+            }
+
+            .settings-erase {
+                button {
+                    background: none;
+                    border: none;
+                    color: #fff;
+                    display: block;
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                    padding: 0;
+                    text-decoration: underline;
+
+                    &:hover {
+                        cursor: pointer;
+                        opacity: 0.7;
+                    }
+                }
+
+                p {
+                    animation: simple-fade-in 0.5s;
+                    color: #ccc;
+                    font-style: italic;
+                    margin: 10px 0 20px;
+                }
+
+                .erase-confirm-btn {
+                    animation: simple-fade-in 1s ease 0s 1 normal forwards;
+                    border-radius: 4px;
+                    display: inline-block;
+                    font-weight: 600;
+                    opacity: 0;
+                    padding: 4px 8px;
+                    text-decoration: none;
+
+                    &.erase-continue {
+                        background-color: colors.$menu-highlight;
+                        color: colors.$black;
+                        margin-right: 10px;
+                    }
+
+                    &.erase-cancel {
+                        background-color: #666;
+                    }
+                }
+            }
+        }
+    }
+}

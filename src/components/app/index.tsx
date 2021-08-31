@@ -8,7 +8,7 @@ import GameRedirect from "../game-redirect";
 import Home from "../home";
 import { sleep } from "../../services/util";
 import LEVELS from "../../services/levels";
-import { loadLevelScores, saveScore } from "../../services/idb";
+import { loadLevelScores, saveScore, clearScores } from "../../services/idb";
 import { getStarsScoredByMoves, getDefaultLevelScoreMap } from "../../services/cc-util";
 
 import "./app.scss";
@@ -97,6 +97,28 @@ export default function App() {
         return level.requiredToUnlock - starCount;
     };
 
+    const eraseData = () => {
+        const nextLevelScoreMap = produce(levelScoreMap, draft => {
+            for (const levelId in draft) {
+                draft[levelId].solved = false;
+                draft[levelId].moves = 0;
+                draft[levelId].stars = 0;
+            }
+        });
+
+        setLevelScoreMap(nextLevelScoreMap);
+        setStarCount(0);
+
+        // Update DB
+        clearScores()
+            .then(() => {
+                toast.success("Save data has been erased.");
+            })
+            .catch(() => {
+                toast.error("Unable to erase data.");
+            });
+    };
+
     // On mount
     useEffect(() => {
         // Update the loader bar
@@ -110,7 +132,7 @@ export default function App() {
 
         WebFont.load({
             custom: {
-                families: [ "FredokaOne", "Nunito:n4,n6,n7,n8", "NunitoSans:n4,n6,n7,i4" ]
+                families: [ "FredokaOne", "Nunito:n4,n6,n7,n8", "NunitoSans:n4,n6,n7,i4,i7" ]
             },
             timeout: 5000,
             active: onFontsLoad,
@@ -198,7 +220,7 @@ export default function App() {
                             starsToUnlockLevel={starsToUnlockLevel} />
                     </Route>
                     <Route path="*">
-                        <Home playAnimation={playHomeAnimation} />
+                        <Home playAnimation={playHomeAnimation} onEraseData={eraseData} />
                     </Route>
                 </Switch>
             </Router>

@@ -144,10 +144,12 @@ $nav-min-default-width: 320px;
     }
 
     .home-nav {
+        animation: nav-container-move 0s linear ($bg-fade-delay + 0.15s) 1 normal forwards;
         margin-top: $nav-min-margin;
-        padding-bottom: 30px;
+        padding-bottom: 40px;
         position: relative;
         text-align: center;
+        transform: translateY(-99999%);
         z-index: 5;
 
         a, button {
@@ -223,6 +225,8 @@ $nav-min-default-width: 320px;
     }
 
     .home-nav {
+        animation: nav-container-move 0s linear 0s 1 normal forwards;
+
         @for $i from 1 through 3 {
             .home-nav-btn-#{$i} {
                 animation: nav-fade-in 0s ease 0s 1 normal forwards;
@@ -299,6 +303,15 @@ $nav-min-default-width: 320px;
     to {
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+@keyframes nav-container-move {
+    from {
+        transform: translateY(-99999%);
+    }
+    to {
+        transform: translateY(0);
     }
 }
 

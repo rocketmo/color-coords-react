@@ -59,3 +59,14 @@ export async function saveScore(levelId: string, moves: number): Promise<void> {
 
     db.close();
 }
+
+export async function clearScores(): Promise<void> {
+    const db = await openDB(DB_NAME, 1, { upgrade });
+    const transaction = db.transaction(SCORES_STORE_NAME, "readwrite");
+    const scoresStore = transaction.objectStore(SCORES_STORE_NAME);
+
+    await scoresStore.clear();
+    await transaction.done;
+
+    db.close();
+}

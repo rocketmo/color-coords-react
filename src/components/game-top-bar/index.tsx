@@ -17,7 +17,7 @@ export default function GameTopBar(props: GameTopBarProps) {
                     size={24} label="Toggle menu" hideOutline={false}></Hamburger>
             </div>
             <div className="game-level">
-                <span className="top-bar-text">{props.levelNumber}. {props.levelName}</span>
+                <h1 className="top-bar-text">{props.levelNumber}. {props.levelName}</h1>
             </div>
             <div className="moves-taken">
                 <span className="top-bar-text">Moves: {props.movesTaken}</span>

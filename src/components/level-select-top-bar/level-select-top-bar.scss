@@ -1,10 +1,6 @@
 @use "../../styles/sizes";
 
-$top-bar-font-size: 16px;
-$hover-opacity: 0.7;
-
 .top-bar.level-select-top-bar {
-    height: sizes.$top-bar-height;
     padding: 0 16px;
     z-index: 1000;
 
@@ -14,7 +10,7 @@ $hover-opacity: 0.7;
         font-size: 24px;
 
         &:hover {
-            opacity: $hover-opacity;
+            opacity: 0.7;
         }
     }
 
@@ -23,7 +19,7 @@ $hover-opacity: 0.7;
         padding-left: 28px;
 
         .top-bar-text {
-            font-size: $top-bar-font-size;
+            font-size: 16px;
             font-weight: 600;
             margin: 0;
         }
@@ -33,10 +29,6 @@ $hover-opacity: 0.7;
         color: #fff;
         float: right;
         font-size: 16px;
-
-        img {
-            padding: 0 2px 0 0;
-        }
     }
 }
 

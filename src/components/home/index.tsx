@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Settings from "../settings";
 import "./home.scss";
 
 interface HomeProps {
-    playAnimation: boolean
+    playAnimation: boolean,
+    onEraseData: () => void
 };
 
 const TITLE = (
@@ -19,7 +21,13 @@ const GRADIENT_ANIM_TIME = 300;
 
 export default function Home(props: HomeProps) {
     const [ gradientDelay ] = useState(Math.random() * GRADIENT_ANIM_TIME);
-    const [ playAnimation ] = useState(props.playAnimation);
+    const [ playAnimation, setPlayAnimation ] = useState(props.playAnimation);
+    const [ showSettings, setShowSettings ] = useState(false);
+
+    const onReturnFromSettings = () => {
+        setShowSettings(false);
+        setPlayAnimation(false);
+    };
 
     let homeClass = "home-container";
     homeClass += !playAnimation ? " home-anim-off" : "";
@@ -51,23 +59,36 @@ export default function Home(props: HomeProps) {
         animationDelay: `-${gradientDelay}s`
     };
 
+    const homeStyle = {
+        display: showSettings ? "none" : "block"
+    };
+
     return (
-        <div className={homeClass}>
-            <div className="home-bg">
-                <div className="home-bg-gradient" style={gradientStyle}>{bgLayers}</div>
-            </div>
-            <div className="title-container">
-                <div className="title-box title-main">
-                    <h1 className="title-text" aria-label="Color Coords">{TITLE}</h1>
+        <div>
+            <div className={homeClass} style={homeStyle}>
+                <div className="home-bg">
+                    <div className="home-bg-gradient" style={gradientStyle}>{bgLayers}</div>
                 </div>
-                {coloredTitles}
+                <div className="title-container">
+                    <div className="title-box title-main">
+                        <h1 className="title-text" aria-label="Color Coords">{TITLE}</h1>
+                    </div>
+                    {coloredTitles}
+                </div>
+
+                <nav className="home-nav">
+                    <Link to="/level-select" className="home-nav-btn-1">Level Select</Link><br />
+                    <button className="home-nav-btn-2">How to Play</button><br />
+                    <button className="home-nav-btn-3" onClick={setShowSettings.bind(null, true)}>
+                        Settings
+                    </button>
+                </nav>
             </div>
 
-            <nav className="home-nav">
-                <Link to="/level-select" className="home-nav-btn-1">Level Select</Link><br />
-                <button className="home-nav-btn-2">How to Play</button><br />
-                <button className="home-nav-btn-3">Settings</button>
-            </nav>
+            <Settings
+                visible={showSettings}
+                onGoBack={onReturnFromSettings}
+                onEraseData={props.onEraseData} />
         </div>
     );
 }
