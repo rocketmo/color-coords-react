@@ -210,7 +210,7 @@ export default function App() {
             <Router>
                 <Switch>
                     <Route path="/game/:levelNumber">
-                        <GameRedirect handleStarUpdate={handleStarUpdate}
+                        <GameRedirect starCount={starCount} handleStarUpdate={handleStarUpdate}
                             starsScoredOnLevel={starsScoredOnLevel}
                             starsToUnlockLevel={starsToUnlockLevel} />
                     </Route>

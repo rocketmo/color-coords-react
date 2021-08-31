@@ -7,6 +7,7 @@ interface GameParams {
 };
 
 interface GameRedirectProps {
+    starCount: number,
     handleStarUpdate: (levelNumber: number, movesTaken: number) => number,
     starsScoredOnLevel: (levelNum: number) => number,
     starsToUnlockLevel: (levelNum: number) => number
@@ -16,8 +17,9 @@ export default function GameRedirect(props: GameRedirectProps) {
     const { levelNumber } = useParams<GameParams>();
     const levelInt = parseInt(levelNumber);
 
-    if (isNaN(levelInt) || !LEVELS[levelInt - 1]) {
-        return <Redirect to="/" />
+    if (isNaN(levelInt) || !LEVELS[levelInt - 1] ||
+        props.starCount < LEVELS[levelInt - 1].requiredToUnlock) {
+        return <Redirect to="/level-select" />
     }
 
     const { gridConfig, playerRow, playerCol, levelName } = LEVELS[levelInt - 1];
