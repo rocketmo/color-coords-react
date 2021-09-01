@@ -28,11 +28,8 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
         props.redoHandler();
     }
 
-    let undoClass = "game-adjust-btn";
-    undoClass += !props.canUndo ? " adjust-disabled" : "";
-
-    let redoClass = "game-adjust-btn";
-    redoClass += !props.canRedo ? " adjust-disabled" : "";
+    const undoClass = `game-adjust-btn ${!props.canUndo ? " adjust-disabled" : ""}`;
+    const redoClass = `game-adjust-btn ${!props.canRedo ? " adjust-disabled" : ""}`;
 
     return (
         <div className="game-adjust-menu">

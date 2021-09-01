@@ -36,9 +36,7 @@ export default function Home(props: HomeProps) {
         setShowSettings(true);
     };
 
-    let homeClass = "home-container";
-    homeClass += !playAnimation ? " home-anim-off" : "";
-
+    const homeClass = `home-container ${!playAnimation ? " home-anim-off" : ""}`;
     const coloredTitles = [];
     const bgLayers = [];
 
