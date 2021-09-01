@@ -40,7 +40,6 @@ export default function LevelPreview(props: LevelPreviewProps) {
                         <span><Star filled size={STAR_SIZE} /></span>
                         {" more)."}
                     </p>
-                    {level.description}
                 </section>
             );
         }
