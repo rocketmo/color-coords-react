@@ -50,7 +50,8 @@ interface GameState {
 };
 
 export default class Game extends React.Component<GameProps, GameState> {
-    keyFnMap: Record<string, Function>;
+    movementKeyFnMap: Record<string, Function>;
+    utilKeyFnMap: Record<string, Function>;
     keyPressFlagMap: Record<string, boolean>;
     gridAnimationQueue: Queue<GridAnimationFrame>;
     gameContainerRef: React.RefObject<HTMLDivElement>;
@@ -95,11 +96,17 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.showSettings = this.showSettings.bind(this);
         this.hideSettings = this.hideSettings.bind(this);
 
-        this.keyFnMap = {
+        this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
             ArrowDown: this.movePlayerByKeyDown.bind(this, Direction.DOWN),
             ArrowLeft: this.movePlayerByKeyDown.bind(this, Direction.LEFT),
             ArrowRight: this.movePlayerByKeyDown.bind(this, Direction.RIGHT)
+        };
+
+        this.utilKeyFnMap = {
+            r: this.inGameRestart,
+            y: this.redo,
+            z: this.undo
         };
 
         this.keyPressFlagMap = {
@@ -124,17 +131,23 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
 
         // Player movement
-        else if (this.keyFnMap[event.key]) {
+        else if (this.movementKeyFnMap[event.key]) {
             event.preventDefault();
 
             if (!this.keyPressFlagMap[event.key]) {
                 this.keyPressFlagMap[event.key] = true;
-                this.keyFnMap[event.key](event);
+                this.movementKeyFnMap[event.key](event);
             }
         }
 
+        // Utility function
+        else if (this.utilKeyFnMap[event.key]) {
+            event.preventDefault();
+            this.utilKeyFnMap[event.key]();
+        }
+
         // Toggle solution
-        else if (event.key.toLowerCase() === "z") {
+        else if (event.key.toLowerCase() === "q") {
             event.preventDefault();
             this.setState({ showSolution: true });
         }
@@ -186,7 +199,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         if (this.keyPressFlagMap[event.key]) {
             event.preventDefault();
             this.keyPressFlagMap[event.key] = false;
-        } else if (event.key.toLowerCase() === "z") {
+        } else if (event.key.toLowerCase() === "q") {
             event.preventDefault();
             this.setState({ showSolution: false });
         }
@@ -234,12 +247,10 @@ export default class Game extends React.Component<GameProps, GameState> {
                 const { newRow, newCol, newColor, gridCellMovedTo } = moveResult;
 
                 // Check if the grid tile needs to be updated
-                if (gridCellMovedTo && newColor !== Color.DEFAULT &&
-                    gridCellMovedTo.color !== newColor) {
-
-                    gridCellMovedTo.color = newColor;
+                let updatedTileColor = gridCellMovedTo && gridCellMovedTo.updateColor(newColor);
+                if (updatedTileColor) {
                     this.gridAnimationQueue.enqueue(
-                        new TileAnimationFrame(newRow, newCol, newColor)
+                        new TileAnimationFrame(newRow, newCol, updatedTileColor)
                     );
                 }
 

@@ -14,8 +14,7 @@ interface SettingsProps {
 export default function Settings(props: SettingsProps) {
     const [ showEraseConfirm, setShowEraseConfirm ] = useState(false);
 
-    let className = "settings";
-    className += props.visible ? " settings-enabled" : "";
+    const className = `settings ${props.visible ? "settings-enabled" : ""}`;
 
     const backOnClick = (event: MouseEvent) => {
         event.preventDefault();

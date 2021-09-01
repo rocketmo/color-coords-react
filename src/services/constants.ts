@@ -3,6 +3,7 @@ export const SOLUTION_TILE_SIZE = 20;
 
 export enum Color {
     BLUE = "blue",
+    DARK = "dark",
     DEFAULT = "default",
     GREEN = "green",
     ORANGE = "orange",

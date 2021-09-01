@@ -39,6 +39,14 @@ body {
     background-color: color.scale(colors.$default, $lightness: 50%);
 }
 
+.bg-dark {
+    background-color: colors.$dark;
+}
+
+.bg-dark.alt {
+    background-color: color.scale(colors.$dark, $lightness: 10%);
+}
+
 @each $name, $col in $color-map {
     .bg-#{$name} {
         background-color: $col;

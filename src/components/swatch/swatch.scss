@@ -1,3 +1,6 @@
+@use "../../styles/colors";
+@use "sass:color";
+
 $swatch-size: 20px;
 
 .swatch {
@@ -14,5 +17,9 @@ $swatch-size: 20px;
         position: absolute;
         width: 100%;
         z-index: 11;
+    }
+
+    &.bg-dark {
+        background-color: color.scale(colors.$dark, $lightness: 25%);
     }
 }

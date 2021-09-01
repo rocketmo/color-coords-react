@@ -19,6 +19,31 @@ export default class GridCell {
         this.item = item;
     }
 
+    updateColor(playerColor: Color): (Color | null) {
+
+        // Cannot change color of a dark tile
+        if (this.color === Color.DARK) {
+            return null;
+        }
+
+        // If the player is dark and the tile is colored, erase the tile color
+        if (playerColor === Color.DARK && this.color !== Color.DEFAULT) {
+            this.color = Color.DEFAULT;
+            return this.color;
+        }
+
+        // If the player is colored and the tile is a different color (but not dark),
+        // re-color the tile
+        if (playerColor !== Color.DEFAULT && playerColor !== Color.DARK &&
+            playerColor !== this.color) {
+            this.color = playerColor;
+            return this.color;
+        }
+
+        // Otherwise, tile stays the same
+        return null;
+    }
+
     renderElements(showSolution: boolean): JSX.Element[] {
         const key = `tile-${this.row}-${this.col}`;
         const elements = [];
