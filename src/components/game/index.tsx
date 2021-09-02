@@ -95,6 +95,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.redo = this.redo.bind(this);
         this.showSettings = this.showSettings.bind(this);
         this.hideSettings = this.hideSettings.bind(this);
+        this.onTilePress = this.onTilePress.bind(this);
 
         this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -213,6 +214,54 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.setState({ showSolution: false });
     }
 
+    // Processes a move and returns the number of tiles moved
+    makeMove(grid: Grid, player: Player, playerMovement: PlayerMovement): number {
+        let moveResult = player.move(playerMovement);
+        let moveCount = 0;
+
+        // If move is invalid, return
+        if (!moveResult.moved) {
+            return moveCount;
+        }
+
+        // Otherwise, add animation frames until the player stops moving
+        while (moveResult.moved) {
+
+            moveCount += 1;
+            const { newRow, newCol, newColor, gridCellMovedTo } = moveResult;
+
+            // Check if the grid tile needs to be updated
+            let updatedTileColor = gridCellMovedTo && gridCellMovedTo.updateColor(newColor);
+            if (updatedTileColor) {
+                this.gridAnimationQueue.enqueue(
+                    new TileAnimationFrame(newRow, newCol, updatedTileColor)
+                );
+            }
+
+            // Add player animation frame
+            this.gridAnimationQueue.enqueue(
+                new PlayerAnimationFrame(newRow, newCol, newColor)
+            );
+
+            // Try to move again
+            playerMovement = {
+                currentDirection: null,
+                prevDirection: playerMovement.currentDirection
+            };
+
+            moveResult = player.move(playerMovement);
+        }
+
+        // Record final state in game history
+        this.gameHistory.push(grid, player.row, player.col, player.color);
+
+        return moveCount;
+    }
+
+    isAnimationInProgress(): boolean {
+        return (this.gridAnimationQueue.size() > 0 || this.state.isPlayerMoving);
+    }
+
     async movePlayerByKeyDown(dir: Direction, event: KeyboardEvent): Promise<void> {
 
         let movedPrevLoop = false; // Flag to prevent infinite loop
@@ -222,7 +271,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         while (this.keyPressFlagMap[event.key] && !this.state.gameOver && !this.state.isMenuOpen) {
 
             // Do not move the player if already in motion; wait until next cycle and check again
-            if (this.gridAnimationQueue.size() > 0 || this.state.isPlayerMoving || movedPrevLoop) {
+            if (this.isAnimationInProgress() || movedPrevLoop) {
                 movedPrevLoop = false;
                 await sleep(0);
                 continue;
@@ -233,50 +282,62 @@ export default class Game extends React.Component<GameProps, GameState> {
             const player = new Player(playerRow, playerCol, gridClone, playerColor);
 
             let playerMovement: PlayerMovement = { currentDirection: dir, prevDirection: null };
-            let moveResult = player.move(playerMovement);
+            let moveCount = this.makeMove(gridClone, player, playerMovement);
 
             // If move is invalid, wait until next cycle
-            if (!moveResult.moved) {
+            if (moveCount === 0) {
                 await sleep(0);
                 continue;
             }
 
-            // Otherwise, add animation frames until the player stops moving
-            while (moveResult.moved) {
-
-                const { newRow, newCol, newColor, gridCellMovedTo } = moveResult;
-
-                // Check if the grid tile needs to be updated
-                let updatedTileColor = gridCellMovedTo && gridCellMovedTo.updateColor(newColor);
-                if (updatedTileColor) {
-                    this.gridAnimationQueue.enqueue(
-                        new TileAnimationFrame(newRow, newCol, updatedTileColor)
-                    );
-                }
-
-                // Add player animation frame
-                this.gridAnimationQueue.enqueue(
-                    new PlayerAnimationFrame(newRow, newCol, newColor)
-                );
-
-                // Try to move again
-                playerMovement = {
-                    currentDirection: null,
-                    prevDirection: playerMovement.currentDirection
-                };
-
-                moveResult = player.move(playerMovement);
-            }
-
-            // Record final state in game history
-            this.gameHistory.push(gridClone, player.row, player.col, player.color);
-
-            // Process next animation
+            // Otherwise, the move was valid; process next animation
             this.startNextAnimation();
 
             // Set flag
             movedPrevLoop = true;
         }
+    }
+
+    onTilePress(row: number, col: number): void {
+        const { grid, playerRow, playerCol, playerColor } = this.state;
+
+        // Do not move if the tile pressed is not on the same row or column; or if it is the same
+        // tile that the player is on already; or if there is animation in progress
+        if ((row === playerRow && col === playerCol) || (row !== playerRow && col !== playerCol) ||
+            this.isAnimationInProgress()) {
+            return;
+        }
+
+        // Determine the movement direction
+        let dir = null;
+        if (row < playerRow) { dir = Direction.UP; }
+        else if (row > playerRow) { dir = Direction.DOWN; }
+        else if (col < playerCol) { dir = Direction.LEFT; }
+        else if (col > playerCol) { dir = Direction.RIGHT; }
+
+        // Determine maximum number of times to move in that direction
+        const numTimesToMove = Math.max(Math.abs(playerRow - row), Math.abs(playerCol - col));
+
+        let gridClone = cloneDeep(grid);
+        const player = new Player(playerRow, playerCol, gridClone, playerColor);
+
+        // Start moving in that direction
+        for (let i = 0; i < numTimesToMove; i += 1) {
+            let playerMovement: PlayerMovement = { currentDirection: dir, prevDirection: null };
+            let moveCount = this.makeMove(gridClone, player, playerMovement);
+
+            // Do not continue unless the player moved exactly one tile
+            if (moveCount !== 1) {
+                break;
+            }
+
+            // Re-clone the grid for each move
+            gridClone = cloneDeep(gridClone);
+            player.grid = gridClone;
+        }
+
+        // Process next animation
+        this.startNextAnimation();
     }
 
     startNextAnimation(): void {
@@ -511,7 +572,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                         playerColor={playerColor}
                         showSolution={showSolution}
                         isPlayerMoving={isPlayerMoving}
-                        onPlayerAnimationEnd={this.onPlayerAnimationEnd} />
+                        onPlayerAnimationEnd={this.onPlayerAnimationEnd}
+                        onTilePress={this.onTilePress} />
                     {gameCompleteEle}
                 </div>
 

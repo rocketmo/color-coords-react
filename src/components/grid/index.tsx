@@ -20,7 +20,8 @@ interface GridProps {
     playerColor: Color,
     showSolution: boolean,
     isPlayerMoving: boolean
-    onPlayerAnimationEnd: () => void
+    onPlayerAnimationEnd: () => void,
+    onTilePress: (row: number, col: number) => void
 }
 
 export default function GridComponent(props: GridProps) {
@@ -39,7 +40,13 @@ export default function GridComponent(props: GridProps) {
     offset.y += (TOP_MENU_HEIGHT / 2);
     offset.x -= (solutionWidth / 2);
 
-    const gridElements = props.grid.renderElements(props.showSolution);
+    const gridElements = props.isPlayerMoving ? props.grid.renderElements(props.showSolution) :
+        props.grid.renderElements(
+            props.showSolution,
+            props.playerRow,
+            props.playerCol,
+            props.onTilePress
+        );
 
     return (
         <GridOffsetContext.Provider value={offset}>

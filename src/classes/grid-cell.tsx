@@ -44,13 +44,19 @@ export default class GridCell {
         return null;
     }
 
-    renderElements(showSolution: boolean): JSX.Element[] {
+    renderElements(
+        showSolution: boolean,
+        playerRow?: number,
+        playerCol?: number,
+        onTilePress?: (row: number, col: number) => void
+    ): JSX.Element[] {
         const key = `tile-${this.row}-${this.col}`;
         const elements = [];
         elements.push(
             <Tile key={key} color={this.color} alt={(this.row + this.col) % 2 === 0}
                 solution={this.solutionColor} showSolution={showSolution}
-                row={this.row} col={this.col} />
+                row={this.row} col={this.col} playerRow={playerRow} playerCol={playerCol}
+                onTilePress={onTilePress} />
         );
 
         if (this.item) {

@@ -63,7 +63,12 @@ export default class Grid {
         return true;
     }
 
-    renderElements(showSolution: boolean): JSX.Element[] {
+    renderElements(
+        showSolution: boolean,
+        playerRow?: number,
+        playerCol?: number,
+        onTilePress?: (row: number, col: number) => void
+    ): JSX.Element[] {
         const elements = [];
 
         for (let i = 0; i < this.cells.length; i += 1) {
@@ -71,7 +76,12 @@ export default class Grid {
                 const gridCell = this.cells[i][j];
 
                 if (gridCell) {
-                    elements.push(...gridCell.renderElements(showSolution));
+                    elements.push(...gridCell.renderElements(
+                        showSolution,
+                        playerRow,
+                        playerCol,
+                        onTilePress
+                    ));
                 }
             }
         }
