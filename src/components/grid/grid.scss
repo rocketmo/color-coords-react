@@ -6,6 +6,11 @@
     height: 100%;
     overflow: hidden;
     position: relative;
+    touch-action: none;
     width: 100%;
     z-index: 50;
+
+    &.grid-dragging {
+        cursor: move;
+    }
 }

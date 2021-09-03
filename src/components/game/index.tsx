@@ -46,7 +46,8 @@ interface GameState {
     starsWon: number,
     isPlayerMoving: boolean,
     isMenuOpen: boolean,
-    areSettingsOpened: boolean
+    areSettingsOpened: boolean,
+    shouldCancelTilePress: boolean
 };
 
 export default class Game extends React.Component<GameProps, GameState> {
@@ -72,7 +73,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             starsWon: 0,
             isPlayerMoving: false,
             isMenuOpen: false,
-            areSettingsOpened: false
+            areSettingsOpened: false,
+            shouldCancelTilePress: false
         };
 
         this.gridAnimationQueue = new Queue();
@@ -96,6 +98,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.showSettings = this.showSettings.bind(this);
         this.hideSettings = this.hideSettings.bind(this);
         this.onTilePress = this.onTilePress.bind(this);
+        this.setShouldCancelTilePress = this.setShouldCancelTilePress.bind(this);
 
         this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -299,12 +302,13 @@ export default class Game extends React.Component<GameProps, GameState> {
     }
 
     onTilePress(row: number, col: number): void {
-        const { grid, playerRow, playerCol, playerColor } = this.state;
+        const { grid, playerRow, playerCol, playerColor, shouldCancelTilePress } = this.state;
 
         // Do not move if the tile pressed is not on the same row or column; or if it is the same
-        // tile that the player is on already; or if there is animation in progress
+        // tile that the player is on already; or if there is animation in progress; or if the
+        // press should be cancelled (e.g. because the user was dragging to the grid)
         if ((row === playerRow && col === playerCol) || (row !== playerRow && col !== playerCol) ||
-            this.isAnimationInProgress()) {
+            this.isAnimationInProgress() || shouldCancelTilePress) {
             return;
         }
 
@@ -505,6 +509,12 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    setShouldCancelTilePress(bool: boolean): void {
+        this.setState({
+            shouldCancelTilePress: bool
+        });
+    }
+
     render() {
         const {
             grid,
@@ -573,7 +583,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                         showSolution={showSolution}
                         isPlayerMoving={isPlayerMoving}
                         onPlayerAnimationEnd={this.onPlayerAnimationEnd}
-                        onTilePress={this.onTilePress} />
+                        onTilePress={this.onTilePress}
+                        dragHandler={this.setShouldCancelTilePress} />
                     {gameCompleteEle}
                 </div>
 
