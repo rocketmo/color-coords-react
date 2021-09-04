@@ -14,3 +14,8 @@
         cursor: move;
     }
 }
+
+// Fix cursor when hovering over tile
+.tile-grid.grid-dragging .tile .tile-hover:hover {
+    cursor: move;
+}

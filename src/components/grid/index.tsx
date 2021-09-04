@@ -3,7 +3,7 @@ import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
 import { GridOffsetContext } from "../../services/context";
 import { TILE_SIZE } from "../../services/constants";
-import { sleep } from "../../services/util";
+import { sleep, getBoundValue } from "../../services/util";
 import "./grid.scss";
 
 import type Grid from "../../classes/grid";
@@ -91,7 +91,6 @@ export default function GridComponent(props: GridProps) {
     };
 
     const onPointerMove = (event: PointerEvent): void => {
-
         // Do not process unless the pointer is pressed down
         if (!isPointerDown) {
             return;
@@ -109,10 +108,10 @@ export default function GridComponent(props: GridProps) {
 
             // Set the offset
             let nextOffsetPctX = offsetPctX + ((event.clientX - lastPointerX) / (width || 1));
-            nextOffsetPctX = Math.min(Math.max(MIN_DRAG_X_PCT, nextOffsetPctX), MAX_DRAG_X_PCT);
+            nextOffsetPctX = getBoundValue(nextOffsetPctX, MAX_DRAG_X_PCT, MIN_DRAG_X_PCT);
 
             let nextOffsetPctY = offsetPctY + ((event.clientY - lastPointerY) / (height || 1));
-            nextOffsetPctY = Math.min(Math.max(MIN_DRAG_Y_PCT, nextOffsetPctY), MAX_DRAG_Y_PCT);
+            nextOffsetPctY = getBoundValue(nextOffsetPctY, MAX_DRAG_Y_PCT, MIN_DRAG_Y_PCT);
 
             setOffsetPctX(nextOffsetPctX);
             setOffsetPctY(nextOffsetPctY);
@@ -157,15 +156,22 @@ export default function GridComponent(props: GridProps) {
         }
     };
 
-    const gridClass = `tile-grid ${isDragging ? "grid-dragging" : ""}`
+    const gridContainerProps: Record<string, any> = {
+        id: "tile-grid",
+        className: `tile-grid ${isDragging ? "grid-dragging" : ""}`,
+        ref,
+        onPointerDown,
+        onPointerUp,
+        onPointerLeave
+    };
+
+    if (isPointerDown) {
+        gridContainerProps.onPointerMove = onPointerMove;
+    }
 
     return (
         <GridOffsetContext.Provider value={offset}>
-            <div id="tile-grid" className={gridClass} ref={ref}
-                onPointerDown={onPointerDown}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerLeave={onPointerLeave}>
+            <div {...gridContainerProps}>
 
                 { gridElements }
                 <PlayerComponent color={props.playerColor} row={props.playerRow}
