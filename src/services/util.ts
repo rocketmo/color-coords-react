@@ -11,3 +11,15 @@ export function getBoundValue(val: number, upperBound: number, lowerBound: numbe
     return Math.min(Math.max(lowerBound, val), upperBound);
 
 }
+
+export function isInElementById(node: (HTMLElement | null), id: string): boolean {
+    while (node) {
+        if (node?.id === id) {
+            return true;
+        }
+
+        node = node.parentElement;
+    }
+
+    return false;
+}

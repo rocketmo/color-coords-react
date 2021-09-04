@@ -24,8 +24,13 @@ $solution-color: #ebde6e;
         height: 20vw;
         max-height: 300px;
         min-height: 200px;
+        overflow: hidden;
         position: relative;
         width: 100%;
+
+        &.solution-dragging {
+            cursor: move;
+        }
     }
 
     .solution-target-text {

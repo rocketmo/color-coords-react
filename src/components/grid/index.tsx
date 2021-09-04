@@ -3,7 +3,7 @@ import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
 import { GridOffsetContext } from "../../services/context";
 import { TILE_SIZE } from "../../services/constants";
-import { sleep, getBoundValue } from "../../services/util";
+import { sleep, getBoundValue, isInElementById } from "../../services/util";
 import "./grid.scss";
 
 import type Grid from "../../classes/grid";
@@ -14,6 +14,7 @@ const TOP_MENU_HEIGHT = 48;
 const SOLUTION_WIDTH_MIN = 200;
 const SOLUTION_WIDTH_MAX = 300;
 const SOLUTION_VW = 0.2;
+const GRID_ID = "tile-grid";
 
 const DRAG_THRESHOLD = 100;
 const MIN_DRAG_X_PCT = -0.5;
@@ -137,28 +138,17 @@ export default function GridComponent(props: GridProps) {
         props.dragHandler(false);
     };
 
-    const isInGrid = (node: (HTMLElement | null)): boolean => {
-        while (node) {
-            if (node?.id === "tile-grid") {
-                return true;
-            }
-
-            node = node.parentElement;
-        }
-
-        return false;
-    }
-
     const onPointerLeave = (event: PointerEvent): void => {
-        if (isInGrid(event.target as HTMLElement) &&
-            (!event.relatedTarget || !isInGrid(event.relatedTarget as HTMLElement))) {
+        if (isInElementById(event.target as HTMLElement, GRID_ID) &&
+            (!event.relatedTarget || !isInElementById(event.relatedTarget as HTMLElement, GRID_ID))
+        ) {
             onPointerUp();
         }
     };
 
     const gridContainerProps: Record<string, any> = {
-        id: "tile-grid",
-        className: `tile-grid ${isDragging ? "grid-dragging" : ""}`,
+        id: GRID_ID,
+        className: `${GRID_ID} ${isDragging ? "grid-dragging" : ""}`,
         ref,
         onPointerDown,
         onPointerUp,
