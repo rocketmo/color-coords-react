@@ -13,8 +13,9 @@ import Grid from "../../classes/grid";
 import GameHistory from "../../classes/game-history";
 import PlayerAnimationFrame from "../../classes/player-animation-frame";
 import TileAnimationFrame from "../../classes/tile-animation-frame";
-import { Color, Direction } from "../../services/constants";
+import { Color, Direction, TILES_SIZES, DEFAULT_TILE_SIZE } from "../../services/constants";
 import { sleep } from "../../services/util";
+import { TileSizeContext } from "../../services/context";
 import "./game.scss";
 
 import type GridAnimationFrame from "../../classes/grid-animation-frame";
@@ -47,8 +48,11 @@ interface GameState {
     isPlayerMoving: boolean,
     isMenuOpen: boolean,
     areSettingsOpened: boolean,
-    shouldCancelTilePress: boolean
+    shouldCancelTilePress: boolean,
+    tileSizeIndex: number
 };
+
+const DEFAULT_TILE_SIZE_INDEX = 6;
 
 export default class Game extends React.Component<GameProps, GameState> {
     movementKeyFnMap: Record<string, Function>;
@@ -74,7 +78,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             isPlayerMoving: false,
             isMenuOpen: false,
             areSettingsOpened: false,
-            shouldCancelTilePress: false
+            shouldCancelTilePress: false,
+            tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
         };
 
         this.gridAnimationQueue = new Queue();
@@ -95,6 +100,8 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.setMenuOpen = this.setMenuOpen.bind(this);
         this.undo = this.undo.bind(this);
         this.redo = this.redo.bind(this);
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zoomOut = this.zoomOut.bind(this);
         this.showSettings = this.showSettings.bind(this);
         this.hideSettings = this.hideSettings.bind(this);
         this.onTilePress = this.onTilePress.bind(this);
@@ -473,6 +480,30 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    canZoomIn(): boolean {
+        return this.state.tileSizeIndex < TILES_SIZES.length - 1;
+    }
+
+    canZoomOut(): boolean {
+        return this.state.tileSizeIndex > 0;
+    }
+
+    zoomIn(): void {
+        if (this.canZoomIn()) {
+            this.setState({
+                tileSizeIndex: this.state.tileSizeIndex + 1
+            });
+        }
+    }
+
+    zoomOut(): void {
+        if (this.canZoomOut()) {
+            this.setState({
+                tileSizeIndex: this.state.tileSizeIndex - 1
+            });
+        }
+    }
+
     setMenuOpen(isOpen: boolean): void {
         this.setState({
             isMenuOpen: isOpen
@@ -506,6 +537,9 @@ export default class Game extends React.Component<GameProps, GameState> {
     componentDidUpdate(prevProps: GameProps): void {
         if (this.props.levelNumber !== prevProps.levelNumber) {
             this.restartGame();
+            this.setState({
+                tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
+            });
         }
     }
 
@@ -547,46 +581,54 @@ export default class Game extends React.Component<GameProps, GameState> {
                 starsToUnlockLevel={this.props.starsToUnlockLevel} /> :
             null;
 
+        const tileSize = TILES_SIZES[this.state.tileSizeIndex] ?? DEFAULT_TILE_SIZE;
+
         return (
             <div>
-                <div className={gameClass}
-                    ref={this.gameContainerRef}
-                    tabIndex={1}
-                    onKeyDown={this.onKeyDown}
-                    onKeyUp={this.onKeyUp}
-                    onFocus={this.resetFlags}
-                    onBlur={this.resetFlags}
-                    style={gameStyle}>
+                <TileSizeContext.Provider value={tileSize}>
+                    <div className={gameClass}
+                        ref={this.gameContainerRef}
+                        tabIndex={1}
+                        onKeyDown={this.onKeyDown}
+                        onKeyUp={this.onKeyUp}
+                        onFocus={this.resetFlags}
+                        onBlur={this.resetFlags}
+                        style={gameStyle}>
 
-                    <GameHUD
-                        movesTaken={movesTaken}
-                        levelNumber={this.props.levelNumber}
-                        levelName={this.props.levelName}
-                        isMenuOpen={isMenuOpen}
-                        setMenuOpen={this.setMenuOpen}
-                        showSettings={this.showSettings} />
-                    <Solution
-                        grid={grid}
-                        playerRow={playerRow}
-                        playerCol={playerCol} />
-                    <GameAdjustMenu
-                        canUndo={this.gameHistory.canUndo()}
-                        canRedo={this.gameHistory.canRedo()}
-                        restartHandler={this.inGameRestart}
-                        undoHandler={this.undo}
-                        redoHandler={this.redo} />
-                    <GridComponent
-                        grid={grid}
-                        playerRow={playerRow}
-                        playerCol={playerCol}
-                        playerColor={playerColor}
-                        showSolution={showSolution}
-                        isPlayerMoving={isPlayerMoving}
-                        onPlayerAnimationEnd={this.onPlayerAnimationEnd}
-                        onTilePress={this.onTilePress}
-                        dragHandler={this.setShouldCancelTilePress} />
-                    {gameCompleteEle}
-                </div>
+                        <GameHUD
+                            movesTaken={movesTaken}
+                            levelNumber={this.props.levelNumber}
+                            levelName={this.props.levelName}
+                            isMenuOpen={isMenuOpen}
+                            setMenuOpen={this.setMenuOpen}
+                            showSettings={this.showSettings} />
+                        <Solution
+                            grid={grid}
+                            playerRow={playerRow}
+                            playerCol={playerCol} />
+                        <GameAdjustMenu
+                            canUndo={this.gameHistory.canUndo()}
+                            canRedo={this.gameHistory.canRedo()}
+                            canZoomIn={this.canZoomIn()}
+                            canZoomOut={this.canZoomOut()}
+                            restartHandler={this.inGameRestart}
+                            undoHandler={this.undo}
+                            redoHandler={this.redo}
+                            zoomInHandler={this.zoomIn}
+                            zoomOutHandler={this.zoomOut} />
+                        <GridComponent
+                            grid={grid}
+                            playerRow={playerRow}
+                            playerCol={playerCol}
+                            playerColor={playerColor}
+                            showSolution={showSolution}
+                            isPlayerMoving={isPlayerMoving}
+                            onPlayerAnimationEnd={this.onPlayerAnimationEnd}
+                            onTilePress={this.onTilePress}
+                            dragHandler={this.setShouldCancelTilePress} />
+                        {gameCompleteEle}
+                    </div>
+                </TileSizeContext.Provider>
 
                 <Settings
                     visible={areSettingsOpened}

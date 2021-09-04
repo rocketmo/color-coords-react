@@ -44,6 +44,7 @@ $tooltip-fade-time: 0.25s;
             position: absolute;
             top: -9999%;
             transition: opacity $tooltip-fade-time, top 0s linear $tooltip-fade-time;
+            white-space: nowrap;
 
             &::after {
                 content: "";

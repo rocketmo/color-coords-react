@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
-import { GridOffsetContext } from "../../services/context";
-import { TILE_SIZE } from "../../services/constants";
+import { GridOffsetContext, TileSizeContext } from "../../services/context";
 import { sleep, getBoundValue, isInElementById } from "../../services/util";
 import "./grid.scss";
 
@@ -43,6 +42,7 @@ export default function GridComponent(props: GridProps) {
     const [ offsetPctX, setOffsetPctX ] = useState(0);
     const [ offsetPctY, setOffsetPctY ] = useState(0);
     const [ hasInitialOffset, setHasInitialOffset ] = useState(false);
+    const tileSize = useContext(TileSizeContext);
 
     const { width, height, ref } = useResizeDetector({
         refreshMode: "throttle",
@@ -50,7 +50,7 @@ export default function GridComponent(props: GridProps) {
     });
 
     // Get grid offset, accounting for the top menu and solution window
-    const offset = props.grid.getCenterOffset(TILE_SIZE, width ?? 0, height ?? 0);
+    const offset = props.grid.getCenterOffset(tileSize, width ?? 0, height ?? 0);
 
     // Add draggable offset
     offset.x += (offsetPctX * (width ?? 0));

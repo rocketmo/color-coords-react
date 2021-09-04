@@ -1,35 +1,43 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSync, faUndoAlt, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import "./game-adjust-menu.scss";
+import {
+    faSync,
+    faUndoAlt,
+    faRedoAlt,
+    faSearchPlus,
+    faSearchMinus
+} from '@fortawesome/free-solid-svg-icons';
 
 import type { MouseEvent } from "react";
 
 interface GameAdjustMenuProps {
     canUndo: boolean,
     canRedo: boolean,
+    canZoomIn: boolean,
+    canZoomOut: boolean,
     undoHandler: () => void,
     redoHandler: () => void,
-    restartHandler: () => void
+    restartHandler: () => void,
+    zoomInHandler: () => void,
+    zoomOutHandler: () => void
+}
+
+function preventDefaultAndHandle(fn: () => void, event: MouseEvent) {
+    event.preventDefault();
+    fn();
 }
 
 export default function GameAdjustMenu(props: GameAdjustMenuProps) {
-    const onRestartClick = (event: MouseEvent) => {
-        event.preventDefault();
-        props.restartHandler();
-    }
-
-    const onUndoClick = (event: MouseEvent) => {
-        event.preventDefault();
-        props.undoHandler();
-    }
-
-    const onRedoClick = (event: MouseEvent) => {
-        event.preventDefault();
-        props.redoHandler();
-    }
+    const onRestartClick = preventDefaultAndHandle.bind(null, props.restartHandler);
+    const onUndoClick = preventDefaultAndHandle.bind(null, props.undoHandler);
+    const onRedoClick = preventDefaultAndHandle.bind(null, props.redoHandler);
+    const onZoomInClick = preventDefaultAndHandle.bind(null, props.zoomInHandler);
+    const onZoomOutClick = preventDefaultAndHandle.bind(null, props.zoomOutHandler);
 
     const undoClass = `game-adjust-btn ${!props.canUndo ? " adjust-disabled" : ""}`;
     const redoClass = `game-adjust-btn ${!props.canRedo ? " adjust-disabled" : ""}`;
+    const zoomInClass = `game-adjust-btn ${!props.canZoomIn ? " adjust-disabled" : ""}`;
+    const zoomOutClass = `game-adjust-btn ${!props.canZoomOut ? " adjust-disabled" : ""}`;
 
     return (
         <div className="game-adjust-menu">
@@ -57,6 +65,24 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
                 </button>
 
                 <div className="game-adjust-tooltip">Redo</div>
+            </div>
+
+            <div className="game-adjust-separator"></div>
+
+            <div className={zoomInClass}>
+                <button tabIndex={0} onClick={onZoomInClick} aria-label="Zoom in">
+                    <FontAwesomeIcon icon={faSearchPlus} />
+                </button>
+
+                <div className="game-adjust-tooltip">Zoom In</div>
+            </div>
+
+            <div className={zoomOutClass}>
+                <button tabIndex={0} onClick={onZoomOutClick} aria-label="Zoom out">
+                    <FontAwesomeIcon icon={faSearchMinus} />
+                </button>
+
+                <div className="game-adjust-tooltip">Zoom Out</div>
             </div>
         </div>
     );

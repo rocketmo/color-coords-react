@@ -1,10 +1,7 @@
-import React from "react";
-import { GridOffsetContext } from "../../services/context";
+import { useContext, useState } from "react";
+import { GridOffsetContext, TileSizeContext } from "../../services/context";
 import "./swatch.scss";
-import { TILE_SIZE, Color } from "../../services/constants";
-
-const SWATCH_SIZE = 20;
-const QUARTER_DIFF = (TILE_SIZE - SWATCH_SIZE) / 2;
+import { Color } from "../../services/constants";
 
 interface SwatchComponentProps {
     color: Color,
@@ -12,27 +9,30 @@ interface SwatchComponentProps {
     col: number
 }
 
-export default class SwatchComponent extends React.Component<SwatchComponentProps> {
-    static contextType = GridOffsetContext;
-    animationDelay: number;
+export default function SwatchComponent(props: SwatchComponentProps) {
+    const offset = useContext(GridOffsetContext);
+    const tileSize = useContext(TileSizeContext);
+    const [ animationDelay ] = useState(Math.random() * 4);
 
-    constructor(props: SwatchComponentProps) {
-        super(props);
-        this.animationDelay = Math.random() * 4;
+    const SWATCH_SIZE = Math.floor((tileSize * 5) / 12);
+    const QUARTER_DIFF = (tileSize - SWATCH_SIZE) / 2;
+
+    const colorClass = `swatch bg-${props.color}`;
+    const swatchStyle = {
+        animationDelay: `-${animationDelay}s`,
+        height: `${SWATCH_SIZE}px`,
+        left: `${(props.col * tileSize) + QUARTER_DIFF + offset.x}px`,
+        top: `${(props.row * tileSize) + QUARTER_DIFF + offset.y}px`,
+        width: `${SWATCH_SIZE}px`
+    };
+
+    const borderStyle = {
+        borderWidth: `${Math.ceil((SWATCH_SIZE * 3) / 20)}px`
     }
 
-    render(): JSX.Element {
-        const colorClass = `swatch bg-${this.props.color}`;
-        const swatchStyle = {
-            left: `${(this.props.col * TILE_SIZE) + QUARTER_DIFF + this.context.x}px`,
-            top: `${(this.props.row * TILE_SIZE) + QUARTER_DIFF + this.context.y}px`,
-            animationDelay: `-${this.animationDelay}s`
-        };
-
-        return (
-            <div className={colorClass} style={swatchStyle}>
-                <div className="swatch-border"></div>
-            </div>
-        );
-    }
+    return (
+        <div className={colorClass} style={swatchStyle}>
+            <div className="swatch-border" style={borderStyle}></div>
+        </div>
+    );
 }

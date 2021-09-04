@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { GridOffsetContext } from "../../services/context";
-import { TILE_SIZE, SOLUTION_TILE_SIZE, Color } from "../../services/constants";
+import { GridOffsetContext, TileSizeContext } from "../../services/context";
+import { Color } from "../../services/constants";
 import "./tile.scss";
 
 import type { MouseEvent } from "react";
@@ -12,7 +12,6 @@ interface TileProps {
     solution?: Color,
     alt?: boolean,
     showSolution?: boolean,
-    isSolutionTile?: boolean,
     playerRow?: number,
     playerCol?: number,
     onTilePress?: (row: number, col: number) => void
@@ -30,6 +29,7 @@ function isSameRowOrColumn(row: number, col: number, pRow?: number, pCol?: numbe
 
 export default function Tile(props: TileProps) {
     const offset = useContext(GridOffsetContext);
+    const tileSize = useContext(TileSizeContext);
     const color = props.color ?? Color.DEFAULT;
     let colorClass = `tile-front bg-${color} ${props.alt ? "alt" : ""}`;
 
@@ -37,10 +37,11 @@ export default function Tile(props: TileProps) {
     const solutionClass = `tile-solution bg-${solutionColor} ${props.alt ? "alt" : ""}`;
     const solutionStyle = { opacity: props.showSolution ? "1" : "0" };
 
-    const tileSize = props.isSolutionTile ? SOLUTION_TILE_SIZE : TILE_SIZE;
-    const tilePositionStyle = {
+    const tileStyle = {
+        height: `${tileSize}px`,
         left: `${(props.col * tileSize) + offset.x}px`,
         top: `${(props.row * tileSize) + offset.y}px`,
+        width: `${tileSize}px`
     };
 
     // Hover tile, if the user hovers over a tile in the same row or column as the player
@@ -56,12 +57,20 @@ export default function Tile(props: TileProps) {
         hoverTile = <div className="tile-hover" onClick={onTileClick}></div>;
     }
 
+    const tileBackStyle = {
+        borderRadius: `${Math.ceil(tileSize / 12)}px`
+    };
+
+    const frontStyle = {
+        borderWidth: `${Math.ceil(tileSize / 12)}px`
+    };
+
     return (
-        <div className="tile" style={tilePositionStyle}>
+        <div className="tile" style={tileStyle}>
             {hoverTile}
             <div className={solutionClass} style={solutionStyle}></div>
-            <div className={colorClass}></div>
-            <div className="tile-back"></div>
+            <div className={colorClass} style={frontStyle}></div>
+            <div className="tile-back" style={tileBackStyle}></div>
         </div>
     );
 }

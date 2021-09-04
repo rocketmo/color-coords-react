@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
-import { GridOffsetContext } from "../../services/context";
-import { SOLUTION_TILE_SIZE } from "../../services/constants";
+import { GridOffsetContext, TileSizeContext } from "../../services/context";
+import { DEFAULT_SOLUTION_TILE_SIZE } from "../../services/constants";
 import { getBoundValue, isInElementById } from "../../services/util";
 import SolutionPlayerCursor from "../solution-player-cursor";
 import "./solution.scss";
@@ -32,7 +32,7 @@ export default function Solution(props: SolutionProps) {
         refreshRate: 10
     });
 
-    const offset = props.grid.getCenterOffset(SOLUTION_TILE_SIZE, width ?? 0, height ?? 0);
+    const offset = props.grid.getCenterOffset(DEFAULT_SOLUTION_TILE_SIZE, width ?? 0, height ?? 0);
 
     // Add draggable offset
     offset.x += (offsetPctX * (width ?? 0));
@@ -94,13 +94,15 @@ export default function Solution(props: SolutionProps) {
 
     return (
         <GridOffsetContext.Provider value={offset}>
-            <div className="solution-container">
-                <span className="solution-target-text">Target</span>
-                <div {...solutionContainerProps}>
-                    {solutionTiles}
-                    <SolutionPlayerCursor row={props.playerRow} col={props.playerCol} />
+            <TileSizeContext.Provider value={DEFAULT_SOLUTION_TILE_SIZE}>
+                <div className="solution-container">
+                    <span className="solution-target-text">Target</span>
+                    <div {...solutionContainerProps}>
+                        {solutionTiles}
+                        <SolutionPlayerCursor row={props.playerRow} col={props.playerCol} />
+                    </div>
                 </div>
-            </div>
+            </TileSizeContext.Provider>
         </GridOffsetContext.Provider>
     );
 }

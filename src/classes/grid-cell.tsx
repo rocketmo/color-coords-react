@@ -69,7 +69,7 @@ export default class GridCell {
     renderSolution(): JSX.Element {
         const key = `solution-tile-${this.row}-${this.col}`;
         return (
-            <Tile key={key} color={this.solutionColor} isSolutionTile={true}
+            <Tile key={key} color={this.solutionColor}
                 alt={(this.row + this.col) % 2 === 0}
                 row={this.row} col={this.col} />
         );

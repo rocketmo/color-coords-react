@@ -1,14 +1,12 @@
 import { useState, useContext, useEffect } from "react";
 import { usePrevious } from "../../services/hooks";
 import { easeQuadInOut } from "d3-ease";
-import { GridOffsetContext } from "../../services/context";
-import { TILE_SIZE, Color } from "../../services/constants";
+import { GridOffsetContext, TileSizeContext } from "../../services/context";
+import { Color } from "../../services/constants";
 import "./player.scss";
 
-const PLAYER_SIZE = 40;
 const ANIM_FRAMES = 70;
 const ANIM_INTERVAL = 5;
-const QUARTER_DIFF = (TILE_SIZE - PLAYER_SIZE) / 2;
 
 interface PlayerProps {
     color?: Color,
@@ -19,11 +17,15 @@ interface PlayerProps {
 }
 
 export default function PlayerComponent(props: PlayerProps) {
-    const [rowPosition, setRowPosition] = useState(props.row)
-    const [colPosition, setColPosition] = useState(props.col)
-    const offset = useContext(GridOffsetContext);
     const { row, col, movementToggle } = props;
-    const prevProps = usePrevious({ row, col })
+    const [rowPosition, setRowPosition] = useState(row);
+    const [colPosition, setColPosition] = useState(col);
+    const offset = useContext(GridOffsetContext);
+    const tileSize = useContext(TileSizeContext);
+    const prevProps = usePrevious({ row, col });
+
+    const PLAYER_SIZE = (tileSize * 5) / 6;
+    const QUARTER_DIFF = (tileSize - PLAYER_SIZE) / 2;
 
     useEffect(() => {
         // Only animate player movement if it's toggled on and we have an initial starting position
@@ -50,15 +52,26 @@ export default function PlayerComponent(props: PlayerProps) {
 
     const color = props.color ?? Color.DEFAULT;
     const colorClass = `player-color bg-${color}`;
-    const playerPositionStyle = {
-        left: `${(colPosition * TILE_SIZE) + QUARTER_DIFF + offset.x}px`,
-        top: `${(rowPosition * TILE_SIZE) + QUARTER_DIFF + offset.y}px`,
+    const borderWidth = Math.ceil(tileSize / 12);
+
+    const playerStyle = {
+        borderRadius: `${PLAYER_SIZE}px`,
+        borderWidth: `${borderWidth}px`,
+        height: `${PLAYER_SIZE}px`,
+        left: `${(colPosition * tileSize) + QUARTER_DIFF + offset.x}px`,
+        top: `${(rowPosition * tileSize) + QUARTER_DIFF + offset.y}px`,
+        width: `${PLAYER_SIZE}px`
+    };
+
+    const playerBodyStyle = {
+        borderRadius: `${PLAYER_SIZE}px`,
+        borderWidth: `${borderWidth}px`,
     };
 
     return (
-        <div className="player" style={playerPositionStyle}>
-            <div className={colorClass}></div>
-            <div className="player-border"></div>
+        <div className="player" style={playerStyle}>
+            <div className={colorClass} style={playerBodyStyle}></div>
+            <div className="player-border" style={playerBodyStyle}></div>
         </div>
     );
 }
