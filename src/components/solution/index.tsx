@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import { GridOffsetContext, TileSizeContext } from "../../services/context";
 import { DEFAULT_SOLUTION_TILE_SIZE, TILES_SIZES } from "../../services/constants";
@@ -19,7 +19,8 @@ const DEFAULT_TILE_SIZE_INDEX = 2;
 interface SolutionProps {
     grid: Grid,
     playerRow: number,
-    playerCol: number
+    playerCol: number,
+    levelNumber: number
 };
 
 export default function Solution(props: SolutionProps) {
@@ -41,6 +42,13 @@ export default function Solution(props: SolutionProps) {
     // Add draggable offset
     offset.x += (offsetPctX * (width ?? 0));
     offset.y += (offsetPctY * (height ?? 0));
+
+    // Reset to default offset and zoom after we switch to a new level
+    useEffect(() => {
+        setOffsetPctX(0);
+        setOffsetPctY(0);
+        setTileSizeIndex(DEFAULT_TILE_SIZE_INDEX);
+    }, [ props.levelNumber ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const solutionTiles = props.grid.renderSolution();
 

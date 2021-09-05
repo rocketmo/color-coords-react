@@ -26,6 +26,7 @@ interface GridProps {
     playerRow: number,
     playerCol: number,
     playerColor: Color,
+    levelNumber: number,
     showSolution: boolean,
     isPlayerMoving: boolean,
     onPlayerAnimationEnd: () => void,
@@ -56,11 +57,9 @@ export default function GridComponent(props: GridProps) {
     offset.x += (offsetPctX * (width ?? 0));
     offset.y += (offsetPctY * (height ?? 0));
 
-    // Set default offset percentage
-    useEffect(() => {
-
-        // Do not do anything if resize detector has not started or if we've already set the offset
-        if (!width || !height || hasInitialOffset) {
+    const setInitialOffset = () => {
+        // Do not do anything if resize detector has not started
+        if (!width || !height) {
             return;
         }
 
@@ -71,7 +70,23 @@ export default function GridComponent(props: GridProps) {
         setOffsetPctX((-solutionWidth) / (2 * width));
         setOffsetPctY(TOP_MENU_HEIGHT / (2 * height));
         setHasInitialOffset(true);
+    };
+
+    // Set default offset percentage after we have the width and height of the container
+    useEffect(() => {
+
+        // Do not do anything if we've already set the offset
+        if (hasInitialOffset) {
+            return;
+        }
+
+        setInitialOffset();
     }, [ width, height ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Reset to default offset percentage after we switch to a new level
+    useEffect(() => {
+        setInitialOffset();
+    }, [ props.levelNumber ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const gridElements = props.isPlayerMoving ? props.grid.renderElements(props.showSolution) :
         props.grid.renderElements(

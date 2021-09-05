@@ -605,7 +605,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                         <Solution
                             grid={grid}
                             playerRow={playerRow}
-                            playerCol={playerCol} />
+                            playerCol={playerCol}
+                            levelNumber={this.props.levelNumber} />
                         <GameAdjustMenu
                             canUndo={this.gameHistory.canUndo()}
                             canRedo={this.gameHistory.canRedo()}
@@ -621,6 +622,7 @@ export default class Game extends React.Component<GameProps, GameState> {
                             playerRow={playerRow}
                             playerCol={playerCol}
                             playerColor={playerColor}
+                            levelNumber={this.props.levelNumber}
                             showSolution={showSolution}
                             isPlayerMoving={isPlayerMoving}
                             onPlayerAnimationEnd={this.onPlayerAnimationEnd}
