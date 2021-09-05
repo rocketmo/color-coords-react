@@ -23,7 +23,7 @@ export default function SolutionAdjustMenu(props: SolutionAdjustMenuProps) {
     const zoomOutClass = `adjust-btn ${!props.canZoomOut ? " adjust-disabled" : ""}`;
 
     return (
-        <div className="adjust-menu solution-adjust-menu">
+        <div id="solution-adjust-menu" className="adjust-menu solution-adjust-menu">
             <div className={zoomInClass}>
                 <button tabIndex={0} onClick={onZoomInClick} aria-label="Zoom in">
                     <FontAwesomeIcon icon={faSearchPlus} />

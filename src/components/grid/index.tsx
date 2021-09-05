@@ -2,7 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
 import { GridOffsetContext, TileSizeContext } from "../../services/context";
-import { sleep, getBoundValue, isInElementById } from "../../services/util";
+import { sleep, getBoundValue } from "../../services/util";
+import { DEFAULT_SOLUTION_CONTAINER_SIZE } from "../../services/constants";
 import "./grid.scss";
 
 import type Grid from "../../classes/grid";
@@ -10,10 +11,6 @@ import type { Color } from "../../services/constants";
 import type { PointerEvent } from "react";
 
 const TOP_MENU_HEIGHT = 48;
-const SOLUTION_WIDTH_MIN = 200;
-const SOLUTION_WIDTH_MAX = 300;
-const SOLUTION_VW = 0.2;
-const GRID_ID = "tile-grid";
 
 const DRAG_THRESHOLD = 100;
 const MIN_DRAG_X_PCT = -0.5;
@@ -63,11 +60,7 @@ export default function GridComponent(props: GridProps) {
             return;
         }
 
-        let solutionWidth = ((width ?? 0) * SOLUTION_VW);
-        solutionWidth = Math.max(SOLUTION_WIDTH_MIN, solutionWidth);
-        solutionWidth = Math.min(SOLUTION_WIDTH_MAX, solutionWidth);
-
-        setOffsetPctX((-solutionWidth) / (2 * width));
+        setOffsetPctX((-DEFAULT_SOLUTION_CONTAINER_SIZE) / (2 * width));
         setOffsetPctY(TOP_MENU_HEIGHT / (2 * height));
         setHasInitialOffset(true);
     };
@@ -102,8 +95,6 @@ export default function GridComponent(props: GridProps) {
         setIsDragging(false);
         setLastPointerX(event.clientX);
         setLastPointerY(event.clientY);
-
-        props.dragHandler(true);
     };
 
     const onPointerMove = (event: PointerEvent): void => {
@@ -121,6 +112,8 @@ export default function GridComponent(props: GridProps) {
         // Process drag if enough distance has been moved
         if (isDragging || totalDist >= DRAG_THRESHOLD) {
             setIsDragging(true);
+            props.dragHandler(true);
+            ref.current && ref.current.setPointerCapture(event.pointerId);
 
             // Set the offset
             let nextOffsetPctX = offsetPctX + ((event.clientX - lastPointerX) / (width || 1));
@@ -138,12 +131,13 @@ export default function GridComponent(props: GridProps) {
         }
     };
 
-    const onPointerUp = async () => {
+    const onPointerUp = async (event: PointerEvent) => {
         const wasDragging = isDragging;
 
         setIsPointerDown(false);
         setDistanceDragged(0);
         setIsDragging(false);
+        ref.current && ref.current.releasePointerCapture(event.pointerId);
 
         // Release the drag on the following cycle
         if (wasDragging) {
@@ -153,21 +147,11 @@ export default function GridComponent(props: GridProps) {
         props.dragHandler(false);
     };
 
-    const onPointerLeave = (event: PointerEvent): void => {
-        if (isInElementById(event.target as HTMLElement, GRID_ID) &&
-            (!event.relatedTarget || !isInElementById(event.relatedTarget as HTMLElement, GRID_ID))
-        ) {
-            onPointerUp();
-        }
-    };
-
     const gridContainerProps: Record<string, any> = {
-        id: GRID_ID,
-        className: `${GRID_ID} ${isDragging ? "grid-dragging" : ""}`,
+        className: `tile-grid ${isDragging ? "grid-dragging" : ""}`,
         ref,
         onPointerDown,
-        onPointerUp,
-        onPointerLeave
+        onPointerUp
     };
 
     if (isPointerDown) {

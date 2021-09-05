@@ -97,6 +97,11 @@ body {
     background: #666;
 }
 
+// React resizable
+.react-resizable-handle {
+    z-index: 300;
+}
+
 // Adjustment menus
 .adjust-menu {
     align-items: center;
@@ -150,7 +155,7 @@ body {
         }
 
         &:hover {
-            .game-adjust-tooltip {
+            .adjust-tooltip {
                 opacity: 1;
                 top: 150%;
                 transition: opacity $tooltip-fade-time, top 0s linear 0s;

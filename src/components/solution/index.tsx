@@ -1,19 +1,25 @@
 import { useState, useEffect } from "react";
+import { Resizable } from "react-resizable";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import { GridOffsetContext, TileSizeContext } from "../../services/context";
-import { DEFAULT_SOLUTION_TILE_SIZE, TILES_SIZES } from "../../services/constants";
 import { getBoundValue, isInElementById } from "../../services/util";
 import SolutionPlayerCursor from "../solution-player-cursor";
 import SolutionAdjustMenu from "../solution-adjust-menu";
+import {
+    TILES_SIZES,
+    DEFAULT_SOLUTION_TILE_SIZE,
+    DEFAULT_SOLUTION_CONTAINER_SIZE
+} from "../../services/constants";
 import "./solution.scss";
 
 import type Grid from "../../classes/grid";
+import type { SyntheticEvent } from "react";
+import type { ResizeCallbackData } from "react-resizable";
 
 const MIN_DRAG_X_PCT = -0.5;
 const MAX_DRAG_X_PCT = 0.5;
 const MIN_DRAG_Y_PCT = -0.5;
 const MAX_DRAG_Y_PCT = 0.5;
-const SOLUTION_ID = "solution";
 const DEFAULT_TILE_SIZE_INDEX = 2;
 
 interface SolutionProps {
@@ -30,6 +36,8 @@ export default function Solution(props: SolutionProps) {
     const [ offsetPctX, setOffsetPctX ] = useState(0);
     const [ offsetPctY, setOffsetPctY ] = useState(0);
     const [ tileSizeIndex, setTileSizeIndex ] = useState(DEFAULT_TILE_SIZE_INDEX);
+    const [ containerWidth, setContainerWidth ] = useState(DEFAULT_SOLUTION_CONTAINER_SIZE);
+    const [ containerHeight, setContainerHeight ] = useState(DEFAULT_SOLUTION_CONTAINER_SIZE);
 
     const { width, height, ref } = useResizeDetector({
         refreshMode: "throttle",
@@ -48,14 +56,23 @@ export default function Solution(props: SolutionProps) {
         setOffsetPctX(0);
         setOffsetPctY(0);
         setTileSizeIndex(DEFAULT_TILE_SIZE_INDEX);
+        setContainerWidth(DEFAULT_SOLUTION_CONTAINER_SIZE);
+        setContainerHeight(DEFAULT_SOLUTION_CONTAINER_SIZE);
     }, [ props.levelNumber ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const solutionTiles = props.grid.renderSolution();
 
     const onPointerDown = (event: PointerEvent): void => {
+
+        // Do not start dragging if we clicked on the adjustment menu
+        if (isInElementById(event.target as HTMLElement, "solution-adjust-menu")) {
+            return;
+        }
+
         setIsPointerDown(true);
         setLastPointerX(event.clientX);
         setLastPointerY(event.clientY);
+        ref.current && ref.current.setPointerCapture(event.pointerId);
     };
 
     const onPointerMove = (event: PointerEvent): void => {
@@ -79,16 +96,9 @@ export default function Solution(props: SolutionProps) {
         setLastPointerY(event.clientY);
     };
 
-    const onPointerUp = async () => {
+    const onPointerUp = async (event: PointerEvent) => {
         setIsPointerDown(false);
-    };
-
-    const onPointerLeave = (event: PointerEvent): void => {
-        if (isInElementById(event.target as HTMLElement, SOLUTION_ID) &&
-            (!event.relatedTarget ||
-                !isInElementById(event.relatedTarget as HTMLElement, SOLUTION_ID))) {
-            onPointerUp();
-        }
+        ref.current && ref.current.releasePointerCapture(event.pointerId);
     };
 
     const canZoomIn = tileSizeIndex < TILES_SIZES.length - 1;
@@ -106,13 +116,20 @@ export default function Solution(props: SolutionProps) {
         }
     };
 
+    const onResize = (event: SyntheticEvent, data: ResizeCallbackData) => {
+        setContainerWidth(data.size.width);
+        setContainerHeight(data.size.height);
+    };
+
     const solutionContainerProps: Record<string, any> = {
-        id: SOLUTION_ID,
-        className: `${SOLUTION_ID} ${isPointerDown ? "solution-dragging" : "" }`,
+        className: `solution ${isPointerDown ? "solution-dragging" : "" }`,
         ref,
         onPointerDown,
         onPointerUp,
-        onPointerLeave
+        style: {
+            height: `${containerHeight}px`,
+            width: `${containerWidth}px`
+        }
     };
 
     if (isPointerDown) {
@@ -122,18 +139,22 @@ export default function Solution(props: SolutionProps) {
     return (
         <GridOffsetContext.Provider value={offset}>
             <TileSizeContext.Provider value={tileSize}>
-                <div className="solution-container">
-                    <span className="solution-target-text">Target</span>
-                    <div {...solutionContainerProps}>
-                        <SolutionAdjustMenu
-                            canZoomIn={canZoomIn}
-                            canZoomOut={canZoomOut}
-                            zoomInHandler={zoomIn}
-                            zoomOutHandler={zoomOut} />
-                        {solutionTiles}
-                        <SolutionPlayerCursor row={props.playerRow} col={props.playerCol} />
+                <Resizable height={containerHeight} width={containerWidth} onResize={onResize}
+                    minConstraints={[100, 100]} maxConstraints={[500, 500]}
+                    resizeHandles={["sw", "se" ]}>
+                    <div className="solution-container">
+                        <span className="solution-target-text">Target</span>
+                        <div {...solutionContainerProps}>
+                            <SolutionAdjustMenu
+                                canZoomIn={canZoomIn}
+                                canZoomOut={canZoomOut}
+                                zoomInHandler={zoomIn}
+                                zoomOutHandler={zoomOut} />
+                            {solutionTiles}
+                            <SolutionPlayerCursor row={props.playerRow} col={props.playerCol} />
+                        </div>
                     </div>
-                </div>
+                </Resizable>
             </TileSizeContext.Provider>
         </GridOffsetContext.Provider>
     );
