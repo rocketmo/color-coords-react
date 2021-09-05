@@ -34,29 +34,29 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
     const onZoomInClick = preventDefaultAndHandle.bind(null, props.zoomInHandler);
     const onZoomOutClick = preventDefaultAndHandle.bind(null, props.zoomOutHandler);
 
-    const undoClass = `game-adjust-btn ${!props.canUndo ? " adjust-disabled" : ""}`;
-    const redoClass = `game-adjust-btn ${!props.canRedo ? " adjust-disabled" : ""}`;
-    const zoomInClass = `game-adjust-btn ${!props.canZoomIn ? " adjust-disabled" : ""}`;
-    const zoomOutClass = `game-adjust-btn ${!props.canZoomOut ? " adjust-disabled" : ""}`;
+    const undoClass = `adjust-btn ${!props.canUndo ? " adjust-disabled" : ""}`;
+    const redoClass = `adjust-btn ${!props.canRedo ? " adjust-disabled" : ""}`;
+    const zoomInClass = `adjust-btn ${!props.canZoomIn ? " adjust-disabled" : ""}`;
+    const zoomOutClass = `adjust-btn ${!props.canZoomOut ? " adjust-disabled" : ""}`;
 
     return (
-        <div className="game-adjust-menu">
-            <div className="game-adjust-btn">
+        <div className="adjust-menu game-adjust-menu">
+            <div className="adjust-btn">
                 <button tabIndex={0} onClick={onRestartClick} aria-label="Restart game">
                     <FontAwesomeIcon icon={faSync} />
                 </button>
 
-                <div className="game-adjust-tooltip">Restart</div>
+                <div className="adjust-tooltip">Restart</div>
             </div>
 
-            <div className="game-adjust-separator"></div>
+            <div className="adjust-separator"></div>
 
             <div className={undoClass}>
                 <button tabIndex={0} onClick={onUndoClick} aria-label="Undo">
                     <FontAwesomeIcon icon={faUndoAlt} />
                 </button>
 
-                <div className="game-adjust-tooltip">Undo</div>
+                <div className="adjust-tooltip">Undo</div>
             </div>
 
             <div className={redoClass}>
@@ -64,17 +64,17 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
                     <FontAwesomeIcon icon={faRedoAlt} />
                 </button>
 
-                <div className="game-adjust-tooltip">Redo</div>
+                <div className="adjust-tooltip">Redo</div>
             </div>
 
-            <div className="game-adjust-separator"></div>
+            <div className="adjust-separator"></div>
 
             <div className={zoomInClass}>
                 <button tabIndex={0} onClick={onZoomInClick} aria-label="Zoom in">
                     <FontAwesomeIcon icon={faSearchPlus} />
                 </button>
 
-                <div className="game-adjust-tooltip">Zoom In</div>
+                <div className="adjust-tooltip">Zoom In</div>
             </div>
 
             <div className={zoomOutClass}>
@@ -82,7 +82,7 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
                     <FontAwesomeIcon icon={faSearchMinus} />
                 </button>
 
-                <div className="game-adjust-tooltip">Zoom Out</div>
+                <div className="adjust-tooltip">Zoom Out</div>
             </div>
         </div>
     );
