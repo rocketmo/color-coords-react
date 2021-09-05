@@ -23,7 +23,7 @@ $transition-delay: 0.15s;
         opacity: 0.85;
         position: absolute;
         transition: background-color $transition-time ease-out $transition-delay,
-            border $transition-time ease-out $transition-delay;
+            border-color $transition-time ease-out $transition-delay;
         width: 100%;
         z-index: 21;
 
@@ -43,7 +43,7 @@ $transition-delay: 0.15s;
         box-sizing: border-box;
         height: 100%;
         position: absolute;
-        transition: border $transition-time ease-out $transition-delay;
+        transition: border-color $transition-time ease-out $transition-delay;
         width: 100%;
         z-index: 22;
     }
@@ -52,10 +52,10 @@ $transition-delay: 0.15s;
 // Turn off player color transition for games that have not started yet
 .game.game-pending .tile-grid .player {
     .player-color {
-        transition: background-color 0s, border 0s;
+        transition: background-color 0s, border-color 0s;
     }
 
     .player-border {
-        transition: border 0s;
+        transition: border-color 0s;
     }
 }
