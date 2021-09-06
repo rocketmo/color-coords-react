@@ -1,6 +1,7 @@
 export const DEFAULT_TILE_SIZE = 48;
 export const DEFAULT_SOLUTION_TILE_SIZE = 20;
 export const DEFAULT_SOLUTION_CONTAINER_SIZE = 300;
+export const TOP_MENU_HEIGHT = 48;
 
 export const TILES_SIZES = [ 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96 ];
 

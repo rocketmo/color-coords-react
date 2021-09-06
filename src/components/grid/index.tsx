@@ -3,14 +3,12 @@ import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
 import { GridOffsetContext, TileSizeContext } from "../../services/context";
 import { sleep, getBoundValue } from "../../services/util";
-import { DEFAULT_SOLUTION_CONTAINER_SIZE } from "../../services/constants";
+import { DEFAULT_SOLUTION_CONTAINER_SIZE, TOP_MENU_HEIGHT } from "../../services/constants";
 import "./grid.scss";
 
 import type Grid from "../../classes/grid";
 import type { Color } from "../../services/constants";
 import type { PointerEvent } from "react";
-
-const TOP_MENU_HEIGHT = 48;
 
 const DRAG_THRESHOLD = 100;
 const MIN_DRAG_X_PCT = -0.5;
@@ -28,7 +26,8 @@ interface GridProps {
     isPlayerMoving: boolean,
     onPlayerAnimationEnd: () => void,
     onTilePress: (row: number, col: number) => void,
-    dragHandler: (bool: boolean) => void
+    dragHandler: (bool: boolean) => void,
+    onGridSizeChange: (width?: number, height?: number) => void
 }
 
 export default function GridComponent(props: GridProps) {
@@ -65,14 +64,18 @@ export default function GridComponent(props: GridProps) {
         setHasInitialOffset(true);
     };
 
-    // Set default offset percentage after we have the width and height of the container
+
     useEffect(() => {
 
-        // Do not do anything if we've already set the offset
+        // Call grid size handler
+        props.onGridSizeChange(width, height);
+
+        // Do not continue if we've already set the offset
         if (hasInitialOffset) {
             return;
         }
 
+        // Otherwise default offset percentage after we have the width and height of the container
         setInitialOffset();
     }, [ width, height ]); // eslint-disable-line react-hooks/exhaustive-deps
 

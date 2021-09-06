@@ -49,7 +49,9 @@ interface GameState {
     isMenuOpen: boolean,
     areSettingsOpened: boolean,
     shouldCancelTilePress: boolean,
-    tileSizeIndex: number
+    tileSizeIndex: number,
+    gridWidth?: number,
+    gridHeight?: number
 };
 
 const DEFAULT_TILE_SIZE_INDEX = 6;
@@ -106,6 +108,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.hideSettings = this.hideSettings.bind(this);
         this.onTilePress = this.onTilePress.bind(this);
         this.setShouldCancelTilePress = this.setShouldCancelTilePress.bind(this);
+        this.onGridSizeChange = this.onGridSizeChange.bind(this);
 
         this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -351,6 +354,13 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.startNextAnimation();
     }
 
+    onGridSizeChange(width?: number, height?: number): void {
+        this.setState({
+            gridWidth: width,
+            gridHeight: height
+        });
+    }
+
     startNextAnimation(): void {
 
         // Process animations until we process a player animation
@@ -561,7 +571,9 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameStarted,
             gameWon,
             isMenuOpen,
-            areSettingsOpened
+            areSettingsOpened,
+            gridWidth,
+            gridHeight
         } = this.state;
 
         let gameClass = "game";
@@ -606,7 +618,9 @@ export default class Game extends React.Component<GameProps, GameState> {
                             grid={grid}
                             playerRow={playerRow}
                             playerCol={playerCol}
-                            levelNumber={this.props.levelNumber} />
+                            levelNumber={this.props.levelNumber}
+                            gridWidth={gridWidth}
+                            gridHeight={gridHeight} />
                         <GameAdjustMenu
                             canUndo={this.gameHistory.canUndo()}
                             canRedo={this.gameHistory.canRedo()}
@@ -627,7 +641,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                             isPlayerMoving={isPlayerMoving}
                             onPlayerAnimationEnd={this.onPlayerAnimationEnd}
                             onTilePress={this.onTilePress}
-                            dragHandler={this.setShouldCancelTilePress} />
+                            dragHandler={this.setShouldCancelTilePress}
+                            onGridSizeChange={this.onGridSizeChange} />
                         {gameCompleteEle}
                     </div>
                 </TileSizeContext.Provider>

@@ -12,6 +12,7 @@ $solution-color: #ebde6e;
     margin: 0 0 0 auto;
     position: absolute;
     right: 4px;
+    touch-action: none;
     top: 4px + sizes.$top-bar-height;
     z-index: 100;
 
@@ -37,5 +38,9 @@ $solution-color: #ebde6e;
         font-weight: 700;
         height: 28px;
         padding: 2px 10px;
+
+        &.solution-dragging {
+            cursor: move;
+        }
     }
 }
