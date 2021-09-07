@@ -33,6 +33,7 @@ interface SolutionProps {
     playerRow: number,
     playerCol: number,
     levelNumber: number,
+    shouldResetLayout: boolean,
     gridWidth?: number,
     gridHeight?: number
 };
@@ -137,8 +138,7 @@ export default function Solution(props: SolutionProps) {
     offset.x += (gridOffsetPctX * (width ?? 0));
     offset.y += (gridOffsetPctY * (height ?? 0));
 
-    // Reset to default offset and zoom after we switch to a new level
-    useEffect(() => {
+    const onResetLayout = () => {
         setGridOffsetPctX(0);
         setGridOffsetPctY(0);
         setTileSizeIndex(DEFAULT_TILE_SIZE_INDEX);
@@ -146,7 +146,19 @@ export default function Solution(props: SolutionProps) {
         setContainerHeight(DEFAULT_SOLUTION_CONTAINER_SIZE);
         setContainerOffsetPctX(0);
         setContainerOffsetPctY(0);
+    };
+
+    // Reset to default offset and zoom after we switch to a new level
+    useEffect(() => {
+        onResetLayout();
     }, [ props.levelNumber ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Reset to default offset if the reset layout button was pressed
+    useEffect(() => {
+        if (props.shouldResetLayout) {
+            onResetLayout();
+        }
+    }, [ props.shouldResetLayout ]);
 
     // Make sure the solution is not offscreen when the viewport is resized
     useEffect(() => {

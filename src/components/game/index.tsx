@@ -49,6 +49,7 @@ interface GameState {
     isMenuOpen: boolean,
     areSettingsOpened: boolean,
     shouldCancelTilePress: boolean,
+    shouldResetLayout: boolean,
     tileSizeIndex: number,
     gridWidth?: number,
     gridHeight?: number
@@ -81,6 +82,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             isMenuOpen: false,
             areSettingsOpened: false,
             shouldCancelTilePress: false,
+            shouldResetLayout: false,
             tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
         };
 
@@ -109,6 +111,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.onTilePress = this.onTilePress.bind(this);
         this.setShouldCancelTilePress = this.setShouldCancelTilePress.bind(this);
         this.onGridSizeChange = this.onGridSizeChange.bind(this);
+        this.resetLayout = this.resetLayout.bind(this);
 
         this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -424,7 +427,9 @@ export default class Game extends React.Component<GameProps, GameState> {
             starsWon: 0,
             isPlayerMoving: false,
             showSolution: false,
-            isMenuOpen: false
+            isMenuOpen: false,
+            shouldCancelTilePress: false,
+            shouldResetLayout: false
         });
 
         this.gameHistory = new GameHistory(
@@ -528,8 +533,20 @@ export default class Game extends React.Component<GameProps, GameState> {
     }
 
     showSettings(): void {
+        this.setState({ areSettingsOpened: true });
+    }
+
+    resetLayout(): void {
+        // Set the flag
         this.setState({
-            areSettingsOpened: true
+            shouldResetLayout: true,
+            tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
+        }, async () => {
+            // Wait one cycle
+            await sleep(0);
+
+            // Unset the flag
+            this.setState({ shouldResetLayout: false });
         });
     }
 
@@ -573,7 +590,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             isMenuOpen,
             areSettingsOpened,
             gridWidth,
-            gridHeight
+            gridHeight,
+            shouldResetLayout
         } = this.state;
 
         let gameClass = "game";
@@ -613,14 +631,16 @@ export default class Game extends React.Component<GameProps, GameState> {
                             levelName={this.props.levelName}
                             isMenuOpen={isMenuOpen}
                             setMenuOpen={this.setMenuOpen}
-                            showSettings={this.showSettings} />
+                            showSettings={this.showSettings}
+                            resetLayout={this.resetLayout} />
                         <Solution
                             grid={grid}
                             playerRow={playerRow}
                             playerCol={playerCol}
                             levelNumber={this.props.levelNumber}
                             gridWidth={gridWidth}
-                            gridHeight={gridHeight} />
+                            gridHeight={gridHeight}
+                            shouldResetLayout={shouldResetLayout} />
                         <GameAdjustMenu
                             canUndo={this.gameHistory.canUndo()}
                             canRedo={this.gameHistory.canRedo()}
@@ -642,7 +662,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                             onPlayerAnimationEnd={this.onPlayerAnimationEnd}
                             onTilePress={this.onTilePress}
                             dragHandler={this.setShouldCancelTilePress}
-                            onGridSizeChange={this.onGridSizeChange} />
+                            onGridSizeChange={this.onGridSizeChange}
+                            shouldResetLayout={shouldResetLayout} />
                         {gameCompleteEle}
                     </div>
                 </TileSizeContext.Provider>

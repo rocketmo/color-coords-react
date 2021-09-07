@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThLarge, faQuestionCircle, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faThLarge, faQuestionCircle, faCog, faSync } from '@fortawesome/free-solid-svg-icons';
 import "./game-menu.scss";
 
 import type { MouseEvent } from "react";
@@ -8,7 +8,8 @@ import type { MouseEvent } from "react";
 interface GameMenuProps {
     isOpen: boolean,
     setOpen: (isOpen: boolean) => void,
-    showSettings: () => void
+    showSettings: () => void,
+    resetLayout: () => void
 }
 
 export default function GameMenu(props: GameMenuProps) {
@@ -27,6 +28,12 @@ export default function GameMenu(props: GameMenuProps) {
         props.showSettings();
     };
 
+    const onResetLayoutClick = (event: MouseEvent) => {
+        event.preventDefault();
+        props.resetLayout();
+        props.setOpen(false);
+    };
+
     return (
         <div className="game-menu">
             <div className={overlayClass} onClick={onOverlayClick}></div>
@@ -40,10 +47,15 @@ export default function GameMenu(props: GameMenuProps) {
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     <span>How to Play</span>
                 </button>
-                <button className="game-menu-btn game-menu-last" tabIndex={tabIndex}
+                <button className="game-menu-btn" tabIndex={tabIndex}
                     onClick={onSettingsClick}>
                     <FontAwesomeIcon icon={faCog} />
                     <span>Settings</span>
+                </button>
+                <button className="game-menu-btn game-menu-last" tabIndex={tabIndex}
+                    onClick={onResetLayoutClick}>
+                    <FontAwesomeIcon icon={faSync} />
+                    <span>Reset Layout</span>
                 </button>
             </nav>
         </div>

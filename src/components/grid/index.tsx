@@ -24,6 +24,7 @@ interface GridProps {
     levelNumber: number,
     showSolution: boolean,
     isPlayerMoving: boolean,
+    shouldResetLayout: boolean,
     onPlayerAnimationEnd: () => void,
     onTilePress: (row: number, col: number) => void,
     dragHandler: (bool: boolean) => void,
@@ -83,6 +84,13 @@ export default function GridComponent(props: GridProps) {
     useEffect(() => {
         setInitialOffset();
     }, [ props.levelNumber ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Reset to default offset percentage if the reset layout button was pressed
+    useEffect(() => {
+        if (props.shouldResetLayout) {
+            setInitialOffset();
+        }
+    }, [ props.shouldResetLayout ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const gridElements = props.isPlayerMoving ? props.grid.renderElements(props.showSolution) :
         props.grid.renderElements(
