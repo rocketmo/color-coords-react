@@ -278,13 +278,17 @@ export default class Game extends React.Component<GameProps, GameState> {
         return (this.gridAnimationQueue.size() > 0 || this.state.isPlayerMoving);
     }
 
+    isGameActive(): boolean {
+        return !this.state.gameOver && !this.state.isMenuOpen;
+    }
+
     async movePlayerByKeyDown(dir: Direction, event: KeyboardEvent): Promise<void> {
 
         let movedPrevLoop = false; // Flag to prevent infinite loop
 
         // Continuously move the player while key is pressed down, game is not over,
         // and menu is closed
-        while (this.keyPressFlagMap[event.key] && !this.state.gameOver && !this.state.isMenuOpen) {
+        while (this.keyPressFlagMap[event.key] && this.isGameActive()) {
 
             // Do not move the player if already in motion; wait until next cycle and check again
             if (this.isAnimationInProgress() || movedPrevLoop) {
@@ -456,7 +460,7 @@ export default class Game extends React.Component<GameProps, GameState> {
 
     canAlterGameState() {
         return (!this.state.isPlayerMoving && this.gridAnimationQueue.size() <= 0 &&
-            !this.state.gameOver && !this.state.isMenuOpen);
+            this.isGameActive());
     }
 
     undo(): void {
@@ -504,7 +508,7 @@ export default class Game extends React.Component<GameProps, GameState> {
     }
 
     zoomIn(): void {
-        if (this.canZoomIn()) {
+        if (this.canZoomIn() && this.isGameActive()) {
             this.setState({
                 tileSizeIndex: this.state.tileSizeIndex + 1
             });
@@ -512,7 +516,7 @@ export default class Game extends React.Component<GameProps, GameState> {
     }
 
     zoomOut(): void {
-        if (this.canZoomOut()) {
+        if (this.canZoomOut() && this.isGameActive()) {
             this.setState({
                 tileSizeIndex: this.state.tileSizeIndex - 1
             });
@@ -587,6 +591,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             movesTaken,
             gameStarted,
             gameWon,
+            gameOver,
             isMenuOpen,
             areSettingsOpened,
             gridWidth,
@@ -640,7 +645,9 @@ export default class Game extends React.Component<GameProps, GameState> {
                             levelNumber={this.props.levelNumber}
                             gridWidth={gridWidth}
                             gridHeight={gridHeight}
-                            shouldResetLayout={shouldResetLayout} />
+                            shouldResetLayout={shouldResetLayout}
+                            gameOver={gameOver}
+                            isMenuOpen={isMenuOpen} />
                         <GameAdjustMenu
                             canUndo={this.gameHistory.canUndo()}
                             canRedo={this.gameHistory.canRedo()}

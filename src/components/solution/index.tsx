@@ -34,6 +34,8 @@ interface SolutionProps {
     playerCol: number,
     levelNumber: number,
     shouldResetLayout: boolean,
+    gameOver: boolean,
+    isMenuOpen: boolean,
     gridWidth?: number,
     gridHeight?: number
 };
@@ -259,17 +261,18 @@ export default function Solution(props: SolutionProps) {
         solutionTopRef.current && solutionTopRef.current.releasePointerCapture(event.pointerId);
     };
 
+    const canAdjust =  !props.gameOver && !props.isMenuOpen;
     const canZoomIn = tileSizeIndex < TILES_SIZES.length - 1;
-    const canZoomOut = tileSizeIndex  > 0;
+    const canZoomOut = tileSizeIndex > 0;
 
     const zoomIn = (): void => {
-        if (canZoomIn) {
+        if (canZoomIn && canAdjust) {
             setTileSizeIndex(tileSizeIndex + 1);
         }
     };
 
     const zoomOut = (): void => {
-        if (canZoomOut) {
+        if (canZoomOut && canAdjust) {
             setTileSizeIndex(tileSizeIndex - 1);
         }
     };
