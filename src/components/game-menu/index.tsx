@@ -40,6 +40,15 @@ export default function GameMenu(props: GameMenuProps) {
         props.setOpen(false);
     };
 
+    // TODO: Add settings button back in once there are more in-game settings
+    const settingsBtn = (
+        <button className="game-menu-btn" tabIndex={tabIndex}
+            onClick={onSettingsClick}>
+            <FontAwesomeIcon icon={faCog} />
+            <span>Settings</span>
+        </button>
+    );
+
     return (
         <div className="game-menu">
             <div className={overlayClass} onClick={onOverlayClick}></div>
@@ -53,11 +62,6 @@ export default function GameMenu(props: GameMenuProps) {
                     onClick={onInstructionsClick}>
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     <span>How to Play</span>
-                </button>
-                <button className="game-menu-btn" tabIndex={tabIndex}
-                    onClick={onSettingsClick}>
-                    <FontAwesomeIcon icon={faCog} />
-                    <span>Settings</span>
                 </button>
                 <button className="game-menu-btn game-menu-last" tabIndex={tabIndex}
                     onClick={onResetLayoutClick}>
