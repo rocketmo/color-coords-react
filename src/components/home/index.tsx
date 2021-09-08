@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Settings from "../settings";
+import Instructions from "../instructions";
 import "./home.scss";
 
 import type { MouseEvent } from "react";
@@ -25,15 +26,24 @@ export default function Home(props: HomeProps) {
     const [ gradientDelay ] = useState(Math.random() * GRADIENT_ANIM_TIME);
     const [ playAnimation, setPlayAnimation ] = useState(props.playAnimation);
     const [ showSettings, setShowSettings ] = useState(false);
+    const [ showInstructions, setShowInstructions ] = useState(false);
 
-    const onReturnFromSettings = () => {
+    const onReturn = () => {
         setShowSettings(false);
+        setShowInstructions(false);
         setPlayAnimation(false);
     };
 
     const onSettingsClick = (event: MouseEvent) => {
         event.preventDefault();
         setShowSettings(true);
+        setShowInstructions(false);
+    };
+
+    const onInstructionsClick = (event: MouseEvent) => {
+        event.preventDefault();
+        setShowSettings(false);
+        setShowInstructions(true);
     };
 
     const homeClass = `home-container ${!playAnimation ? " home-anim-off" : ""}`;
@@ -65,7 +75,7 @@ export default function Home(props: HomeProps) {
     };
 
     const homeStyle = {
-        display: showSettings ? "none" : "block"
+        display: (showSettings || showInstructions) ? "none" : "block"
     };
 
     return (
@@ -83,7 +93,9 @@ export default function Home(props: HomeProps) {
 
                 <nav className="home-nav">
                     <Link to="/level-select" className="home-nav-btn-1">Level Select</Link><br />
-                    <button className="home-nav-btn-2">How to Play</button><br />
+                    <button className="home-nav-btn-2" onClick={onInstructionsClick}>
+                        How to Play
+                    </button><br />
                     <button className="home-nav-btn-3" onClick={onSettingsClick}>
                         Settings
                     </button>
@@ -92,8 +104,12 @@ export default function Home(props: HomeProps) {
 
             <Settings
                 visible={showSettings}
-                onGoBack={onReturnFromSettings}
+                onGoBack={onReturn}
                 onEraseData={props.onEraseData} />
+
+            <Instructions
+                visible={showInstructions}
+                onGoBack={onReturn} />
         </div>
     );
 }

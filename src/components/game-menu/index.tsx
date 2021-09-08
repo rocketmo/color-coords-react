@@ -9,6 +9,7 @@ interface GameMenuProps {
     isOpen: boolean,
     setOpen: (isOpen: boolean) => void,
     showSettings: () => void,
+    showInstructions: () => void,
     resetLayout: () => void
 }
 
@@ -28,6 +29,11 @@ export default function GameMenu(props: GameMenuProps) {
         props.showSettings();
     };
 
+    const onInstructionsClick = (event: MouseEvent) => {
+        event.preventDefault();
+        props.showInstructions();
+    };
+
     const onResetLayoutClick = (event: MouseEvent) => {
         event.preventDefault();
         props.resetLayout();
@@ -43,7 +49,8 @@ export default function GameMenu(props: GameMenuProps) {
                     <FontAwesomeIcon icon={faThLarge} />
                     <span>Level Select</span>
                 </Link>
-                <button className="game-menu-btn" tabIndex={tabIndex}>
+                <button className="game-menu-btn" tabIndex={tabIndex}
+                    onClick={onInstructionsClick}>
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     <span>How to Play</span>
                 </button>

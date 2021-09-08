@@ -16,6 +16,10 @@ $solution-color: #ebde6e;
     top: 4px + sizes.$top-bar-height;
     z-index: 100;
 
+    &:hover {
+        cursor: move;
+    }
+
     .solution {
         background-color: color.scale($solution-color, $lightness: 90%);
         box-sizing: border-box;

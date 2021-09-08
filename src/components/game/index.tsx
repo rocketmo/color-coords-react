@@ -8,6 +8,7 @@ import GameComplete from "../game-complete";
 import Solution from "../solution";
 import GameAdjustMenu from "../game-adjust-menu";
 import Settings from "../settings";
+import Instructions from "../instructions";
 import Player from "../../classes/player";
 import Grid from "../../classes/grid";
 import GameHistory from "../../classes/game-history";
@@ -48,6 +49,7 @@ interface GameState {
     isPlayerMoving: boolean,
     isMenuOpen: boolean,
     areSettingsOpened: boolean,
+    areInstructionsOpened: boolean,
     shouldCancelTilePress: boolean,
     shouldResetLayout: boolean,
     tileSizeIndex: number,
@@ -81,6 +83,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             isPlayerMoving: false,
             isMenuOpen: false,
             areSettingsOpened: false,
+            areInstructionsOpened: false,
             shouldCancelTilePress: false,
             shouldResetLayout: false,
             tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
@@ -107,7 +110,8 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.zoomIn = this.zoomIn.bind(this);
         this.zoomOut = this.zoomOut.bind(this);
         this.showSettings = this.showSettings.bind(this);
-        this.hideSettings = this.hideSettings.bind(this);
+        this.showInstructions = this.showInstructions.bind(this);
+        this.hideOtherWindows = this.hideOtherWindows.bind(this);
         this.onTilePress = this.onTilePress.bind(this);
         this.setShouldCancelTilePress = this.setShouldCancelTilePress.bind(this);
         this.onGridSizeChange = this.onGridSizeChange.bind(this);
@@ -537,7 +541,17 @@ export default class Game extends React.Component<GameProps, GameState> {
     }
 
     showSettings(): void {
-        this.setState({ areSettingsOpened: true });
+        this.setState({
+            areSettingsOpened: true,
+            areInstructionsOpened: false
+        });
+    }
+
+    showInstructions(): void {
+        this.setState({
+            areSettingsOpened: false,
+            areInstructionsOpened: true
+        });
     }
 
     resetLayout(): void {
@@ -554,9 +568,10 @@ export default class Game extends React.Component<GameProps, GameState> {
         });
     }
 
-    hideSettings(): void {
+    hideOtherWindows(): void {
         this.setState({
-            areSettingsOpened: false
+            areSettingsOpened: false,
+            areInstructionsOpened: false
         });
     }
 
@@ -594,6 +609,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameOver,
             isMenuOpen,
             areSettingsOpened,
+            areInstructionsOpened,
             gridWidth,
             gridHeight,
             shouldResetLayout
@@ -604,7 +620,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         gameClass += !gameStarted ? " game-pending" : "";
 
         const gameStyle = {
-            display: this.state.areSettingsOpened ? "none" : "block"
+            display: (areSettingsOpened || areInstructionsOpened) ? "none" : "block"
         };
 
         // Only show the completion component when the user beats the puzzle
@@ -637,6 +653,7 @@ export default class Game extends React.Component<GameProps, GameState> {
                             isMenuOpen={isMenuOpen}
                             setMenuOpen={this.setMenuOpen}
                             showSettings={this.showSettings}
+                            showInstructions={this.showInstructions}
                             resetLayout={this.resetLayout} />
                         <Solution
                             grid={grid}
@@ -677,7 +694,11 @@ export default class Game extends React.Component<GameProps, GameState> {
 
                 <Settings
                     visible={areSettingsOpened}
-                    onGoBack={this.hideSettings} />
+                    onGoBack={this.hideOtherWindows} />
+
+                <Instructions
+                    visible={areInstructionsOpened}
+                    onGoBack={this.hideOtherWindows} />
             </div>
         );
     }
