@@ -9,7 +9,8 @@ import {
     TILES_SIZES,
     DEFAULT_SOLUTION_TILE_SIZE,
     DEFAULT_SOLUTION_CONTAINER_SIZE,
-    TOP_MENU_HEIGHT
+    TOP_MENU_HEIGHT,
+    GAME_MOBILE_WIDTH
 } from "../../services/constants";
 import "./solution.scss";
 
@@ -27,6 +28,9 @@ const MIN_CONTAINER_SIZE = 100;
 const MAX_CONTAINER_SIZE = 500;
 const CONTAINER_LEFT_ADJUST = 12;
 const CONTAINER_BOTTOM_ADJUST = TOP_MENU_HEIGHT + 36;
+const DEFAULT_MOBILE_HEIGHT_PCT = 0.35;
+const MAX_MOBILE_HEIGHT_PCT = 0.8;
+const MIN_MOBILE_HEIGHT = 35;
 
 interface SolutionProps {
     grid: Grid,
@@ -37,7 +41,8 @@ interface SolutionProps {
     gameOver: boolean,
     isMenuOpen: boolean,
     gridWidth?: number,
-    gridHeight?: number
+    gridHeight?: number,
+    appHeight?: number
 };
 
 function getBoundedContainerOffsetPctX(
@@ -112,6 +117,7 @@ export default function Solution(props: SolutionProps) {
     const [ tileSizeIndex, setTileSizeIndex ] = useState(DEFAULT_TILE_SIZE_INDEX);
     const [ containerWidth, setContainerWidth ] = useState(DEFAULT_SOLUTION_CONTAINER_SIZE);
     const [ containerHeight, setContainerHeight ] = useState(DEFAULT_SOLUTION_CONTAINER_SIZE);
+    const [ mobileHeightPct, setMobileHeightPct ] = useState(DEFAULT_MOBILE_HEIGHT_PCT);
 
     // Pointer position
     const [ lastPointerX, setLastPointerX] = useState(0);
@@ -135,6 +141,7 @@ export default function Solution(props: SolutionProps) {
     const tileSize = TILES_SIZES[tileSizeIndex] ?? DEFAULT_SOLUTION_TILE_SIZE;
     const offset = props.grid.getCenterOffset(tileSize, width ?? 0, height ?? 0);
     const solutionTopRef = useRef<HTMLElement>(null);
+    const isInMobileView = props.gridWidth !== undefined && props.gridWidth < GAME_MOBILE_WIDTH;
 
     // Add draggable offset
     offset.x += (gridOffsetPctX * (width ?? 0));
@@ -148,6 +155,7 @@ export default function Solution(props: SolutionProps) {
         setContainerHeight(DEFAULT_SOLUTION_CONTAINER_SIZE);
         setContainerOffsetPctX(0);
         setContainerOffsetPctY(0);
+        setMobileHeightPct(DEFAULT_MOBILE_HEIGHT_PCT);
     };
 
     // Reset to default offset and zoom after we switch to a new level
@@ -160,10 +168,16 @@ export default function Solution(props: SolutionProps) {
         if (props.shouldResetLayout) {
             onResetLayout();
         }
-    }, [ props.shouldResetLayout ]);
+    }, [ props.shouldResetLayout ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Make sure the solution is not offscreen when the viewport is resized
     useEffect(() => {
+
+        // Not needed in mobile view
+        if (isInMobileView) {
+            return;
+        }
+
         const offsetPctX = getBoundedContainerOffsetPctX(containerOffsetPctX, containerWidth,
             props.gridWidth);
         const offsetPctY = getBoundedContainerOffsetPctY(containerOffsetPctY, containerHeight,
@@ -180,6 +194,17 @@ export default function Solution(props: SolutionProps) {
             setContainerHeight(size.height);
         }
     }, [ props.gridWidth, props.gridHeight ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Make sure the mobile solution is still visible after viewport height changes
+    useEffect(() => {
+        if (!props.appHeight) {
+            return;
+        }
+
+        let pct = getBoundValue(mobileHeightPct, MAX_MOBILE_HEIGHT_PCT,
+            MIN_MOBILE_HEIGHT / props.appHeight);
+        setMobileHeightPct(pct);
+    }, [ props.appHeight ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Grid dragging handlers
     const onGridPointerDown = (event: PointerEvent): void => {
@@ -223,6 +248,12 @@ export default function Solution(props: SolutionProps) {
 
     // Solution container dragging handlers
     const onContainerPointerDown = (event: PointerEvent): void => {
+
+        // Not needed in mobile view
+        if (isInMobileView) {
+            return;
+        }
+
         setIsContainerPointerDown(true);
         setLastPointerX(event.clientX);
         setLastPointerY(event.clientY);
@@ -231,7 +262,7 @@ export default function Solution(props: SolutionProps) {
 
     const onContainerPointerMove = (event: PointerEvent): void => {
         // Do not process unless the pointer is pressed down
-        if (!isContainerPointerDown) {
+        if (!isContainerPointerDown || isInMobileView) {
             return;
         }
 
@@ -261,7 +292,7 @@ export default function Solution(props: SolutionProps) {
         solutionTopRef.current && solutionTopRef.current.releasePointerCapture(event.pointerId);
     };
 
-    const canAdjust =  !props.gameOver && !props.isMenuOpen;
+    const canAdjust = !props.gameOver && !props.isMenuOpen;
     const canZoomIn = tileSizeIndex < TILES_SIZES.length - 1;
     const canZoomOut = tileSizeIndex > 0;
 
@@ -293,25 +324,38 @@ export default function Solution(props: SolutionProps) {
         setContainerHeight(newHeight);
     };
 
-    // Solution grid props
-    const solutionProps: Record<string, any> = {
-        className: `solution ${isGridPointerDown ? "solution-dragging" : "" }`,
-        ref,
-        onPointerDown: onGridPointerDown,
-        onPointerUp: onGridPointerUp,
-        style: {
-            height: `${containerHeight}px`,
-            width: `${containerWidth}px`
+    const onMobileResize = (event: SyntheticEvent, data: ResizeCallbackData) => {
+        if (props.appHeight) {
+            let pct = data.size.height / props.appHeight;
+            pct = getBoundValue(pct, MAX_MOBILE_HEIGHT_PCT, MIN_MOBILE_HEIGHT / props.appHeight);
+            setMobileHeightPct(pct);
         }
     };
+
+    // Solution grid props
+    const solutionProps: Record<string, any> = {
+        className: "solution",
+        ref,
+        onPointerDown: onGridPointerDown,
+        onPointerUp: onGridPointerUp
+    };
+
+    if (!isInMobileView) {
+        solutionProps.style = {
+            height: `${containerHeight}px`,
+            width: `${containerWidth}px`
+        };
+    }
 
     if (isGridPointerDown) {
         solutionProps.onPointerMove = onGridPointerMove;
     }
 
     // Solution top bar props
+    let topBarClassName = "solution-target-text";
+    topBarClassName += !isInMobileView ? " solution-draggable" : "";
     const topBarProps: Record<string, any> = {
-        className: `solution-target-text ${isContainerPointerDown ? "solution-dragging" : "" }`,
+        className: topBarClassName,
         ref: solutionTopRef,
         onPointerDown: onContainerPointerDown,
         onPointerUp: onContainerPointerUp
@@ -321,35 +365,63 @@ export default function Solution(props: SolutionProps) {
         topBarProps.onPointerMove = onContainerPointerMove;
     }
 
-    // Container offset
-    const containerStyle = {
-        right: getContainerOffsetX(containerOffsetPctX, props.gridWidth),
-        top: getContainerOffsetY(containerOffsetPctY, props.gridHeight)
-    };
+    // Container style
+    const containerStyle: Record<string, any> = {};
+    const mHeight = props.appHeight ? props.appHeight * mobileHeightPct : MIN_MOBILE_HEIGHT;
+    if (!isInMobileView) {
+        containerStyle.right = getContainerOffsetX(containerOffsetPctX, props.gridWidth);
+        containerStyle.top = getContainerOffsetY(containerOffsetPctY, props.gridHeight);
+    } else {
+        containerStyle.height = `${mHeight}px`;
+    }
 
     // Solution grid
     const solutionTiles = props.grid.renderSolution();
 
+    // Build the solution element
+    let solutionElement = (
+        <div className="solution-container" style={containerStyle}>
+            <span {...topBarProps}>Target</span>
+            <div {...solutionProps}>
+                <SolutionAdjustMenu
+                    canZoomIn={canZoomIn}
+                    canZoomOut={canZoomOut}
+                    zoomInHandler={zoomIn}
+                    zoomOutHandler={zoomOut} />
+                {solutionTiles}
+                <SolutionPlayerCursor row={props.playerRow} col={props.playerCol} />
+            </div>
+        </div>
+    );
+
+    // Add resizable
+    if (!isInMobileView) {
+        solutionElement = (
+            <Resizable height={containerHeight} width={containerWidth} onResize={onResize}
+                minConstraints={[MIN_CONTAINER_SIZE, MIN_CONTAINER_SIZE]}
+                maxConstraints={[MAX_CONTAINER_SIZE, MAX_CONTAINER_SIZE]}
+                resizeHandles={[ "sw" ]}>
+                {solutionElement}
+            </Resizable>
+        );
+    } else {
+        const maxSize = props.appHeight ?
+            Math.max(props.appHeight * MAX_MOBILE_HEIGHT_PCT, MIN_MOBILE_HEIGHT) :
+            MAX_CONTAINER_SIZE;
+        solutionElement = (
+            <Resizable axis="y" width={0} height={mHeight} onResize={onMobileResize}
+                minConstraints={[0, MIN_MOBILE_HEIGHT]}
+                maxConstraints={[Infinity, maxSize]}
+                resizeHandles={[ "n" ]}>
+                {solutionElement}
+            </Resizable>
+        );
+    }
+
     return (
         <GridOffsetContext.Provider value={offset}>
             <TileSizeContext.Provider value={tileSize}>
-                <Resizable height={containerHeight} width={containerWidth} onResize={onResize}
-                    minConstraints={[MIN_CONTAINER_SIZE, MIN_CONTAINER_SIZE]}
-                    maxConstraints={[MAX_CONTAINER_SIZE, MAX_CONTAINER_SIZE]}
-                    resizeHandles={["sw" ]}>
-                    <div className="solution-container" style={containerStyle}>
-                        <span {...topBarProps}>Target</span>
-                        <div {...solutionProps}>
-                            <SolutionAdjustMenu
-                                canZoomIn={canZoomIn}
-                                canZoomOut={canZoomOut}
-                                zoomInHandler={zoomIn}
-                                zoomOutHandler={zoomOut} />
-                            {solutionTiles}
-                            <SolutionPlayerCursor row={props.playerRow} col={props.playerCol} />
-                        </div>
-                    </div>
-                </Resizable>
+                {solutionElement}
             </TileSizeContext.Provider>
         </GridOffsetContext.Provider>
     );

@@ -10,7 +10,8 @@ interface GameRedirectProps {
     starCount: number,
     handleStarUpdate: (levelNumber: number, movesTaken: number) => number,
     starsScoredOnLevel: (levelNum: number) => number,
-    starsToUnlockLevel: (levelNum: number) => number
+    starsToUnlockLevel: (levelNum: number) => number,
+    appHeight?: number
 };
 
 export default function GameRedirect(props: GameRedirectProps) {
@@ -29,6 +30,7 @@ export default function GameRedirect(props: GameRedirectProps) {
             levelName={levelName} levelNumber={levelInt}
             handleStarUpdate={props.handleStarUpdate}
             starsScoredOnLevel={props.starsScoredOnLevel}
-            starsToUnlockLevel={props.starsToUnlockLevel} />
+            starsToUnlockLevel={props.starsToUnlockLevel}
+            appHeight={props.appHeight} />
     );
 }

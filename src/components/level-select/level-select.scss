@@ -10,9 +10,9 @@
 
     .level-select-main {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-areas: "levels preview";
+        grid-template-columns: auto auto;
         grid-template-rows: auto;
-        grid-template: "levels preview";
         justify-content: space-between;
         height: calc(100vh - #{sizes.$top-bar-height});
         top: sizes.$top-bar-height;

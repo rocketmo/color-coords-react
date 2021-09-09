@@ -3,7 +3,11 @@ import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import PlayerComponent from "../player";
 import { GridOffsetContext, TileSizeContext } from "../../services/context";
 import { sleep, getBoundValue } from "../../services/util";
-import { DEFAULT_SOLUTION_CONTAINER_SIZE, TOP_MENU_HEIGHT } from "../../services/constants";
+import {
+    DEFAULT_SOLUTION_CONTAINER_SIZE,
+    TOP_MENU_HEIGHT,
+    GAME_MOBILE_WIDTH
+} from "../../services/constants";
 import "./grid.scss";
 
 import type Grid from "../../classes/grid";
@@ -47,7 +51,7 @@ export default function GridComponent(props: GridProps) {
         refreshRate: 10
     });
 
-    // Get grid offset, accounting for the top menu and solution window
+    // Start with grid in the center
     const offset = props.grid.getCenterOffset(tileSize, width ?? 0, height ?? 0);
 
     // Add draggable offset
@@ -60,8 +64,15 @@ export default function GridComponent(props: GridProps) {
             return;
         }
 
-        setOffsetPctX((-DEFAULT_SOLUTION_CONTAINER_SIZE) / (2 * width));
         setOffsetPctY(TOP_MENU_HEIGHT / (2 * height));
+
+        if (width < GAME_MOBILE_WIDTH) {
+            setOffsetPctX(0);
+        } else {
+            // Account for solution container if we are in desktop view
+            setOffsetPctX((-DEFAULT_SOLUTION_CONTAINER_SIZE) / (2 * width));
+        }
+
         setHasInitialOffset(true);
     };
 

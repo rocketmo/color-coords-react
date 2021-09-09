@@ -4,6 +4,7 @@
 @use "sass:color";
 
 $solution-color: #ebde6e;
+$target-text-height: 28px;
 
 .game .solution-container {
     border: 4px solid colors.$black;
@@ -16,10 +17,6 @@ $solution-color: #ebde6e;
     top: 4px + sizes.$top-bar-height;
     z-index: 100;
 
-    &:hover {
-        cursor: move;
-    }
-
     .solution {
         background-color: color.scale($solution-color, $lightness: 90%);
         box-sizing: border-box;
@@ -27,7 +24,7 @@ $solution-color: #ebde6e;
         position: relative;
         width: 100%;
 
-        &.solution-dragging {
+        &:hover {
             cursor: move;
         }
     }
@@ -40,11 +37,41 @@ $solution-color: #ebde6e;
         display: block;
         font-family: functions.sans-serif-family(NunitoSans);
         font-weight: 700;
-        height: 28px;
+        height: $target-text-height;
         padding: 2px 10px;
 
-        &.solution-dragging {
+        &.solution-draggable:hover {
             cursor: move;
+        }
+    }
+}
+
+@media only screen and (max-width: sizes.$game-md-width) {
+    .game .solution-container {
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-top: 7px solid colors.$black;
+        border-radius: 0;
+        grid-area: solution;
+        position: relative;
+        right: 0;
+        touch-action: none;
+        top: 0;
+        width: 100%;
+
+        .solution {
+            height: calc(100% - #{$target-text-height});
+            width: 100%;
+        }
+
+        .react-resizable-handle-n {
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAALCAYAAAATD/9GAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAMUlEQVQ4EWNgGAWjIUDbEGD8//+/O22tIM90kMM+kqeVtrpADrOgrRWjpo+GwOAMAQBSIwprdT3GHwAAAABJRU5ErkJggg==);
+            background-position: center;
+            background-size: auto;
+            height: 36px;
+            top: -20px;
+            transform: none;
         }
     }
 }

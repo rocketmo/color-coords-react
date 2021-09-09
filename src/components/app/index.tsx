@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import produce from "immer";
 import WebFont from "webfontloader";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -23,6 +24,11 @@ export default function App() {
     const [ areFontsLoaded, setAreFontsLoaded ] = useState(false);
     const [ isSavedDataLoaded, setIsSavedDataLoaded ] = useState(false);
     const [ levelScoreMap, setLevelScoreMap ] = useState<Record<string, LevelScore>>({});
+
+    const { height, ref } = useResizeDetector({
+        refreshMode: "throttle",
+        refreshRate: 1
+    });
 
     /**
      * Handler to update star counts after a level is completed
@@ -205,14 +211,15 @@ export default function App() {
     return (
         // TODO: Uncomment and replace other app
         // <div className="app" onContextMenu={event => event.preventDefault()}>
-        <div className="app">
+        <div className="app" ref={ref}>
             <ToastContainer />
             <Router>
                 <Switch>
                     <Route path="/game/:levelNumber">
                         <GameRedirect starCount={starCount} handleStarUpdate={handleStarUpdate}
                             starsScoredOnLevel={starsScoredOnLevel}
-                            starsToUnlockLevel={starsToUnlockLevel} />
+                            starsToUnlockLevel={starsToUnlockLevel}
+                            appHeight={height} />
                     </Route>
                     <Route path="/level-select">
                         <LevelSelect starCount={starCount} levelScoreMap={levelScoreMap}

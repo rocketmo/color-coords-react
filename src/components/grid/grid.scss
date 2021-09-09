@@ -1,4 +1,5 @@
 @use "../../styles/colors";
+@use "../../styles/sizes";
 
 .tile-grid {
     background-color: colors.$game-bg;
@@ -18,4 +19,10 @@
 // Fix cursor when hovering over tile
 .tile-grid.grid-dragging .tile .tile-hover:hover {
     cursor: move;
+}
+
+@media only screen and (max-width: sizes.$game-md-width) {
+    .tile-grid {
+        grid-area: game;
+    }
 }

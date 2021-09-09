@@ -30,6 +30,7 @@ interface GameProps {
     playerCol: number,
     levelNumber: number, // 1-indexed
     levelName: string,
+    appHeight?: number,
     handleStarUpdate: (levelNumber: number, movesTaken: number) => number,
     starsScoredOnLevel: (levelNum: number) => number,
     starsToUnlockLevel: (levelNum: number) => number
@@ -571,7 +572,8 @@ export default class Game extends React.Component<GameProps, GameState> {
     hideOtherWindows(): void {
         this.setState({
             areSettingsOpened: false,
-            areInstructionsOpened: false
+            areInstructionsOpened: false,
+            isMenuOpen: false
         });
     }
 
@@ -619,9 +621,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         gameClass += gameWon ? " game-won" : "";
         gameClass += !gameStarted ? " game-pending" : "";
 
-        const gameStyle = {
-            display: (areSettingsOpened || areInstructionsOpened) ? "none" : "block"
-        };
+        const gameStyle = (areSettingsOpened || areInstructionsOpened) ? { display: "none" } : {};
 
         // Only show the completion component when the user beats the puzzle
         const gameCompleteEle = gameWon ?
@@ -662,6 +662,7 @@ export default class Game extends React.Component<GameProps, GameState> {
                             levelNumber={this.props.levelNumber}
                             gridWidth={gridWidth}
                             gridHeight={gridHeight}
+                            appHeight={this.props.appHeight}
                             shouldResetLayout={shouldResetLayout}
                             gameOver={gameOver}
                             isMenuOpen={isMenuOpen} />

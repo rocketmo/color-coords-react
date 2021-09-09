@@ -1,11 +1,13 @@
 @use "../../styles/colors";
+@use "../../styles/sizes";
 
 .game {
     animation: simple-fade-in 1s;
     background-color: colors.$game-won-bg;
+    display: block;
     height: 100vh;
     max-width: 100%;
-    overflow-x: hidden;
+    overflow: hidden;
     width: 100vw;
 }
 
@@ -13,5 +15,17 @@
     .tile-grid, .solution-container, .game-adjust-menu {
         opacity: 0;
         transition: opacity 1.5s;
+    }
+}
+
+@media only screen and (max-width: sizes.$game-md-width) {
+    .game {
+        display: grid;
+        grid-template-areas:
+            "game"
+            "solution";
+        grid-template-columns: auto;
+        grid-template-rows: 1fr auto;
+        justify-content: stretch;
     }
 }
