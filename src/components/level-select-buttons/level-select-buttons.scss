@@ -50,30 +50,6 @@
                 box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
                 color: #fff;
             }
-
-            &.btn-star-3 {
-                background-color: color.scale(colors.$green, $lightness: 10%);
-
-                &:hover {
-                    background-color: color.scale(colors.$green, $lightness: 50%);
-                }
-            }
-
-            &.btn-star-1 {
-                background-color: color.scale(colors.$yellow, $lightness: 20%);
-
-                &:hover {
-                    background-color: color.scale(colors.$yellow, $lightness: 50%);
-                }
-            }
-
-            &.btn-locked {
-                background-color: color.scale(colors.$default, $lightness: -30%);
-
-                &:hover {
-                    background-color: color.scale(colors.$default, $lightness: -40%);
-                }
-            }
         }
     }
 

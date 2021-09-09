@@ -1,0 +1,96 @@
+@use "../../styles/colors";
+@use "../../styles/sizes";
+@use "../../styles/functions";
+@use "sass:color";
+
+.level-select-mobile {
+    box-sizing: border-box;
+    display: none;
+    height: calc(100vh - #{sizes.$top-bar-height});
+    top: sizes.$top-bar-height;
+    overflow: auto;
+    padding: 10px;
+    position: relative;
+
+    .level-select-mobile-btn {
+        background-color: colors.$default;
+        border: none;
+        border-bottom: 1px solid colors.$menu-bg;
+        box-sizing: border-box;
+        display: block;
+        padding: 6px 10px;
+        transition: background-color 0.5s;
+        width: 100%;
+
+        h2 {
+            font-family: functions.sans-serif-family(NunitoSans);
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+            text-align: left;
+        }
+
+        &:hover {
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        &.btn-highlight {
+            background-color: #fff;
+        }
+    }
+
+    .level-preview-mobile {
+        background-color: colors.$menu-bg;
+        box-sizing: border-box;
+        color: #fff;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s linear;
+        width: 100%;
+
+        &.preview-open {
+            animation: 1.5s delay-overflow;
+            max-height: 650px;
+            overflow-y: auto;
+
+            &.level-preview-locked {
+                max-height: 250px;
+            }
+        }
+
+        .level-preview-padding {
+            padding: 10px;
+        }
+
+        .locked-box {
+            font-size: 50px;
+            height: 50vw;
+            max-height: 150px;
+        }
+
+        h3 {
+            font-family: functions.sans-serif-family(Nunito);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 4px 0;
+        }
+
+        p {
+            margin: 8px 0 0;
+        }
+    }
+}
+
+@media only screen and (max-width: sizes.$window-sm) {
+    .level-select .level-select-mobile {
+        display: block;
+    }
+}
+
+@keyframes delay-overflow {
+    from {
+        overflow-y: hidden;
+    }
+}

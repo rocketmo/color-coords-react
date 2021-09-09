@@ -1,0 +1,102 @@
+@use "../colors";
+@use "../functions";
+@use "sass:color";
+
+.level-select-main .level-btn-container .level-select-btn,
+.level-select-mobile .level-select-mobile-btn {
+    &.btn-star-3 {
+        background-color: color.scale(colors.$green, $lightness: 10%);
+
+        &:hover {
+            background-color: color.scale(colors.$green, $lightness: 50%);
+        }
+    }
+
+    &.btn-star-1 {
+        background-color: color.scale(colors.$yellow, $lightness: 20%);
+
+        &:hover {
+            background-color: color.scale(colors.$yellow, $lightness: 50%);
+        }
+    }
+
+    &.btn-locked {
+        background-color: color.scale(colors.$default, $lightness: -30%);
+
+        &:hover {
+            background-color: color.scale(colors.$default, $lightness: -40%);
+        }
+    }
+}
+
+.level-select-main .level-preview,
+.level-select-mobile .level-preview-mobile {
+    .locked-box {
+        align-items: center;
+        background-color: #333;
+        border-radius: 8px;
+        box-sizing: border-box;
+        color: #888;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    .unlock-text {
+        color: #ccc;
+        font-style: italic;
+        margin-bottom: 0;
+
+        span {
+            vertical-align: middle;
+        }
+    }
+
+    hr {
+        border: 0;
+        border-bottom: 2px solid #fff;
+        margin: 16px 0;
+    }
+
+    table {
+        border: none;
+        margin-bottom: 10px;
+        width: 100%;
+
+        td {
+            border: none;
+            font-size: 16px;
+        }
+
+        td:first-child {
+            transition: width 0.75s;
+            white-space: nowrap;
+            width: 66px;
+        }
+
+        // Star images
+        img {
+            height: 16px;
+        }
+    }
+
+    .play-btn {
+        background-color: colors.$menu-highlight;
+        border: none;
+        border-radius: 4px;
+        display: inline-block;
+        color: colors.$black;
+        font-family: functions.sans-serif-family(Nunito);
+        font-weight: 600;
+        margin-top: 12px;
+        padding: 4px 8px;
+        text-decoration: none;
+
+        &:hover {
+            background-color: color.scale(colors.$menu-highlight, $lightness: 25%);
+        }
+    }
+}

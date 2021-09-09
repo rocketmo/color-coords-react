@@ -1,0 +1,93 @@
+@use "../colors";
+
+$tooltip-fade-time: 0.25s;
+
+.adjust-menu {
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    display: inline-flex;
+    height: 30px;
+
+    .adjust-btn {
+        background: none;
+        border: none;
+        display: inline-block;
+        padding: 0 2px;
+        position: relative;
+
+        button {
+            background: none;
+            border: none;
+            color: rgba(0, 0, 0, 0.6);
+            font-size: 16px;
+            height: 100%;
+
+            &:hover {
+                cursor: pointer;
+                color: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        .adjust-tooltip {
+            background-color: colors.$menu-bg;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            opacity: 0;
+            padding: 4px 10px;
+            position: absolute;
+            top: -999999%;
+            transition: opacity $tooltip-fade-time, top 0s linear $tooltip-fade-time;
+            white-space: nowrap;
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 100%;
+                left: 16px;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: transparent transparent colors.$menu-bg transparent;
+            }
+        }
+
+        &:hover {
+            .adjust-tooltip {
+                opacity: 1;
+                top: 150%;
+                transition: opacity $tooltip-fade-time, top 0s linear 0s;
+            }
+        }
+
+        &.adjust-disabled {
+            button {
+                color: rgba(0, 0, 0, 0.2);
+
+                &:hover {
+                    cursor: default;
+                    color: rgba(0, 0, 0, 0.2);
+                }
+            }
+
+            .adjust-tooltip {
+                opacity: 0;
+                top: -9999%;
+                transition: opacity $tooltip-fade-time, top 0s linear $tooltip-fade-time;
+            }
+        }
+    }
+
+    .adjust-separator {
+        background-color: rgba(0, 0, 0, 0);
+        border-left: 2px solid rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
+        display: inline-block;
+        height: 80%;
+        margin: 0 4px;
+        padding: 4px 0;
+        vertical-align: middle;
+        width: 1px;
+    }
+}

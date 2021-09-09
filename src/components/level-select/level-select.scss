@@ -20,3 +20,10 @@
         position: relative;
     }
 }
+
+
+@media only screen and (max-width: sizes.$window-sm) {
+    .level-select .level-select-main {
+        display: none;
+    }
+}

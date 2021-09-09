@@ -26,10 +26,10 @@ $preview-transition-time: 0.75s;
         box-sizing: border-box;
         color: #fff;
         grid-area: preview;
-        overflow: hidden;
         place-self: end center;
         padding: 10px 20px;
         height: 100%;
+        overflow: hidden;
         overflow-y: auto;
         transform: translateX(sizes.$preview-width);
         transition: width $preview-transition-time,
@@ -38,28 +38,8 @@ $preview-transition-time: 0.75s;
         width: sizes.$preview-width;
 
         .locked-box {
-            align-items: center;
-            background-color: #333;
-            border-radius: 8px;
-            box-sizing: border-box;
-            color: #888;
-            display: flex;
             font-size: 60px;
-            flex-direction: column;
             height: 250px;
-            justify-content: space-evenly;
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-        }
-
-        .unlock-text {
-            color: #ccc;
-            font-style: italic;
-
-            span {
-                vertical-align: middle;
-            }
         }
 
         h2, h3 {
@@ -79,51 +59,6 @@ $preview-transition-time: 0.75s;
 
         p {
             margin: 5px 0 8px;
-        }
-
-        hr {
-            border: 0;
-            border-bottom: 2px solid #fff;
-            margin: 16px 0;
-        }
-
-        table {
-            border: none;
-            margin-bottom: 10px;
-            width: 100%;
-
-            td {
-                border: none;
-                font-size: 16px;
-            }
-
-            td:first-child {
-                transition: width 0.75s;
-                white-space: nowrap;
-                width: 66px;
-            }
-
-            // Star images
-            img {
-                height: 16px;
-            }
-        }
-
-        .play-btn {
-            background-color: colors.$menu-highlight;
-            border: none;
-            border-radius: 4px;
-            display: inline-block;
-            color: colors.$black;
-            font-family: functions.sans-serif-family(Nunito);
-            font-weight: 600;
-            margin-top: 12px;
-            padding: 4px 8px;
-            text-decoration: none;
-
-            &:hover {
-                background-color: color.scale(colors.$menu-highlight, $lightness: 25%);
-            }
         }
     }
 

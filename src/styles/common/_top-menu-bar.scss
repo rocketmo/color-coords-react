@@ -1,0 +1,20 @@
+@use "../colors";
+@use "../sizes";
+
+.top-bar {
+    background-color: colors.$black;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    height: sizes.$top-bar-height;
+    padding: 0 16px 0 4px;
+    position: fixed;
+    width: 100%;
+
+    .top-bar-text {
+        align-items: center;
+        display: inline-flex;
+        height: sizes.$top-bar-height;
+    }
+}

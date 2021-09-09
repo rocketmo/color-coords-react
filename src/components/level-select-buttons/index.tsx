@@ -8,7 +8,6 @@ interface LevelSelectButtonsProps {
     setSelectedLevel: React.Dispatch<React.SetStateAction<number | null>>,
     setIsSelected: React.Dispatch<React.SetStateAction<boolean>>,
     containerRef: React.RefObject<HTMLElement>,
-    starCount: number,
     starsScoredOnLevel: (levelNum: number) => number
 };
 
