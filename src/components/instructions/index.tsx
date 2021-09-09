@@ -191,7 +191,7 @@ export default function Instructions(props: InstructionsProps) {
                             you can reposition both the target window, as well as the target grid
                             within the window. You can also
                             <em className="highlight"> zoom in or out </em> using the zoom buttons
-                            in the quick menus. If we want to reset back to the default layout, go
+                            in the quick menus. If you want to reset back to the default layout, go
                             into the game menu and select
                             <em className="highlight"> Reset Layout</em>.
                         </li>
