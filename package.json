@@ -2,6 +2,7 @@
     "name": "color-coords-react",
     "version": "0.1.0",
     "private": true,
+    "homepage": "https://rocketmo.github.io/color-coords-react",
     "dependencies": {
         "@datastructures-js/queue": "^4.1.3",
         "@fortawesome/fontawesome-svg-core": "^1.2.36",
