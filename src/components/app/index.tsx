@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useResizeDetector } from 'react-resize-detector/build/withPolyfill';
 import produce from "immer";
 import WebFont from "webfontloader";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import LevelSelect from "../level-select";
 import GameRedirect from "../game-redirect";
