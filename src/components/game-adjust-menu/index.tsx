@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./game-adjust-menu.scss";
 import {
     faSync,
     faUndoAlt,
@@ -7,6 +6,7 @@ import {
     faSearchPlus,
     faSearchMinus
 } from '@fortawesome/free-solid-svg-icons';
+import "./game-adjust-menu.scss";
 
 interface GameAdjustMenuProps {
     canUndo: boolean,

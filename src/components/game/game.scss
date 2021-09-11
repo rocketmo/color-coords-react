@@ -23,9 +23,10 @@
         display: grid;
         grid-template-areas:
             "game"
-            "solution";
+            "solution"
+            "tutorial";
         grid-template-columns: auto;
-        grid-template-rows: 1fr auto;
+        grid-template-rows: 1fr auto auto;
         justify-content: stretch;
     }
 }

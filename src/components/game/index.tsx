@@ -9,6 +9,7 @@ import Solution from "../solution";
 import GameAdjustMenu from "../game-adjust-menu";
 import Settings from "../settings";
 import Instructions from "../instructions";
+import GameTutorial from "../game-tutorial";
 import Player from "../../classes/player";
 import Grid from "../../classes/grid";
 import GameHistory from "../../classes/game-history";
@@ -23,6 +24,7 @@ import type GridAnimationFrame from "../../classes/grid-animation-frame";
 import type { KeyboardEvent } from "react";
 import type { GridCellConfig } from "../../classes/grid";
 import type { PlayerMovement } from "../../classes/player";
+import type { LevelInstruction } from "../../services/levels";
 
 interface GameProps {
     gridConfig: GridCellConfig[][],
@@ -30,6 +32,7 @@ interface GameProps {
     playerCol: number,
     levelNumber: number, // 1-indexed
     levelName: string,
+    levelInstructions?: LevelInstruction[],
     appHeight?: number,
     handleStarUpdate: (levelNumber: number, movesTaken: number) => number,
     starsScoredOnLevel: (levelNum: number) => number,
@@ -53,6 +56,7 @@ interface GameState {
     areInstructionsOpened: boolean,
     shouldCancelTilePress: boolean,
     shouldResetLayout: boolean,
+    showTutorial: boolean,
     tileSizeIndex: number,
     gridWidth?: number,
     gridHeight?: number
@@ -87,6 +91,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             areInstructionsOpened: false,
             shouldCancelTilePress: false,
             shouldResetLayout: false,
+            showTutorial: !!props.levelInstructions && props.levelInstructions.length > 0,
             tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
         };
 
@@ -117,6 +122,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.setShouldCancelTilePress = this.setShouldCancelTilePress.bind(this);
         this.onGridSizeChange = this.onGridSizeChange.bind(this);
         this.resetLayout = this.resetLayout.bind(this);
+        this.onCompleteTutorial = this.onCompleteTutorial.bind(this);
 
         this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -416,6 +422,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             this.setState({
                 gameOver: true,
                 gameWon: true,
+                showTutorial: false,
                 starsWon: this.props.handleStarUpdate(this.props.levelNumber, this.state.movesTaken)
             });
         }
@@ -577,6 +584,12 @@ export default class Game extends React.Component<GameProps, GameState> {
         });
     }
 
+    onCompleteTutorial(): void {
+        this.setState({
+            showTutorial: false
+        });
+    }
+
     // Focus on the game container after mounting
     componentDidMount(): void {
         this.gameContainerRef.current && this.gameContainerRef.current.focus();
@@ -624,15 +637,21 @@ export default class Game extends React.Component<GameProps, GameState> {
         const gameStyle = (areSettingsOpened || areInstructionsOpened) ? { display: "none" } : {};
 
         // Only show the completion component when the user beats the puzzle
-        const gameCompleteEle = gameWon ?
+        const gameCompleteEle = gameWon ? (
             <GameComplete levelNumber={this.props.levelNumber}
                 stars={this.state.starsWon}
                 restartHandler={this.restartGame}
                 starsScoredOnLevel={this.props.starsScoredOnLevel}
-                starsToUnlockLevel={this.props.starsToUnlockLevel} /> :
-            null;
+                starsToUnlockLevel={this.props.starsToUnlockLevel} />
+        ) : null;
 
         const tileSize = TILES_SIZES[this.state.tileSizeIndex] ?? DEFAULT_TILE_SIZE;
+
+        // Game tutorial
+        const tutorial = (this.props.levelInstructions && this.state.showTutorial) ? (
+            <GameTutorial levelInstructions={this.props.levelInstructions}
+                onComplete={this.onCompleteTutorial} />
+        ) : null;
 
         return (
             <div>
@@ -689,7 +708,9 @@ export default class Game extends React.Component<GameProps, GameState> {
                             dragHandler={this.setShouldCancelTilePress}
                             onGridSizeChange={this.onGridSizeChange}
                             shouldResetLayout={shouldResetLayout} />
+
                         {gameCompleteEle}
+                        {tutorial}
                     </div>
                 </TileSizeContext.Provider>
 

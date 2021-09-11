@@ -23,7 +23,7 @@ export default function GameRedirect(props: GameRedirectProps) {
         return <Redirect to="/level-select" />
     }
 
-    const { gridConfig, playerRow, playerCol, levelName } = LEVELS[levelInt - 1];
+    const { gridConfig, playerRow, playerCol, levelName, levelInstructions } = LEVELS[levelInt - 1];
 
     return (
         <Game gridConfig={gridConfig} playerRow={playerRow} playerCol={playerCol}
@@ -31,6 +31,7 @@ export default function GameRedirect(props: GameRedirectProps) {
             handleStarUpdate={props.handleStarUpdate}
             starsScoredOnLevel={props.starsScoredOnLevel}
             starsToUnlockLevel={props.starsToUnlockLevel}
-            appHeight={props.appHeight} />
+            appHeight={props.appHeight}
+            levelInstructions={levelInstructions} />
     );
 }
