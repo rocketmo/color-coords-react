@@ -8,7 +8,6 @@ import LEVELS from "../../services/levels";
 import { getPersonalBestTable, getLevelScoringTable } from "../level-preview";
 import "./level-select-mobile.scss";
 
-import type { MouseEvent } from "react";
 import type { LevelScore } from "../../services/definitions";
 
 const STAR_SIZE = 16;
@@ -24,9 +23,7 @@ interface LevelSelectMobileProps {
 };
 
 export default function LevelSelectMobile(props: LevelSelectMobileProps) {
-    const toggleSelected = (levelNum: number, event: MouseEvent) => {
-        event.preventDefault();
-
+    const toggleSelected = (levelNum: number) => {
         if (props.selectedLevel === levelNum) {
             props.setIsSelected(!props.isSelected);
         } else {

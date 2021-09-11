@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import "./settings.scss";
 
-import type { MouseEvent } from "react";
-
 interface SettingsProps {
     visible: boolean,
     onEraseData?: () => void,
@@ -16,21 +14,14 @@ export default function Settings(props: SettingsProps) {
 
     const className = `settings ${props.visible ? "settings-enabled" : ""}`;
 
-    const backOnClick = (event: MouseEvent) => {
-        event.preventDefault();
+    const backOnClick = () => {
         setShowEraseConfirm(false);
         props.onGoBack();
     }
 
-    const onEraseConfirm = (event: MouseEvent) => {
-        event.preventDefault();
+    const onEraseConfirm = () => {
         props.onEraseData && props.onEraseData();
         setShowEraseConfirm(false);
-    };
-
-    const toggleEraseConfirm = (show: boolean, event: MouseEvent) => {
-        event.preventDefault();
-        setShowEraseConfirm(show);
     };
 
     let eraseElement = null;
@@ -47,7 +38,7 @@ export default function Settings(props: SettingsProps) {
                         Continue
                     </button>
                     <button className="erase-confirm-btn erase-cancel"
-                        onClick={toggleEraseConfirm.bind(null, false)}>
+                        onClick={setShowEraseConfirm.bind(null, false)}>
                         Cancel
                     </button>
                 </div>
@@ -57,7 +48,7 @@ export default function Settings(props: SettingsProps) {
         eraseElement = (
             <div className="settings-erase">
                 <h2>Save Data</h2>
-                <button onClick={toggleEraseConfirm.bind(null, true)}>Erase save data?</button>
+                <button onClick={setShowEraseConfirm.bind(null, true)}>Erase save data?</button>
                 {eraseConfirm}
             </div>
         );

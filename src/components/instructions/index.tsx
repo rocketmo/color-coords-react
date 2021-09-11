@@ -2,8 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import "./instructions.scss";
 
-import type { MouseEvent } from "react";
-
 interface InstructionsProps {
     visible: boolean,
     onGoBack: () => void
@@ -12,17 +10,12 @@ interface InstructionsProps {
 export default function Instructions(props: InstructionsProps) {
     const className = `instructions ${props.visible ? "instructions-enabled" : ""}`;
 
-    const backOnClick = (event: MouseEvent) => {
-        event.preventDefault();
-        props.onGoBack();
-    }
-
     // TODO: Make each section collapsible
     return (
         <div className={className}>
             <header className="top-bar instructions-top-bar">
                 <button className="top-bar-text back-btn" aria-label="Go back"
-                    onClick={backOnClick}>
+                    onClick={props.onGoBack}>
                     <FontAwesomeIcon icon={faArrowLeft} />
                 </button>
                 <div className="level-select-title">

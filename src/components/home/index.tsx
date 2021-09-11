@@ -4,8 +4,6 @@ import Settings from "../settings";
 import Instructions from "../instructions";
 import "./home.scss";
 
-import type { MouseEvent } from "react";
-
 interface HomeProps {
     playAnimation: boolean,
     onEraseData: () => void
@@ -34,14 +32,12 @@ export default function Home(props: HomeProps) {
         setPlayAnimation(false);
     };
 
-    const onSettingsClick = (event: MouseEvent) => {
-        event.preventDefault();
+    const onSettingsClick = () => {
         setShowSettings(true);
         setShowInstructions(false);
     };
 
-    const onInstructionsClick = (event: MouseEvent) => {
-        event.preventDefault();
+    const onInstructionsClick = () => {
         setShowSettings(false);
         setShowInstructions(true);
     };

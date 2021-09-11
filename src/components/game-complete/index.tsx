@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Star from "../star";
 import LEVELS from "../../services/levels";
 import "./game-complete.scss";
-import type { MouseEvent } from "react";
 
 interface GameCompleteProps {
     levelNumber: number,
@@ -62,11 +61,6 @@ export default function GameComplete(props: GameCompleteProps) {
         );
     }
 
-    const onRestartClick = (event: MouseEvent) => {
-        event.preventDefault();
-        props.restartHandler();
-    };
-
     const stars = [];
     for (let i = 1; i <= 3; i += 1) {
         stars.push(
@@ -87,7 +81,7 @@ export default function GameComplete(props: GameCompleteProps) {
                     <Link to="/level-select" className="level-complete-btn">
                         <FontAwesomeIcon icon={faThLarge} /> Level Select
                     </Link>
-                    <button className="level-complete-btn" onClick={onRestartClick}>
+                    <button className="level-complete-btn" onClick={props.restartHandler}>
                         <FontAwesomeIcon icon={faSync} /> Restart
                     </button>
                     {nextBtn}

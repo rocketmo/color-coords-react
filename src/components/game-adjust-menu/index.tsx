@@ -8,8 +8,6 @@ import {
     faSearchMinus
 } from '@fortawesome/free-solid-svg-icons';
 
-import type { MouseEvent } from "react";
-
 interface GameAdjustMenuProps {
     canUndo: boolean,
     canRedo: boolean,
@@ -22,18 +20,7 @@ interface GameAdjustMenuProps {
     zoomOutHandler: () => void
 }
 
-function preventDefaultAndHandle(fn: () => void, event: MouseEvent) {
-    event.preventDefault();
-    fn();
-}
-
 export default function GameAdjustMenu(props: GameAdjustMenuProps) {
-    const onRestartClick = preventDefaultAndHandle.bind(null, props.restartHandler);
-    const onUndoClick = preventDefaultAndHandle.bind(null, props.undoHandler);
-    const onRedoClick = preventDefaultAndHandle.bind(null, props.redoHandler);
-    const onZoomInClick = preventDefaultAndHandle.bind(null, props.zoomInHandler);
-    const onZoomOutClick = preventDefaultAndHandle.bind(null, props.zoomOutHandler);
-
     const undoClass = `adjust-btn ${!props.canUndo ? " adjust-disabled" : ""}`;
     const redoClass = `adjust-btn ${!props.canRedo ? " adjust-disabled" : ""}`;
     const zoomInClass = `adjust-btn ${!props.canZoomIn ? " adjust-disabled" : ""}`;
@@ -42,7 +29,7 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
     return (
         <div className="adjust-menu game-adjust-menu">
             <div className="adjust-btn">
-                <button tabIndex={0} onClick={onRestartClick} aria-label="Restart game">
+                <button tabIndex={0} onClick={props.restartHandler} aria-label="Restart game">
                     <FontAwesomeIcon icon={faSync} />
                 </button>
 
@@ -52,7 +39,7 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
             <div className="adjust-separator"></div>
 
             <div className={undoClass}>
-                <button tabIndex={0} onClick={onUndoClick} aria-label="Undo">
+                <button tabIndex={0} onClick={props.undoHandler} aria-label="Undo">
                     <FontAwesomeIcon icon={faUndoAlt} />
                 </button>
 
@@ -60,7 +47,7 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
             </div>
 
             <div className={redoClass}>
-                <button tabIndex={0} onClick={onRedoClick} aria-label="Redo">
+                <button tabIndex={0} onClick={props.redoHandler} aria-label="Redo">
                     <FontAwesomeIcon icon={faRedoAlt} />
                 </button>
 
@@ -70,7 +57,7 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
             <div className="adjust-separator"></div>
 
             <div className={zoomInClass}>
-                <button tabIndex={0} onClick={onZoomInClick} aria-label="Zoom in">
+                <button tabIndex={0} onClick={props.zoomInHandler} aria-label="Zoom in">
                     <FontAwesomeIcon icon={faSearchPlus} />
                 </button>
 
@@ -78,7 +65,7 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
             </div>
 
             <div className={zoomOutClass}>
-                <button tabIndex={0} onClick={onZoomOutClick} aria-label="Zoom out">
+                <button tabIndex={0} onClick={props.zoomOutHandler} aria-label="Zoom out">
                     <FontAwesomeIcon icon={faSearchMinus} />
                 </button>
 

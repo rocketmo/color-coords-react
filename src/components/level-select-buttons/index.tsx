@@ -1,6 +1,5 @@
 import LEVELS from "../../services/levels";
 import "./level-select-buttons.scss";
-import type { MouseEvent } from "react";
 
 interface LevelSelectButtonsProps {
     selectedLevel: number | null, // 1-indexed
@@ -12,9 +11,7 @@ interface LevelSelectButtonsProps {
 };
 
 export default function LevelSelectButtons(props: LevelSelectButtonsProps) {
-    const toggleSelected = (levelNum: number, event: MouseEvent) => {
-        event.preventDefault();
-
+    const toggleSelected = (levelNum: number) => {
         if (props.selectedLevel === levelNum) {
             props.setIsSelected(!props.isSelected);
         } else {

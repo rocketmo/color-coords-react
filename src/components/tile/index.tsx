@@ -3,8 +3,6 @@ import { GridOffsetContext, TileSizeContext } from "../../services/context";
 import { Color } from "../../services/constants";
 import "./tile.scss";
 
-import type { MouseEvent } from "react";
-
 interface TileProps {
     row: number,
     col: number,
@@ -49,8 +47,7 @@ export default function Tile(props: TileProps) {
     if (isSameRowOrColumn(props.row, props.col, props.playerRow, props.playerCol) &&
         props.onTilePress) {
 
-        const onTileClick = (event: MouseEvent) => {
-            event.preventDefault();
+        const onTileClick = () => {
             props.onTilePress && props.onTilePress(props.row, props.col);
         }
 
