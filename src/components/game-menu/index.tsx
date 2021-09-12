@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThLarge, faQuestionCircle, faCog, faSync } from '@fortawesome/free-solid-svg-icons';
+import {
+    faThLarge,
+    faQuestionCircle,
+    faCog,
+    faSync,
+    faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
 import "./game-menu.scss";
 
 interface GameMenuProps {
@@ -8,7 +14,8 @@ interface GameMenuProps {
     setOpen: (isOpen: boolean) => void,
     showSettings: () => void,
     showInstructions: () => void,
-    resetLayout: () => void
+    resetLayout: () => void,
+    startTutorial?: () => void
 }
 
 export default function GameMenu(props: GameMenuProps) {
@@ -22,6 +29,15 @@ export default function GameMenu(props: GameMenuProps) {
         props.setOpen(false);
     };
 
+    const onViewTutorial = () => {
+        if (!props.startTutorial) {
+            return;
+        }
+
+        props.startTutorial();
+        props.setOpen(false);
+    };
+
     // TODO: Add settings button back in once there are more in-game settings
     const settingsBtn = (
         <button className="game-menu-btn" tabIndex={tabIndex}
@@ -30,6 +46,13 @@ export default function GameMenu(props: GameMenuProps) {
             <span>Settings</span>
         </button>
     );
+
+    const tutorialBtn = props.startTutorial ? (
+        <button className="game-menu-btn" tabIndex={tabIndex} onClick={onViewTutorial}>
+            <FontAwesomeIcon icon={faInfoCircle} />
+            <span>View Tutorial</span>
+        </button>
+    ): null;
 
     return (
         <div className="game-menu">
@@ -45,6 +68,7 @@ export default function GameMenu(props: GameMenuProps) {
                     <FontAwesomeIcon icon={faQuestionCircle} />
                     <span>How to Play</span>
                 </button>
+                {tutorialBtn}
                 <button className="game-menu-btn game-menu-last" tabIndex={tabIndex}
                     onClick={onResetLayoutClick}>
                     <FontAwesomeIcon icon={faSync} />

@@ -10,7 +10,8 @@ interface GameHUDProps {
     setMenuOpen: (isOpen: boolean) => void,
     showSettings: () => void,
     showInstructions: () => void,
-    resetLayout: () => void
+    resetLayout: () => void,
+    startTutorial?: () => void
 }
 
 export default function GameHUD(props: GameHUDProps) {
@@ -26,7 +27,8 @@ export default function GameHUD(props: GameHUDProps) {
                 setOpen={props.setMenuOpen}
                 showSettings={props.showSettings}
                 showInstructions={props.showInstructions}
-                resetLayout={props.resetLayout} />
+                resetLayout={props.resetLayout}
+                startTutorial={props.startTutorial} />
         </div>
     );
 }

@@ -123,6 +123,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.onGridSizeChange = this.onGridSizeChange.bind(this);
         this.resetLayout = this.resetLayout.bind(this);
         this.onCompleteTutorial = this.onCompleteTutorial.bind(this);
+        this.startTutorial = this.startTutorial.bind(this);
 
         this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -590,6 +591,12 @@ export default class Game extends React.Component<GameProps, GameState> {
         });
     }
 
+    startTutorial(): void {
+        this.setState({
+            showTutorial: true
+        });
+    }
+
     // Focus on the game container after mounting
     componentDidMount(): void {
         this.gameContainerRef.current && this.gameContainerRef.current.focus();
@@ -645,12 +652,16 @@ export default class Game extends React.Component<GameProps, GameState> {
                 starsToUnlockLevel={this.props.starsToUnlockLevel} />
         ) : null;
 
-        const tileSize = TILES_SIZES[this.state.tileSizeIndex] ?? DEFAULT_TILE_SIZE;
+        const tileSize = TILES_SIZES[this.state.tileSizeIndex] ?? DEFAULT_TILE_SIZE
+        const canStartTutorial = !!this.props.levelInstructions &&
+            this.props.levelInstructions.length > 0 &&
+            !this.state.showTutorial;
+        const startTutorial = canStartTutorial ? this.startTutorial : undefined;
 
         // Game tutorial
         const tutorial = (this.props.levelInstructions && this.state.showTutorial) ? (
             <GameTutorial levelInstructions={this.props.levelInstructions}
-                onComplete={this.onCompleteTutorial} />
+                onComplete={this.onCompleteTutorial} isMenuOpen={isMenuOpen} />
         ) : null;
 
         return (
@@ -673,7 +684,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                             setMenuOpen={this.setMenuOpen}
                             showSettings={this.showSettings}
                             showInstructions={this.showInstructions}
-                            resetLayout={this.resetLayout} />
+                            resetLayout={this.resetLayout}
+                            startTutorial={startTutorial} />
                         <Solution
                             grid={grid}
                             playerRow={playerRow}

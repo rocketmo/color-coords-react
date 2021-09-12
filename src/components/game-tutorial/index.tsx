@@ -4,6 +4,7 @@ import type { LevelInstruction } from "../../services/levels";
 
 interface GameTutorialProps {
     levelInstructions: LevelInstruction[],
+    isMenuOpen: boolean,
     onComplete: () => void
 }
 
@@ -17,14 +18,26 @@ export default function GameTutorial(props: GameTutorialProps) {
     }, [currentInstruction]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const onNext = () => {
+        if (props.isMenuOpen) {
+            return;
+        }
+
         setCurrentInstruction(currentInstruction + 1);
     };
 
     const onPrevious = () => {
+        if (props.isMenuOpen) {
+            return;
+        }
+
         setCurrentInstruction(currentInstruction - 1);
     };
 
     const onSkip = () => {
+        if (props.isMenuOpen) {
+            return;
+        }
+
         setCurrentInstruction(props.levelInstructions.length);
     };
 
