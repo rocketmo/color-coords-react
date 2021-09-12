@@ -34,6 +34,7 @@ interface GameProps {
     levelName: string,
     levelInstructions?: LevelInstruction[],
     appHeight?: number,
+    completedBefore: boolean,
     handleStarUpdate: (levelNumber: number, movesTaken: number) => number,
     starsScoredOnLevel: (levelNum: number) => number,
     starsToUnlockLevel: (levelNum: number) => number
@@ -91,7 +92,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             areInstructionsOpened: false,
             shouldCancelTilePress: false,
             shouldResetLayout: false,
-            showTutorial: !!props.levelInstructions && props.levelInstructions.length > 0,
+            showTutorial: !props.completedBefore && !!props.levelInstructions &&
+                props.levelInstructions.length > 0,
             tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
         };
 
@@ -606,7 +608,9 @@ export default class Game extends React.Component<GameProps, GameState> {
         if (this.props.levelNumber !== prevProps.levelNumber) {
             this.restartGame();
             this.setState({
-                tileSizeIndex: DEFAULT_TILE_SIZE_INDEX
+                tileSizeIndex: DEFAULT_TILE_SIZE_INDEX,
+                showTutorial: !this.props.completedBefore && !!this.props.levelInstructions &&
+                    this.props.levelInstructions.length > 0,
             });
         }
     }

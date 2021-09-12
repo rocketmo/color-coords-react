@@ -2,12 +2,15 @@ import { Redirect, useParams } from "react-router";
 import Game from "../game";
 import LEVELS from "../../services/levels";
 
+import type { LevelScore } from "../../services/definitions";
+
 interface GameParams {
     levelNumber: string
 };
 
 interface GameRedirectProps {
     starCount: number,
+    levelScoreMap: Record<string, LevelScore>,
     handleStarUpdate: (levelNumber: number, movesTaken: number) => number,
     starsScoredOnLevel: (levelNum: number) => number,
     starsToUnlockLevel: (levelNum: number) => number,
@@ -23,7 +26,14 @@ export default function GameRedirect(props: GameRedirectProps) {
         return <Redirect to="/level-select" />
     }
 
-    const { gridConfig, playerRow, playerCol, levelName, levelInstructions } = LEVELS[levelInt - 1];
+    const {
+        id,
+        gridConfig,
+        playerRow,
+        playerCol,
+        levelName,
+        levelInstructions
+    } = LEVELS[levelInt - 1];
 
     return (
         <Game gridConfig={gridConfig} playerRow={playerRow} playerCol={playerCol}
@@ -32,6 +42,7 @@ export default function GameRedirect(props: GameRedirectProps) {
             starsScoredOnLevel={props.starsScoredOnLevel}
             starsToUnlockLevel={props.starsToUnlockLevel}
             appHeight={props.appHeight}
-            levelInstructions={levelInstructions} />
+            levelInstructions={levelInstructions}
+            completedBefore={!!props.levelScoreMap[id] && props.levelScoreMap[id].solved} />
     );
 }

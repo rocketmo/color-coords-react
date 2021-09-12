@@ -219,7 +219,8 @@ export default function App() {
                         <GameRedirect starCount={starCount} handleStarUpdate={handleStarUpdate}
                             starsScoredOnLevel={starsScoredOnLevel}
                             starsToUnlockLevel={starsToUnlockLevel}
-                            appHeight={height} />
+                            appHeight={height}
+                            levelScoreMap={levelScoreMap} />
                     </Route>
                     <Route path="/level-select">
                         <LevelSelect starCount={starCount} levelScoreMap={levelScoreMap}
