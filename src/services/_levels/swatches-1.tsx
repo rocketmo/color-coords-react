@@ -5,7 +5,7 @@ import type { GameConfig } from "../levels";
 const LEVEL_SWATCHES_1: GameConfig = {
     id: "X08Cn2VWa0C6YvdCaTQMFw==",
     description: <p>An introduction to the game of <em>Color Coords</em>.</p>,
-    levelInstructions:[
+    levelInstructions: [
         {
             element: (
                 <p>

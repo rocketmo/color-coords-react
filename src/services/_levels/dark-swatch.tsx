@@ -5,6 +5,17 @@ import type { GameConfig } from "../levels";
 const DARK_SWATCH: GameConfig = {
     id: "AZn/4XVi8EOd/qqCmO9icQ==",
     description: <p>An introduction to the dark swatch.</p>,
+    levelInstructions: [
+        {
+            element: (
+                <p>
+                    The <strong> dark swatch </strong> will turn the player piece black. While
+                    moving around in this state, the player piece will remove colors from any
+                    grid tile it lands on.
+                </p>
+            )
+        }
+    ],
     gridConfig: [
         [
             { hasTile: true, solutionColor: Color.RED },

@@ -5,6 +5,16 @@ import type { GameConfig } from "../levels";
 const DARK_TILES_1: GameConfig = {
     id: "mWgTHtQTikqu7J9n3kjeDg==",
     description: <p>An introduction to dark tiles.</p>,
+    levelInstructions: [
+        {
+            element: (
+                <p>
+                    <strong>Dark tiles </strong> cannot change colors; they will always remain
+                    black, even if the player pieces moves across them while in a colored state.
+                </p>
+            )
+        }
+    ],
     gridConfig: [
         [
             { hasTile: true, solutionColor: Color.PURPLE, item: new Swatch(Color.PURPLE) },
