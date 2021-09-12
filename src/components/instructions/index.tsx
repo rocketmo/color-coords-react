@@ -148,7 +148,7 @@ export default function Instructions(props: InstructionsProps) {
                                 </tr>
                                 <tr>
                                     <td>Toggle Target</td>
-                                    <td>Q</td>
+                                    <td>Q (hold)</td>
                                     <td>-</td>
                                 </tr>
                                 <tr>
@@ -164,6 +164,11 @@ export default function Instructions(props: InstructionsProps) {
                                 <tr>
                                     <td>Restart</td>
                                     <td>R</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Toggle Game Menu</td>
+                                    <td>Escape</td>
                                     <td>-</td>
                                 </tr>
                                 <tr>
