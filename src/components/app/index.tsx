@@ -228,7 +228,8 @@ export default function App() {
                             starsToUnlockLevel={starsToUnlockLevel} />
                     </Route>
                     <Route path="*">
-                        <Home playAnimation={playHomeAnimation} onEraseData={eraseData} />
+                        <Home playAnimation={playHomeAnimation} onEraseData={eraseData}
+                            starsScoredOnLevel={starsScoredOnLevel}  />
                     </Route>
                 </Switch>
             </Router>

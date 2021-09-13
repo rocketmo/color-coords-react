@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Settings from "../settings";
 import Instructions from "../instructions";
+import LEVELS from "../../services/levels";
 import "./home.scss";
 
 interface HomeProps {
     playAnimation: boolean,
+    starsScoredOnLevel: (levelNum: number) => number
     onEraseData: () => void
 };
 
@@ -25,6 +27,39 @@ export default function Home(props: HomeProps) {
     const [ playAnimation, setPlayAnimation ] = useState(props.playAnimation);
     const [ showSettings, setShowSettings ] = useState(false);
     const [ showInstructions, setShowInstructions ] = useState(false);
+    const [ playLevelNumber, setPlayLevelNumber ] = useState<number | null>(null);
+
+    const onPlay = () => {
+        let lastUnlockedLevel = 1;
+        let firstUnsolvedLevel: (number | null) = null;
+        let firstIncompleteLevel: (number | null) = null;
+
+        for (let i = 0; i < LEVELS.length; i += 1) {
+            const levelNum = i + 1;
+            const starsScored = props.starsScoredOnLevel(levelNum);
+
+            if (starsScored === 0) {
+                firstUnsolvedLevel = i + 1;
+                break;
+            }
+
+            if (starsScored > 0) {
+                lastUnlockedLevel = i + 1;
+
+                if (firstIncompleteLevel === null && starsScored < 3) {
+                    firstIncompleteLevel = i + 1;
+                }
+            }
+        }
+
+        if (firstUnsolvedLevel !== null) {
+            setPlayLevelNumber(firstUnsolvedLevel);
+        } else if (firstIncompleteLevel !== null) {
+            setPlayLevelNumber(firstIncompleteLevel);
+        } else {
+            setPlayLevelNumber(lastUnlockedLevel);
+        }
+    };
 
     const onReturn = () => {
         setShowSettings(false);
@@ -74,6 +109,10 @@ export default function Home(props: HomeProps) {
         display: (showSettings || showInstructions) ? "none" : "block"
     };
 
+    if (playLevelNumber !== null) {
+        return <Redirect to={`/game/${playLevelNumber}`} />
+    }
+
     return (
         <div>
             <div className={homeClass} style={homeStyle}>
@@ -88,13 +127,15 @@ export default function Home(props: HomeProps) {
                 </div>
 
                 <nav className="home-nav">
-                    <Link to="/level-select" className="home-nav-btn-1">Level Select</Link><br />
-                    <button className="home-nav-btn-2" onClick={onInstructionsClick}>
+                    <button className="home-nav-btn-1" onClick={onPlay}>Play</button><br />
+
+                    <Link to="/level-select" className="home-nav-btn-2">Level Select</Link><br />
+
+                    <button className="home-nav-btn-3" onClick={onInstructionsClick}>
                         How to Play
                     </button><br />
-                    <button className="home-nav-btn-3" onClick={onSettingsClick}>
-                        Settings
-                    </button>
+
+                    <button className="home-nav-btn-4" onClick={onSettingsClick}>Settings</button>
                 </nav>
             </div>
 

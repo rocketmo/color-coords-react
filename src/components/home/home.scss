@@ -171,7 +171,7 @@ $nav-min-default-width: 320px;
             }
         }
 
-        @for $i from 1 through 3 {
+        @for $i from 1 through 4 {
             .home-nav-btn-#{$i} {
                 animation: nav-fade-in 1.5s ease ($bg-fade-delay + (0.15s * $i)) 1 normal forwards;
             }
@@ -227,7 +227,7 @@ $nav-min-default-width: 320px;
     .home-nav {
         animation: nav-container-move 0s linear 0s 1 normal forwards;
 
-        @for $i from 1 through 3 {
+        @for $i from 1 through 4 {
             .home-nav-btn-#{$i} {
                 animation: nav-fade-in 0s ease 0s 1 normal forwards;
             }
