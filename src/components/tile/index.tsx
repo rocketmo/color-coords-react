@@ -47,26 +47,27 @@ export default function Tile(props: TileProps) {
     if (isSameRowOrColumn(props.row, props.col, props.playerRow, props.playerCol) &&
         props.onTilePress) {
 
+        const hoverClass = `tile-hover hover-${color}`;
         const onTileClick = () => {
             props.onTilePress && props.onTilePress(props.row, props.col);
         }
 
-        hoverTile = <div className="tile-hover" onClick={onTileClick}></div>;
+        const hoverStyle = {
+            borderWidth: `${Math.ceil(tileSize / 12)}px`
+        };
+
+        hoverTile = <div className={hoverClass} onClick={onTileClick} style={hoverStyle}></div>;
     }
 
     const tileBackStyle = {
         borderRadius: `${Math.ceil(tileSize / 12)}px`
     };
 
-    const frontStyle = {
-        borderWidth: `${Math.ceil(tileSize / 12)}px`
-    };
-
     return (
         <div className="tile" style={tileStyle}>
             {hoverTile}
             <div className={solutionClass} style={solutionStyle}></div>
-            <div className={colorClass} style={frontStyle}></div>
+            <div className={colorClass}></div>
             <div className="tile-back" style={tileBackStyle}></div>
         </div>
     );
