@@ -8,6 +8,7 @@ import DARK_TILES_1 from "./_levels/dark-tiles-1";
 import DARK_TILES_2 from "./_levels/dark-tiles-2";
 import DARK_SWATCH from "./_levels/dark-swatch";
 import ICE_1 from "./_levels/ice-1";
+import ICE_2 from "./_levels/ice-2";
 import type { GridCellConfig } from "../classes/grid";
 
 export enum InstructionHighlightType {
@@ -47,7 +48,8 @@ const LEVELS: GameConfig[] = [
     DARK_TILES_1,
     DARK_TILES_2,
     DARK_SWATCH,
-    ICE_1
+    ICE_1,
+    ICE_2
 ];
 
 export default LEVELS;
