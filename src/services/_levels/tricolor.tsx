@@ -4,6 +4,16 @@ import type { GameConfig } from "../levels";
 
 const TRICOLOR: GameConfig = {
     id: "DwaPoAeJnkmnOGFPsUKPIw==",
+    levelInstructions: [
+        {
+            element: (
+                <p>
+                    Tip: If playing on a desktop, you can hold the <strong> Q </strong> key to view
+                    the solution overlayed on top of the puzzle grid.
+                </p>
+            )
+        }
+    ],
     gridConfig: [
         [
             { hasTile: true, solutionColor: Color.YELLOW, item: new Swatch(Color.YELLOW) },
