@@ -10,7 +10,8 @@ interface GridCellConfig {
     hasTile: boolean,
     tileColor?: Color,
     solutionColor?: Color,
-    item?: Item
+    item?: Item,
+    ice?: boolean
 }
 
 export type { GridCellConfig };
@@ -30,7 +31,8 @@ export default class Grid {
                         colIdx,
                         cell.tileColor,
                         cell.solutionColor,
-                        cloneDeep(cell.item)
+                        cloneDeep(cell.item),
+                        cell.ice
                     ) : null;
             });
         });

@@ -29,6 +29,13 @@ export enum Direction {
     RIGHT = "right"
 };
 
+export enum PlayerMovementType {
+    DEFAULT = "default",
+    TO_ICE = "to-ice",
+    FROM_ICE = "from-ice",
+    ON_ICE = "on-ice"
+};
+
 interface DirectionOffset {
     rowOffset: number,
     colOffset: number

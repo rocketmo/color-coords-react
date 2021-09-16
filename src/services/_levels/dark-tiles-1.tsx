@@ -18,7 +18,7 @@ const DARK_TILES_1: GameConfig = {
     gridConfig: [
         [
             { hasTile: true, solutionColor: Color.PURPLE, item: new Swatch(Color.PURPLE) },
-            { hasTile: true, tileColor:Color.DARK, solutionColor: Color.DARK },
+            { hasTile: true, tileColor: Color.DARK, solutionColor: Color.DARK },
             { hasTile: true, solutionColor: Color.GREEN }
         ],
         [

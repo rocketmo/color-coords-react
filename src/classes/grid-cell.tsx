@@ -10,13 +10,22 @@ export default class GridCell {
     color: Color;
     solutionColor: Color;
     item?: Item;
+    ice: boolean;
 
-    constructor(row: number, col: number, color?: Color, solutionColor?: Color, item?: Item) {
+    constructor(
+        row: number,
+        col: number, color?:
+        Color, solutionColor?:
+        Color,
+        item?: Item,
+        ice?: boolean
+    ) {
         this.row = row;
         this.col = col;
         this.color = color ?? Color.DEFAULT;
         this.solutionColor = solutionColor ?? Color.DEFAULT;
         this.item = item;
+        this.ice = ice ?? false;
     }
 
     updateColor(playerColor: Color): (Color | null) {
@@ -56,7 +65,7 @@ export default class GridCell {
             <Tile key={key} color={this.color} alt={(this.row + this.col) % 2 === 0}
                 solution={this.solutionColor} showSolution={showSolution}
                 row={this.row} col={this.col} playerRow={playerRow} playerCol={playerCol}
-                onTilePress={onTilePress} />
+                ice={this.ice} onTilePress={onTilePress} />
         );
 
         if (this.item) {
@@ -69,7 +78,7 @@ export default class GridCell {
     renderSolution(): JSX.Element {
         const key = `solution-tile-${this.row}-${this.col}`;
         return (
-            <Tile key={key} color={this.solutionColor}
+            <Tile key={key} color={this.solutionColor} ice={this.ice}
                 alt={(this.row + this.col) % 2 === 0}
                 row={this.row} col={this.col} />
         );

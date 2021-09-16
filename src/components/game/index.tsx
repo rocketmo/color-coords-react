@@ -15,9 +15,15 @@ import Grid from "../../classes/grid";
 import GameHistory from "../../classes/game-history";
 import PlayerAnimationFrame from "../../classes/player-animation-frame";
 import TileAnimationFrame from "../../classes/tile-animation-frame";
-import { Color, Direction, TILES_SIZES, DEFAULT_TILE_SIZE } from "../../services/constants";
 import { sleep } from "../../services/util";
 import { TileSizeContext } from "../../services/context";
+import {
+    Color,
+    Direction,
+    TILES_SIZES,
+    DEFAULT_TILE_SIZE,
+    PlayerMovementType
+} from "../../services/constants";
 import "./game.scss";
 
 import type GridAnimationFrame from "../../classes/grid-animation-frame";
@@ -60,7 +66,8 @@ interface GameState {
     showTutorial: boolean,
     tileSizeIndex: number,
     gridWidth?: number,
-    gridHeight?: number
+    gridHeight?: number,
+    playerMovementType?: PlayerMovementType
 };
 
 const DEFAULT_TILE_SIZE_INDEX = 6;
@@ -255,10 +262,11 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
 
         // Otherwise, add animation frames until the player stops moving
+        let isStart = true;
         while (moveResult.moved) {
 
             moveCount += 1;
-            const { newRow, newCol, newColor, gridCellMovedTo } = moveResult;
+            const { newRow, newCol, newColor, gridCellMovedTo, movementType } = moveResult;
 
             // Check if the grid tile needs to be updated
             let updatedTileColor = gridCellMovedTo && gridCellMovedTo.updateColor(newColor);
@@ -270,15 +278,16 @@ export default class Game extends React.Component<GameProps, GameState> {
 
             // Add player animation frame
             this.gridAnimationQueue.enqueue(
-                new PlayerAnimationFrame(newRow, newCol, newColor)
+                new PlayerAnimationFrame(newRow, newCol, newColor, movementType, isStart)
             );
 
             // Try to move again
             playerMovement = {
                 currentDirection: null,
-                prevDirection: playerMovement.currentDirection
+                prevDirection: moveResult.directionMoved || null
             };
 
+            isStart = false;
             moveResult = player.move(playerMovement);
         }
 
@@ -397,7 +406,8 @@ export default class Game extends React.Component<GameProps, GameState> {
                     playerColor: animationFrame.color,
                     isPlayerMoving: true,
                     gameStarted: true,
-                    movesTaken: this.state.movesTaken + 1
+                    movesTaken: this.state.movesTaken + (animationFrame.isStart ? 1 : 0),
+                    playerMovementType: animationFrame.movementType
                 });
 
                 break;
@@ -627,6 +637,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             playerRow,
             playerCol,
             playerColor,
+            playerMovementType,
             showSolution,
             isPlayerMoving,
             movesTaken,
@@ -719,6 +730,7 @@ export default class Game extends React.Component<GameProps, GameState> {
                             levelNumber={this.props.levelNumber}
                             showSolution={showSolution}
                             isPlayerMoving={isPlayerMoving}
+                            playerMovementType={playerMovementType}
                             onPlayerAnimationEnd={this.onPlayerAnimationEnd}
                             onTilePress={this.onTilePress}
                             dragHandler={this.setShouldCancelTilePress}

@@ -7,6 +7,7 @@ interface TileProps {
     row: number,
     col: number,
     color?: Color,
+    ice?: boolean,
     solution?: Color,
     alt?: boolean,
     showSolution?: boolean,
@@ -59,6 +60,11 @@ export default function Tile(props: TileProps) {
         hoverTile = <div className={hoverClass} onClick={onTileClick} style={hoverStyle}></div>;
     }
 
+    // Ice layer
+    let iceTile = props.ice ? (
+        <div className="tile-ice"></div>
+    ) : null;
+
     const tileBackStyle = {
         borderRadius: `${Math.ceil(tileSize / 12)}px`
     };
@@ -66,6 +72,7 @@ export default function Tile(props: TileProps) {
     return (
         <div className="tile" style={tileStyle}>
             {hoverTile}
+            {iceTile}
             <div className={solutionClass} style={solutionStyle}></div>
             <div className={colorClass}></div>
             <div className="tile-back" style={tileBackStyle}></div>

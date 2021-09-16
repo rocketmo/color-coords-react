@@ -6,7 +6,8 @@ import { sleep, getBoundValue } from "../../services/util";
 import {
     DEFAULT_SOLUTION_CONTAINER_SIZE,
     TOP_MENU_HEIGHT,
-    GAME_MOBILE_WIDTH
+    GAME_MOBILE_WIDTH,
+    PlayerMovementType
 } from "../../services/constants";
 import "./grid.scss";
 
@@ -25,6 +26,7 @@ interface GridProps {
     playerRow: number,
     playerCol: number,
     playerColor: Color,
+    playerMovementType?: PlayerMovementType,
     levelNumber: number,
     showSolution: boolean,
     isPlayerMoving: boolean,
@@ -187,6 +189,7 @@ export default function GridComponent(props: GridProps) {
                 { gridElements }
                 <PlayerComponent color={props.playerColor} row={props.playerRow}
                     col={props.playerCol} movementToggle={props.isPlayerMoving}
+                    playerMovementType={props.playerMovementType}
                     onAnimationEnd={props.onPlayerAnimationEnd} />
             </div>
         </GridOffsetContext.Provider>

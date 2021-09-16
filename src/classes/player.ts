@@ -1,4 +1,4 @@
-import { Color, DIR_OFFSET } from "../services/constants";
+import { Color, PlayerMovementType, DIR_OFFSET } from "../services/constants";
 import type Grid from "./grid";
 import type GridCell from "./grid-cell";
 import type { Direction } from "../services/constants";
@@ -14,7 +14,8 @@ interface PlayerMovementResult {
     newCol: number,
     newColor: Color,
     directionMoved?: Direction,
-    gridCellMovedTo?: GridCell
+    gridCellMovedTo?: GridCell,
+    movementType?: PlayerMovementType
 }
 
 export type { PlayerMovement };
@@ -33,8 +34,26 @@ export default class Player {
     }
 
     move(movement: PlayerMovement): PlayerMovementResult {
+        let rowOffset = 0;
+        let colOffset = 0;
+        const currCell = this.grid.getCellAt(this.row, this.col);
+        let directionMoved;
+
+        // Determine where to move
         if (movement.currentDirection) {
-            const { rowOffset, colOffset } = DIR_OFFSET[movement.currentDirection];
+            const offset = DIR_OFFSET[movement.currentDirection];
+            rowOffset = offset.rowOffset;
+            colOffset = offset.colOffset;
+            directionMoved = movement.currentDirection;
+        } else if (currCell?.ice && movement.prevDirection) {
+            const offset = DIR_OFFSET[movement.prevDirection];
+            rowOffset = offset.rowOffset;
+            colOffset = offset.colOffset;
+            directionMoved = movement.prevDirection;
+        }
+
+        // Determine final grid tile
+        if ((rowOffset !== 0 || colOffset !== 0) && directionMoved) {
             const nextRow = this.row + rowOffset;
             const nextCol = this.col + colOffset;
             const gridCell = this.grid.getCellAt(nextRow, nextCol);
@@ -49,13 +68,23 @@ export default class Player {
                     this.color = nextPlayerColor;
                 }
 
+                let moveType = PlayerMovementType.DEFAULT;
+                if (currCell?.ice && gridCell.ice && !movement.currentDirection) {
+                    moveType = PlayerMovementType.ON_ICE;
+                } else if (gridCell.ice) {
+                    moveType = PlayerMovementType.TO_ICE;
+                } else if (currCell?.ice && movement.prevDirection) {
+                    moveType = PlayerMovementType.FROM_ICE;
+                }
+
                 return {
                     moved: true,
                     newRow: this.row,
                     newCol: this.col,
                     newColor: this.color,
-                    directionMoved: movement.currentDirection,
-                    gridCellMovedTo: gridCell
+                    directionMoved: directionMoved,
+                    gridCellMovedTo: gridCell,
+                    movementType: moveType
                 };
             }
         }

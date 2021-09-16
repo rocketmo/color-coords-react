@@ -9,6 +9,11 @@ $solution-tile-back-pct: 125%;
 $solution-tile-offset: -12.5%;
 $solution-tile-back-radius: 2px;
 
+$ice-from: #bcc6c980;
+$ice-to: #bcc6c940;
+$ice-glint-from: #ffffff61;
+$ice-glint-to: #ffffffbb;
+
 .tile {
     height: sizes.$tile-size;
     position: absolute;
@@ -21,6 +26,18 @@ $solution-tile-back-radius: 2px;
         transition: background-color .4s ease-out 0.15s;
         width: 100%;
         z-index: 2;
+    }
+
+    .tile-ice {
+        background-image: linear-gradient(135deg, $ice-from 0%, $ice-to 25%,
+            $ice-glint-from 25%, $ice-glint-to 50%,
+            $ice-from 50%, $ice-to 75%,
+            $ice-glint-from 75%, $ice-glint-to 100%);
+        box-sizing: border-box;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 4;
     }
 
     .tile-hover {
