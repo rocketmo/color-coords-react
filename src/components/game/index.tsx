@@ -70,6 +70,14 @@ interface GameState {
     playerMovementType?: PlayerMovementType
 };
 
+interface MoveCount {
+    count: number,
+    [Direction.UP]: number,
+    [Direction.DOWN]: number,
+    [Direction.LEFT]: number,
+    [Direction.RIGHT]: number
+};
+
 const DEFAULT_TILE_SIZE_INDEX = 6;
 
 export default class Game extends React.Component<GameProps, GameState> {
@@ -252,9 +260,15 @@ export default class Game extends React.Component<GameProps, GameState> {
     }
 
     // Processes a move and returns the number of tiles moved
-    makeMove(grid: Grid, player: Player, playerMovement: PlayerMovement): number {
+    makeMove(grid: Grid, player: Player, playerMovement: PlayerMovement): MoveCount {
         let moveResult = player.move(playerMovement);
-        let moveCount = 0;
+        const moveCount = {
+            count: 0,
+            [Direction.UP]: 0,
+            [Direction.DOWN]: 0,
+            [Direction.LEFT]: 0,
+            [Direction.RIGHT]: 0
+        };
 
         // If move is invalid, return
         if (!moveResult.moved) {
@@ -265,8 +279,20 @@ export default class Game extends React.Component<GameProps, GameState> {
         let isStart = true;
         while (moveResult.moved) {
 
-            moveCount += 1;
-            const { newRow, newCol, newColor, gridCellMovedTo, movementType } = moveResult;
+            // Update count
+            const {
+                newRow,
+                newCol,
+                newColor,
+                gridCellMovedTo,
+                movementType,
+                directionMoved
+            } = moveResult;
+
+            moveCount.count += 1;
+            if (directionMoved && moveCount[directionMoved] !== undefined) {
+                moveCount[directionMoved] += 1;
+            }
 
             // Check if the grid tile needs to be updated
             let updatedTileColor = gridCellMovedTo && gridCellMovedTo.updateColor(newColor);
@@ -284,7 +310,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             // Try to move again
             playerMovement = {
                 currentDirection: null,
-                prevDirection: moveResult.directionMoved || null
+                prevDirection: directionMoved || null
             };
 
             isStart = false;
@@ -328,7 +354,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             let moveCount = this.makeMove(gridClone, player, playerMovement);
 
             // If move is invalid, wait until next cycle
-            if (moveCount === 0) {
+            if (moveCount.count === 0) {
                 await sleep(0);
                 continue;
             }
@@ -353,26 +379,47 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
 
         // Determine the movement direction
-        let dir = null;
-        if (row < playerRow) { dir = Direction.UP; }
-        else if (row > playerRow) { dir = Direction.DOWN; }
-        else if (col < playerCol) { dir = Direction.LEFT; }
-        else if (col > playerCol) { dir = Direction.RIGHT; }
+        let pressDir = null;
+        if (row < playerRow) { pressDir = Direction.UP; }
+        else if (row > playerRow) { pressDir = Direction.DOWN; }
+        else if (col < playerCol) { pressDir = Direction.LEFT; }
+        else if (col > playerCol) { pressDir = Direction.RIGHT; }
 
         // Determine maximum number of times to move in that direction
         const numTimesToMove = Math.max(Math.abs(playerRow - row), Math.abs(playerCol - col));
 
         let gridClone = cloneDeep(grid);
         const player = new Player(playerRow, playerCol, gridClone, playerColor);
+        let timesMoved = 0;
 
         // Start moving in that direction
-        for (let i = 0; i < numTimesToMove; i += 1) {
-            let playerMovement: PlayerMovement = { currentDirection: dir, prevDirection: null };
+        while (timesMoved < numTimesToMove) {
+            let playerMovement: PlayerMovement = {
+                currentDirection: pressDir,
+                prevDirection: null
+            };
             let moveCount = this.makeMove(gridClone, player, playerMovement);
 
-            // Do not continue unless the player moved exactly one tile
-            if (moveCount !== 1) {
+            // Do not continue unless the player moved exclusively in the movement direction
+            if (moveCount.count === 0) {
                 break;
+            }
+
+            let shouldStopMoving = false;
+            for (const dir of [ Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT ]) {
+                if (dir !== pressDir && moveCount[dir] > 0) {
+                    shouldStopMoving = true;
+                    break;
+                }
+            }
+
+            if (shouldStopMoving) {
+                break;
+            }
+
+            // Increment move counter
+            if (pressDir && moveCount[pressDir]) {
+                timesMoved += moveCount[pressDir];
             }
 
             // Re-clone the grid for each move
