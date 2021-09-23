@@ -17,7 +17,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import type { LevelScore } from "../../services/definitions";
 
-export default function App() {
+interface AppProps {
+    skipPreLoad?: boolean
+};
+
+export default function App(props: AppProps) {
     const [ starCount, setStarCount ] = useState(0);
     const [ playHomeAnimation, setPlayHomeAnimation ] = useState(true);
     const [ isReady, setIsReady ] = useState(false);
@@ -131,6 +135,15 @@ export default function App() {
         const loaderBarFill = getLoaderBarFill();
         loaderBarFill && loaderBarFill.classList.add("loader-bar-fill-state-1");
 
+        // For testing purposes only
+        if (props.skipPreLoad) {
+            setAreFontsLoaded(true);
+            setIsSavedDataLoaded(true);
+            setIsReady(true);
+            console.log("and we live bois");
+            return;
+        }
+
         // Load all fonts
         const onFontsLoad = () => {
             setAreFontsLoaded(true);
@@ -165,7 +178,7 @@ export default function App() {
                 toast.error("Could not retrieve saved data. Please refresh and try again.");
             });
 
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Runs after each loading stage is completed
     useEffect(() => {

@@ -52,6 +52,11 @@
             "react-app/jest"
         ]
     },
+    "jest": {
+        "transformIgnorePatterns": [
+            "<rootDir>/node_modules/(?!d3-ease|react-toastify)"
+        ]
+    },
     "browserslist": {
         "production": [
             ">0.2%",
