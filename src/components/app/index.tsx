@@ -140,7 +140,6 @@ export default function App(props: AppProps) {
             setAreFontsLoaded(true);
             setIsSavedDataLoaded(true);
             setIsReady(true);
-            console.log("and we live bois");
             return;
         }
 

@@ -1,4 +1,4 @@
-import { render, act, screen, waitFor } from "@testing-library/react";
+import { render, act, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
 import App from ".";
 
@@ -9,7 +9,7 @@ test("App renders, defaults to the home screen", async () => {
         render(<App skipPreLoad />);
     });
 
-    // Get the play button
-    const playBtn = await waitFor(() => screen.getByText("Play"));
+    // Get the play button on home screen
+    const playBtn = await screen.findByText("Play");
     expect(playBtn).toBeInTheDocument();
 });
