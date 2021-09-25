@@ -18,7 +18,7 @@ const ICE_1: GameConfig = {
         {
             element: (
                 <p>
-                    Also, note that ice tiles can still be colored, just like normal tiles.
+                    Also, note that ice tiles can still be colored, just like default tiles.
                 </p>
             )
         }

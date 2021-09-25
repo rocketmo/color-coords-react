@@ -115,6 +115,16 @@ export default function Instructions(props: InstructionsProps) {
                                         piece lands on it while in a colored state.
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>Ice Tile</td>
+                                    <td>
+                                        After the player piece moves onto an ice tile, it will
+                                        continue to <em className="highlight"> slide in the same
+                                        direction </em> until it hits a wall or until it lands on
+                                        a non-ice tile. These tiles <em className="highlight"> can
+                                        be colored</em>, similar to default tiles.
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -181,19 +191,16 @@ export default function Instructions(props: InstructionsProps) {
                     </div>
 
                     <h2>Miscellaneous</h2>
-                    <ul>
-                        <li>
-                            If you want to adjust the layout of the game, you can
-                            <em className="highlight"> reposition </em> the puzzle grid and/or the
-                            target window by dragging the screen with your cursor. For the target,
-                            you can reposition both the target window, as well as the target grid
-                            within the window. You can also
-                            <em className="highlight"> zoom in or out </em> using the zoom buttons
-                            in the quick menus. If you want to reset back to the default layout, go
-                            into the game menu and select
-                            <em className="highlight"> Reset Layout</em>.
-                        </li>
-                    </ul>
+                    <p>
+                        If you want to adjust the layout of the game, you can
+                        <em className="highlight"> reposition </em> the puzzle grid and/or the
+                        target window by dragging the screen with your cursor. For the target, you
+                        can reposition both the target window, as well as the target grid within the
+                        window. You can also <em className="highlight"> zoom in or out</em>, using
+                        the zoom buttons in the quick menus. If you want to reset back to the
+                        default layout, go into the game menu and select
+                        <em className="highlight"> Reset Layout</em>.
+                    </p>
                 </section>
             </main>
         </div>
