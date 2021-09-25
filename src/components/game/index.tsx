@@ -51,7 +51,8 @@ interface GameState {
     playerRow: number,
     playerCol: number,
     playerColor: Color,
-    showSolution: boolean,
+    showSolutionByKey: boolean,
+    showSolutionByToggle: boolean,
     movesTaken: number,
     gameStarted: boolean,
     gameOver: boolean,
@@ -95,7 +96,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             playerRow: props.playerRow,
             playerCol: props.playerCol,
             playerColor: Color.DEFAULT,
-            showSolution: false,
+            showSolutionByKey: false,
+            showSolutionByToggle: false,
             movesTaken: 0,
             gameStarted: false,
             gameOver: false,
@@ -141,6 +143,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.resetLayout = this.resetLayout.bind(this);
         this.onCompleteTutorial = this.onCompleteTutorial.bind(this);
         this.startTutorial = this.startTutorial.bind(this);
+        this.toggleSolution = this.toggleSolution.bind(this);
 
         this.movementKeyFnMap = {
             ArrowUp: this.movePlayerByKeyDown.bind(this, Direction.UP),
@@ -195,7 +198,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         // Toggle solution
         else if (event.key.toLowerCase() === "q") {
             event.preventDefault();
-            this.setState({ showSolution: true });
+            this.setState({ showSolutionByKey: true });
         }
     }
 
@@ -247,7 +250,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             this.keyPressFlagMap[event.key] = false;
         } else if (event.key.toLowerCase() === "q") {
             event.preventDefault();
-            this.setState({ showSolution: false });
+            this.setState({ showSolutionByKey: false });
         }
     }
 
@@ -256,7 +259,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             this.keyPressFlagMap[key] = false;
         }
 
-        this.setState({ showSolution: false });
+        this.setState({ showSolutionByKey: false });
     }
 
     // Processes a move and returns the number of tiles moved
@@ -483,6 +486,7 @@ export default class Game extends React.Component<GameProps, GameState> {
                 gameOver: true,
                 gameWon: true,
                 showTutorial: false,
+                showSolutionByToggle: false,
                 starsWon: this.props.handleStarUpdate(this.props.levelNumber, this.state.movesTaken)
             });
         }
@@ -502,7 +506,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             gameWon: false,
             starsWon: 0,
             isPlayerMoving: false,
-            showSolution: false,
+            showSolutionByKey: false,
+            showSolutionByToggle: false,
             isMenuOpen: false,
             shouldCancelTilePress: false,
             shouldResetLayout: false
@@ -595,6 +600,10 @@ export default class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    toggleSolution(): void {
+        this.setState({ showSolutionByToggle: !this.state.showSolutionByToggle });
+    }
+
     setMenuOpen(isOpen: boolean): void {
         this.setState({
             isMenuOpen: isOpen
@@ -685,7 +694,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             playerCol,
             playerColor,
             playerMovementType,
-            showSolution,
+            showSolutionByKey,
+            showSolutionByToggle,
             isPlayerMoving,
             movesTaken,
             gameStarted,
@@ -704,6 +714,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         gameClass += !gameStarted ? " game-pending" : "";
 
         const gameStyle = (areSettingsOpened || areInstructionsOpened) ? { display: "none" } : {};
+        const showSolution = showSolutionByKey || showSolutionByToggle;
 
         // Only show the completion component when the user beats the puzzle
         const gameCompleteEle = gameWon ? (
@@ -764,11 +775,13 @@ export default class Game extends React.Component<GameProps, GameState> {
                             canRedo={this.gameHistory.canRedo()}
                             canZoomIn={this.canZoomIn()}
                             canZoomOut={this.canZoomOut()}
+                            solutionToggled={showSolutionByToggle}
                             restartHandler={this.inGameRestart}
                             undoHandler={this.undo}
                             redoHandler={this.redo}
                             zoomInHandler={this.zoomIn}
-                            zoomOutHandler={this.zoomOut} />
+                            zoomOutHandler={this.zoomOut}
+                            solutionToggleHandler={this.toggleSolution} />
                         <GridComponent
                             grid={grid}
                             playerRow={playerRow}

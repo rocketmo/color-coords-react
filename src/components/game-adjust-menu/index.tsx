@@ -4,7 +4,9 @@ import {
     faUndoAlt,
     faRedoAlt,
     faSearchPlus,
-    faSearchMinus
+    faSearchMinus,
+    faEye,
+    faEyeSlash
 } from '@fortawesome/free-solid-svg-icons';
 import "./game-adjust-menu.scss";
 
@@ -13,11 +15,13 @@ interface GameAdjustMenuProps {
     canRedo: boolean,
     canZoomIn: boolean,
     canZoomOut: boolean,
+    solutionToggled: boolean,
     undoHandler: () => void,
     redoHandler: () => void,
     restartHandler: () => void,
     zoomInHandler: () => void,
-    zoomOutHandler: () => void
+    zoomOutHandler: () => void,
+    solutionToggleHandler: () => void
 }
 
 export default function GameAdjustMenu(props: GameAdjustMenuProps) {
@@ -25,6 +29,8 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
     const redoClass = `adjust-btn ${!props.canRedo ? " adjust-disabled" : ""}`;
     const zoomInClass = `adjust-btn ${!props.canZoomIn ? " adjust-disabled" : ""}`;
     const zoomOutClass = `adjust-btn ${!props.canZoomOut ? " adjust-disabled" : ""}`;
+
+    const solBtnStyle = props.solutionToggled ? { paddingLeft: "5px", paddingRight: "5px" } : {};
 
     return (
         <div className="adjust-menu game-adjust-menu">
@@ -70,6 +76,17 @@ export default function GameAdjustMenu(props: GameAdjustMenuProps) {
                 </button>
 
                 <div className="adjust-tooltip">Zoom Out</div>
+            </div>
+
+            <div className="adjust-separator"></div>
+
+            <div className="adjust-btn">
+                <button tabIndex={0} onClick={props.solutionToggleHandler}
+                    aria-label="Toggle solution" style={solBtnStyle}>
+                    <FontAwesomeIcon icon={props.solutionToggled ? faEyeSlash : faEye} />
+                </button>
+
+                <div className="adjust-tooltip">Toggle Solution</div>
             </div>
         </div>
     );

@@ -5,4 +5,12 @@
     position: fixed;
     top: 4px + sizes.$top-bar-height;
     z-index: 200;
+
+    .adjust-btn:first-child {
+        margin-left: 4px;
+    }
+
+    .adjust-btn:last-child {
+        margin-right: 4px;
+    }
 }

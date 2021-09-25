@@ -154,10 +154,10 @@ export default function Instructions(props: InstructionsProps) {
                                 <tr>
                                     <td>Player Piece Movement</td>
                                     <td>Arrow keys</td>
-                                    <td>Left click on tile</td>
+                                    <td>Left click (on tiles)</td>
                                 </tr>
                                 <tr>
-                                    <td>Toggle Target</td>
+                                    <td>Toggle Solution</td>
                                     <td>Q (hold)</td>
                                     <td>-</td>
                                 </tr>
@@ -191,16 +191,26 @@ export default function Instructions(props: InstructionsProps) {
                     </div>
 
                     <h2>Miscellaneous</h2>
-                    <p>
-                        If you want to adjust the layout of the game, you can
-                        <em className="highlight"> reposition </em> the puzzle grid and/or the
-                        target window by dragging the screen with your cursor. For the target, you
-                        can reposition both the target window, as well as the target grid within the
-                        window. You can also <em className="highlight"> zoom in or out</em>, using
-                        the zoom buttons in the quick menus. If you want to reset back to the
-                        default layout, go into the game menu and select
-                        <em className="highlight"> Reset Layout</em>.
-                    </p>
+                    <ul>
+                        <li>
+                            If you want to adjust the layout of the game, you can
+                            <em className="highlight"> reposition </em> the puzzle grid and/or the
+                            target window by dragging the screen with your cursor. For the target,
+                            you can reposition both the target window, as well as the target grid
+                            within the window. You can also
+                            <em className="highlight"> zoom in or out</em>, using the zoom buttons
+                            in the quick menus. If you want to reset back to the default layout, go
+                            into the game menu and select
+                            <em className="highlight"> Reset Layout</em>.
+                        </li>
+                        <li>
+                            If playing on a desktop, press and hold the <strong>Q</strong> key to
+                            have the <em className="highlight"> solution overlayed </em> onto the
+                            puzzle grid. Alternatively, you can press the
+                            <strong> Toggle Solution </strong> button from the quick menu to have
+                            the solution overlay toggled on or off.
+                        </li>
+                    </ul>
                 </section>
             </main>
         </div>
