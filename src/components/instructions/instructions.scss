@@ -64,7 +64,15 @@
                 font-family: functions.sans-serif-family(Nunito);
                 font-size: 24px;
                 font-weight: 700;
-                margin: 10px 0 20px;
+                margin: 1.5em 0 0.5em;
+
+                &:first-child {
+                    margin-top: 0.5em;
+                }
+
+                & + h3 {
+                    margin-top: 1em;
+                }
             }
 
             h3 {
@@ -72,11 +80,11 @@
                 font-family: functions.sans-serif-family(Nunito);
                 font-size: 18px;
                 font-weight: 600;
-                margin: 5px 0 10px;
+                margin: 1.5em 0 0.5em;
             }
 
             p {
-                margin: 1em 0;
+                margin: 0.5em 0;
             }
 
             .highlight {
@@ -87,6 +95,10 @@
                 overflow: auto;
                 width: 100%;
                 margin-bottom: 1em;
+            }
+
+            ul {
+                margin: 0.5em 0;
             }
 
             li {
