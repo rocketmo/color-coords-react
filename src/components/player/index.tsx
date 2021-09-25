@@ -88,6 +88,7 @@ export default function PlayerComponent(props: PlayerProps) {
         <div className="player" style={playerStyle}>
             <div className={colorClass} style={playerBodyStyle}></div>
             <div className="player-border" style={playerBodyStyle}></div>
+            <div className="player-back" style={playerBodyStyle}></div>
         </div>
     );
 }

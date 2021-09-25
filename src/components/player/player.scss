@@ -8,7 +8,7 @@ $transition-time: 0.3s;
 $transition-delay: 0.15s;
 
 .player {
-    background-color: #333;
+    background-color: transparent;
     border-radius: $player-size;
     height: $player-size;
     position: absolute;
@@ -25,13 +25,14 @@ $transition-delay: 0.15s;
         transition: background-color $transition-time ease-out $transition-delay,
             border-color $transition-time ease-out $transition-delay;
         width: 100%;
-        z-index: 21;
+        z-index: 22;
 
         &.bg-dark {
             background-color: color.scale(colors.$dark, $lightness: 25%);
             border: $dark-border;
 
-            & + .player-border {
+            & ~ .player-border,
+            & ~ .player-back {
                 border: $dark-border;
             }
         }
@@ -45,7 +46,18 @@ $transition-delay: 0.15s;
         position: absolute;
         transition: border-color $transition-time ease-out $transition-delay;
         width: 100%;
-        z-index: 22;
+        z-index: 23;
+    }
+
+    .player-back {
+        background-color: #333;
+        border: $player-border;
+        border-radius: $player-size;
+        box-sizing: border-box;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        z-index: 21;
     }
 }
 
