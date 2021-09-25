@@ -404,7 +404,8 @@ export default class Game extends React.Component<GameProps, GameState> {
             let moveCount = this.makeMove(gridClone, player, playerMovement);
 
             // Do not continue unless the player moved exclusively in the movement direction
-            if (moveCount.count === 0) {
+            // and the puzzle has not been solved yet
+            if (moveCount.count === 0 || gridClone.isGridSolved()) {
                 break;
             }
 
