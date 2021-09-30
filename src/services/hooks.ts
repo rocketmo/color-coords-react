@@ -11,4 +11,4 @@ export function usePrevious<T> (value: T): MutableRefObject<T | undefined>['curr
     }, [ value ]);
 
     return ref.current;
-  }
+}
