@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/color-coords-react/static/css/main.60818301.chunk.css",
+    "main.css": "/color-coords-react/static/css/main.003ea3b2.chunk.css",
     "main.js": "/color-coords-react/static/js/main.26a06d24.chunk.js",
     "main.js.map": "/color-coords-react/static/js/main.26a06d24.chunk.js.map",
     "runtime-main.js": "/color-coords-react/static/js/runtime-main.93d21eb5.js",
     "runtime-main.js.map": "/color-coords-react/static/js/runtime-main.93d21eb5.js.map",
-    "static/css/2.0f85b2c7.chunk.css": "/color-coords-react/static/css/2.0f85b2c7.chunk.css",
+    "static/css/2.4b992338.chunk.css": "/color-coords-react/static/css/2.4b992338.chunk.css",
     "static/js/2.b379e9bd.chunk.js": "/color-coords-react/static/js/2.b379e9bd.chunk.js",
     "static/js/2.b379e9bd.chunk.js.map": "/color-coords-react/static/js/2.b379e9bd.chunk.js.map",
     "index.html": "/color-coords-react/index.html",
-    "static/css/2.0f85b2c7.chunk.css.map": "/color-coords-react/static/css/2.0f85b2c7.chunk.css.map",
-    "static/css/main.60818301.chunk.css.map": "/color-coords-react/static/css/main.60818301.chunk.css.map",
+    "static/css/2.4b992338.chunk.css.map": "/color-coords-react/static/css/2.4b992338.chunk.css.map",
+    "static/css/main.003ea3b2.chunk.css.map": "/color-coords-react/static/css/main.003ea3b2.chunk.css.map",
     "static/js/2.b379e9bd.chunk.js.LICENSE.txt": "/color-coords-react/static/js/2.b379e9bd.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/color-coords-react/static/media/NunitoSans-SemiBold.c37af053.svg",
     "static/media/star_default.50ce398f.svg": "/color-coords-react/static/media/star_default.50ce398f.svg",
@@ -18,9 +18,9 @@
   },
   "entrypoints": [
     "static/js/runtime-main.93d21eb5.js",
-    "static/css/2.0f85b2c7.chunk.css",
+    "static/css/2.4b992338.chunk.css",
     "static/js/2.b379e9bd.chunk.js",
-    "static/css/main.60818301.chunk.css",
+    "static/css/main.003ea3b2.chunk.css",
     "static/js/main.26a06d24.chunk.js"
   ]
 }
